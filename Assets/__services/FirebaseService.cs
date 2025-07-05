@@ -1,0 +1,113 @@
+using System;
+using System.Threading.Tasks;
+using UnityEditor.AdaptivePerformance.Editor;
+using UnityEngine;
+
+// fb singleton service
+public class FirebaseService
+{
+    public static FirebaseService _instance;
+
+    public static FirebaseService Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new FirebaseService();
+                Debug.Log("FirebaseService instance created.");
+            }
+            return _instance;
+        }
+    }
+
+    public Task IsInitialized { get; private set; } = null;
+
+    private Firebase.FirebaseApp firebaseApp { get; set; }
+
+    // Private constructor to prevent instantiation
+    private FirebaseService()
+    {
+        this.IsInitialized = this.Init();
+        // Initialize Firebase here if needed
+        Debug.Log("FirebaseService initialized.");
+    }
+
+
+    public async Task Init()
+    {
+        var status = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
+        if (status == Firebase.DependencyStatus.Available)
+        {
+            this.firebaseApp = Firebase.FirebaseApp.DefaultInstance;
+            return;
+        }
+        else
+        {
+            Debug.LogError($"Firebase dependencies are not available: {status}");
+            throw new System.Exception("Firebase dependencies are not available.");
+        }
+    }
+
+    // Example method to demonstrate functionality
+    public void LogEvent(string eventName)
+    {
+        Debug.Log($"Event logged: {eventName}");
+        // Add Firebase event logging logic here
+    }
+
+    public async Task Login(string email, string password)
+    {
+        var auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        var result = await auth.SignInWithEmailAndPasswordAsync(email, password);
+        if (result != null)
+        {
+            Debug.Log($"User logged in successfully: {result.User.Email} with UID: {result.User.UserId}");
+        }
+        else
+        {
+            Debug.LogError("Login failed.");
+        }
+    }
+
+    public async Task SaveSingle<T>(string path, T data) where T : IFirebaseDoc
+    {
+        string uid = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        var collectionRef = this.GetCollectionRef(path);
+        var doc = collectionRef.Document(uid);
+        data.UserId = uid; // Ensure UserId is set
+        await doc.SetAsync(data);
+        Debug.Log($"Document saved at path: {path} with UID: {uid}");
+    }
+
+    public async Task<T> GetSingle<T>(string path, string firebaseUid = null)
+    {
+        string uid = firebaseUid ?? Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        var collectionRef = this.GetCollectionRef(path);
+        var doc = collectionRef.Document(uid);
+        var snapShot = await doc.GetSnapshotAsync();
+        if (snapShot.Exists)
+        {
+            Debug.Log($"Document found at path: {path} for UID: {uid}");
+            return snapShot.ConvertTo<T>();
+        }
+        else
+        {
+            Debug.LogWarning($"No document found at path: {path} for UID: {uid}");
+            return default(T);
+        }
+    }
+
+    public string GetUserId()
+    {
+        var auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        return auth.CurrentUser.UserId;
+    }
+
+    public Firebase.Firestore.CollectionReference GetCollectionRef(string path)
+    {
+        string pathPrefix = "__dev__"; // todo, use config to set this later
+        var db = Firebase.Firestore.FirebaseFirestore.DefaultInstance;
+        return db.Collection(pathPrefix + path);
+    }
+}

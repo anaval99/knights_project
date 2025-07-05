@@ -1,0 +1,41 @@
+# Unity specific settings
+*.cs     text diff=csharp
+*.shader text
+*.cginc  text
+*.compute text
+*.hlsl   text
+*.uxml   text
+*.uss    text
+*.asmdef text
+*.json   text
+*.xml    text
+*.txt    text
+*.md     text
+*.yml    text
+# LFS for large binary assets
+*.psd filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
+*.jpg filter=lfs diff=lfs merge=lfs -text
+*.jpeg filter=lfs diff=lfs merge=lfs -text
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.tiff filter=lfs diff=lfs merge=lfs -text
+*.mp3 filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text
+*.wav filter=lfs diff=lfs merge=lfs -text
+*.fbx filter=lfs diff=lfs merge=lfs -text
+*.prefab filter=lfs diff=lfs merge=lfs -text
+*.unity filter=lfs diff=lfs merge=lfs -text
+*.asset filter=lfs diff=lfs merge=lfs -text
+*.mat filter=lfs diff=lfs merge=lfs -text
+*.anim filter=lfs diff=lfs merge=lfs -text
+*.controller filter=lfs diff=lfs merge=lfs -text
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+*.mov filter=lfs diff=lfs merge=lfs -text
+*.webm filter=lfs diff=lfs merge=lfs -text
+*.exr filter=lfs diff=lfs merge=lfs -text
+# Prevent CRLF issues
+* text=auto
+# End of file
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_9_0.bundle filter=lfs diff=lfs merge=lfs -text
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-12_9_0.so filter=lfs diff=lfs merge=lfs -text

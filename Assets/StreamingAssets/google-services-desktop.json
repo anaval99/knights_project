@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1033720012593",
+    "project_id": "gamingmatcher-dev",
+    "storage_bucket": "gamingmatcher-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033720012593:android:9f127549b3ad8f997a1a10",
+        "android_client_info": {
+          "package_name": "knights.dlorna.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033720012593-d9t52539pnrcj26f2i940g79e84a9gvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5wQVfGoz04TWrs399IbDTsDNB9kXzP3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033720012593-d9t52539pnrcj26f2i940g79e84a9gvm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1033720012593-qq426pdp0sqdlm4p48igl5slfomcgakn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "knights.dlorna.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
