@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 113
+  controlID: 43
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -1395,7 +1395,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: e604ffff0621ffffe07fffffe087ffff7a8fffffda95ffff44a7ffff20aeffff12b4ffff2cbcffffb0d3ffff86d5ffff3cddffff92deffffb2deffffc2f5ffffc6f5ffff06f9ffff0af9ffff0ef9ffff12f9ffff16f9ffff1afbffff1cfbffff4eac000004c800009cc800004cc900007ec90000cec9000094ca0000
+      m_ExpandedIDs: 1cfbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1467,7 +1467,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__scenes/dashboard
+    - Assets
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1477,16 +1477,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__scenes/dashboard
+  - Assets
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 47}
-    m_SelectedIDs: 4abe0000
-    m_LastClickedID: 48714
-    m_ExpandedIDs: 0000000044bc000046bc000048bc00004abc00004cbc00004ebc000050bc000052bc000054bc000056bc000058bc00005abc00005cbc0000
+    m_SelectedIDs: 4abc0000
+    m_LastClickedID: 48202
+    m_ExpandedIDs: 000000005abd00005cbd00005ebd000060bd000062bd000064bd000066bd000068bd00006abd00006cbd00006ebd000070bd000072bd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1515,7 +1515,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000044bc000046bc000048bc00004abc00004cbc00004ebc000050bc000052bc000054bc000056bc000058bc00005abc00005cbc0000
+    m_ExpandedIDs: 000000005abd00005cbd00005ebd000060bd000062bd000064bd000066bd000068bd00006abd00006cbd00006ebd000070bd000072bd0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1543,7 +1543,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c62300009c0c04004c0d0400daea0000520d0400d4ea0000580d0400aeba0000fcd2000008da0000d8bd000070d50000d4b00000b0cb0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

@@ -1,3 +1,5 @@
+using R3;
+using R3.Triggers;
 using UnityEngine;
 
 public class DashboardController : MonoBehaviour
@@ -11,7 +13,8 @@ public class DashboardController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        var test1 = new BehaviorSubject<string>("test1");
+        test1.Subscribe(value => Debug.Log($"Received value: {value}")).AddTo(this);
     }
 
     // Update is called once per frame
