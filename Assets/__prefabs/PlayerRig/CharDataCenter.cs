@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using R3;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,8 +9,8 @@ public class CharDataCenter : MonoBehaviour
     #region Events
     public CharEquipment CurrentEquipment;
     public CharInventory CurrentInventory;
-    public UnityEvent<CharEquipment> OnEquipmentChanged = new();
-    public UnityEvent<CharInventory> OnInventoryChange = new();
+    public BehaviorSubject<CharEquipment> CharEquipmentObs = new(null);
+    public BehaviorSubject<CharInventory> CharInventoryObs = new(null);
     #endregion Events
     [SerializeField]
     EquipmentRenderer equipmentRenderer;
@@ -60,8 +61,8 @@ public class CharDataCenter : MonoBehaviour
         this.equipmentRenderer.SetEquipment(charEquipment);
         this.CurrentEquipment = charEquipment;
         this.CurrentInventory = charInventory;
-        this.OnEquipmentChanged.Invoke(charEquipment);
-        this.OnInventoryChange.Invoke(charInventory);
+        this.CharEquipmentObs.OnNext(charEquipment);
+        this.CharInventoryObs.OnNext(charInventory);
     }
 
     public async Task SaveEquipment(CharEquipment equipment)
@@ -69,6 +70,6 @@ public class CharDataCenter : MonoBehaviour
         this.equipmentRenderer.SetEquipment(equipment);
         await FirebaseService.Instance.SaveSingle(FirebasePaths.Equipments, equipment);
         this.CurrentEquipment = equipment;
-        this.OnEquipmentChanged.Invoke(equipment);
+        this.CharEquipmentObs.OnNext(equipment);
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using R3;
 using UnityEngine;
 
 public class ItemsContainer : MonoBehaviour
@@ -12,11 +13,7 @@ public class ItemsContainer : MonoBehaviour
     void Start()
     {
         this.PopuplateItemsUI();
-        this.charDataCenter.OnInventoryChange.AddListener(this.Render);
-        if (this.charDataCenter?.CurrentInventory != null)
-        {
-            this.Render(this.charDataCenter.CurrentInventory);
-        }
+        this.charDataCenter.CharInventoryObs.Subscribe(this.Render).AddTo(this);
     }
 
     void PopuplateItemsUI()
@@ -62,6 +59,5 @@ public class ItemsContainer : MonoBehaviour
 
     void OnDestroy()
     {
-        this.charDataCenter.OnInventoryChange.RemoveListener(this.Render);
     }
 }

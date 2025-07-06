@@ -16,7 +16,7 @@ public class ItemActionsUI : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Button equipButton;
 
-    public BehaviorSubject<Item> CurrentItemObs = new BehaviorSubject<Item>(null); 
+    public BehaviorSubject<Item> CurrentItemObs = new(null); 
 
     void Start()
     {

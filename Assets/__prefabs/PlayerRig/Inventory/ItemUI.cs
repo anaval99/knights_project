@@ -29,14 +29,13 @@ public class ItemUI : MonoBehaviour
     void Start()
     {
         button.onClick.AddListener(this.OnButtonClicked);
-        this.itemActionsUI.CurrentItemObs.Subscribe(item => this.SetFocused(item)).AddTo(this);
-        this.charDataCenter.OnEquipmentChanged.AddListener(this.SetEquippedSymbol);
+        this.itemActionsUI.CurrentItemObs.Subscribe(this.SetFocused).AddTo(this);
+        this.charDataCenter.CharEquipmentObs.Subscribe(this.SetEquippedSymbol).AddTo(this);
     }
 
     void OnDestroy()
     {
         button.onClick.RemoveListener(this.OnButtonClicked);
-        this.charDataCenter.OnEquipmentChanged.RemoveListener(this.SetEquippedSymbol);
     }
 
     void OnButtonClicked()
