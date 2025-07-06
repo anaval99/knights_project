@@ -78,7 +78,7 @@ public class ItemUI : MonoBehaviour
     public void Render(Item item)
     {
         this.item = item;
-        this.SetEquippedSymbol(this.charDataCenter.CurrentEquipment);
+        this.SetEquippedSymbol(this.charDataCenter.CharEquipmentObs.Value);
         if (item == null || string.IsNullOrEmpty(item.ItemSOId))
         {
             this.itemImage.sprite = null;

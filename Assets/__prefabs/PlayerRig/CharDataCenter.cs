@@ -7,8 +7,6 @@ using UnityEngine.Events;
 public class CharDataCenter : MonoBehaviour
 {
     #region Events
-    public CharEquipment CurrentEquipment;
-    public CharInventory CurrentInventory;
     public BehaviorSubject<CharEquipment> CharEquipmentObs = new(null);
     public BehaviorSubject<CharInventory> CharInventoryObs = new(null);
     #endregion Events
@@ -59,8 +57,6 @@ public class CharDataCenter : MonoBehaviour
         this.bodyPartRenderer.SetBodyPart(charAvatar);
         // set equipment
         this.equipmentRenderer.SetEquipment(charEquipment);
-        this.CurrentEquipment = charEquipment;
-        this.CurrentInventory = charInventory;
         this.CharEquipmentObs.OnNext(charEquipment);
         this.CharInventoryObs.OnNext(charInventory);
     }
@@ -69,7 +65,6 @@ public class CharDataCenter : MonoBehaviour
     {
         this.equipmentRenderer.SetEquipment(equipment);
         await FirebaseService.Instance.SaveSingle(FirebasePaths.Equipments, equipment);
-        this.CurrentEquipment = equipment;
         this.CharEquipmentObs.OnNext(equipment);
     }
 }

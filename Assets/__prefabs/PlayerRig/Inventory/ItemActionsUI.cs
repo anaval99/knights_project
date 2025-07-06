@@ -35,18 +35,19 @@ public class ItemActionsUI : MonoBehaviour
 
     async void OnEquipButtonClicked()
     {
+        var currentEquipment = charDataCenter.CharEquipmentObs.Value;
         var (itemSO, part) = equipmentList.GetSOGO(CurrentItemObs.Value);
         if (itemSO.WeaponClass != WeaponClass.None)
         {
             // Equip as weapon
-            charDataCenter.CurrentEquipment.Weapon = CurrentItemObs.Value;
-            await charDataCenter.SaveEquipment(charDataCenter.CurrentEquipment);
+            currentEquipment.Weapon = CurrentItemObs.Value;
+            await charDataCenter.SaveEquipment(currentEquipment);
         }
         else if (itemSO.ArmorPart == ArmorPart.Body)
         {
             // Equip as armor
-            charDataCenter.CurrentEquipment.Armor = CurrentItemObs.Value;
-            await charDataCenter.SaveEquipment(charDataCenter.CurrentEquipment);
+            currentEquipment.Armor = CurrentItemObs.Value;
+            await charDataCenter.SaveEquipment(currentEquipment);
         }
     }
 
