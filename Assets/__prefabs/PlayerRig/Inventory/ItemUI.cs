@@ -1,4 +1,5 @@
 using System;
+using R3;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -28,14 +29,13 @@ public class ItemUI : MonoBehaviour
     void Start()
     {
         button.onClick.AddListener(this.OnButtonClicked);
-        this.itemActionsUI.OnItemSelected.AddListener(this.SetFocused);
+        this.itemActionsUI.CurrentItemObs.Subscribe(item => this.SetFocused(item)).AddTo(this);
         this.charDataCenter.OnEquipmentChanged.AddListener(this.SetEquippedSymbol);
     }
 
     void OnDestroy()
     {
         button.onClick.RemoveListener(this.OnButtonClicked);
-        this.itemActionsUI.OnItemSelected.RemoveListener(this.SetFocused);
         this.charDataCenter.OnEquipmentChanged.RemoveListener(this.SetEquippedSymbol);
     }
 
@@ -51,7 +51,7 @@ public class ItemUI : MonoBehaviour
             this.FocusedImage.gameObject.SetActive(false);
             return;
         }
-        if (this.itemActionsUI.currentItem == this.item)
+        if (item == this.item)
         {
             this.FocusedImage.gameObject.SetActive(true);
         }
@@ -79,7 +79,6 @@ public class ItemUI : MonoBehaviour
     public void Render(Item item)
     {
         this.item = item;
-        this.SetFocused(this.itemActionsUI.currentItem);
         this.SetEquippedSymbol(this.charDataCenter.CurrentEquipment);
         if (item == null || string.IsNullOrEmpty(item.ItemSOId))
         {
