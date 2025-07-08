@@ -44,16 +44,16 @@ public class ImageList : ScriptableObject
     switch (rarity)
     {
       case Rarity.Common:
-        prefix = "ItemFrame_02_Bg_Single_Green";
+        prefix = "ItemFrame_02_Bg_Single_Lime";
         break;
       case Rarity.Rare:
         prefix = "ItemFrame_02_Bg_Single_Blue";
         break;
       case Rarity.Epic:
-        prefix = "ItemFrame_02_Bg_Single_Purple";
+        prefix = "ItemFrame_02_Bg_Single_Yellow";
         break;
       case Rarity.Legendary:
-        prefix = "ItemFrame_02_Bg_Single_Red";
+        prefix = "ItemFrame_02_Bg_Single_Pink";
         break;
     }
     if (string.IsNullOrEmpty(prefix) || !this.ImageDictionary.ContainsKey(prefix))
