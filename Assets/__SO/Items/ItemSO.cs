@@ -4,13 +4,16 @@ using UnityEngine;
 public class ItemSO : ScriptableObject
 {
   public int Level = 0;
-  public string ItemId;
   public string ItemName;
+  [TextArea]
   public string ItemDescription;
   public Sprite ItemIcon;
   public bool IsConsumable;
   public bool IsEquippable;
   public bool IsStackable;
+  /// <summary>
+  /// The gameobject of the actual equipment part. (e.g. "Helmet01", "Sword07")
+  /// </summary>
   public string GameObjectName;
 
   public WeaponClass WeaponClass = WeaponClass.None;

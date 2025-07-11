@@ -6,11 +6,10 @@ public class SkillBookSO : ScriptableObject
   [SerializeField]
   public int Level;
   [SerializeField]
-  public string SkillId;
-  [SerializeField]
   public string SkillName;
   [SerializeField]
   public int ActionPoints;
+  [TextArea]
   [SerializeField]
   public string Description;
   [SerializeField]

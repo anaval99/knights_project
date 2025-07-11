@@ -43,7 +43,7 @@ public class EquipmentList : MonoBehaviour
                 {
                     if (item != null)
                     {
-                        equipmentItemsDictionary[item.ItemId] = item;
+                        equipmentItemsDictionary[item.name] = item;
                     }
                 }
             }
@@ -77,7 +77,7 @@ public class EquipmentList : MonoBehaviour
 
         if (this.EquipmentItems != null)
         {
-            this.EquipmentItems = this.EquipmentItems.DistinctBy(item => item.ItemId).ToArray();
+            this.EquipmentItems = this.EquipmentItems.DistinctBy(item => item.name).ToArray();
         }
     }
 }
