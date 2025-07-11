@@ -7,12 +7,14 @@ public class SkillBookSO : ScriptableObject
   public int Level;
   [SerializeField]
   public string SkillId;
-	[SerializeField]
-	public string SkillName;
-	[SerializeField]
-	public int ActionPoints;
-	[SerializeField]
-	public string Description;
+  [SerializeField]
+  public string SkillName;
+  [SerializeField]
+  public int ActionPoints;
+  [SerializeField]
+  public string Description;
   [SerializeField]
   public Sprite SkillIcon;
+  [SerializeField]
+  public WeaponClass WeaponClass;
 }

@@ -24,7 +24,7 @@ public class ItemsContainer : MonoBehaviour
             return;
         }
 
-        while (this.itemUIs.Count < 18)
+        while (this.itemUIs.Count < 28)
         {
             // add more items and then set parent to this.transform
             var itemUI = Instantiate(this.itemUIs[0], this.transform);
