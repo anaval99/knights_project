@@ -20,10 +20,16 @@ public class CharDataCenter : MonoBehaviour
     public async Task LoadCharDataAsync(string firebaseUid)
     {
         // get the character data from FirebaseService.Instance
-        var charAvatar = await FirebaseService.Instance.GetSingle<CharAvatar>(FirebasePaths.Avatars, firebaseUid);
-        var charInventory = await this.GetInventoryAsync(firebaseUid);
-        var charSkillBooks = await this.GetSkillBooksAsync(firebaseUid);
-        var charSkillBar = await this.GetSkillBarAsync(firebaseUid);
+        var charAvatarTask = FirebaseService.Instance.GetSingle<CharAvatar>(FirebasePaths.Avatars, firebaseUid);
+        var charInventoryTask = this.GetInventoryAsync(firebaseUid);
+        var charSkillBooksTask = this.GetSkillBooksAsync(firebaseUid);
+        var charSkillBarTask = this.GetSkillBarAsync(firebaseUid);
+        await Task.WhenAll(charAvatarTask, charInventoryTask, charSkillBooksTask, charSkillBarTask);
+        var charAvatar = await charAvatarTask;
+        var charInventory = await charInventoryTask;
+        var charSkillBooks = await charSkillBooksTask;
+        var charSkillBar = await charSkillBarTask;
+        // load equipment last to ensure all items are available
         var charEquipment = await this.GetEquipmentAsync(firebaseUid, charInventory);
         // set avatar
         this.bodyPartRenderer.SetBodyPart(charAvatar);
@@ -53,22 +59,6 @@ public class CharDataCenter : MonoBehaviour
         }
         return charInventory;
     }
-    
-    public async Task<CharEquipment> GetEquipmentAsync(string firebaseUid, CharInventory charInventory)
-    {
-        var charEquipment = await FirebaseService.Instance.GetSingle<CharEquipment>(FirebasePaths.Equipments, firebaseUid);
-        if (charEquipment == null)
-        {
-            charEquipment = new CharEquipment()
-            {
-                UserId = firebaseUid,
-                Weapon = charInventory.Items.Find(x => x.ItemSOId == "beginner_sword"),
-                Armor = charInventory.Items.Find(x => x.ItemSOId == "beginner_armor")
-            };
-            await FirebaseService.Instance.SaveSingle(FirebasePaths.Equipments, charEquipment);
-        }
-        return charEquipment;
-    }
 
     public async Task<CharSkillBooks> GetSkillBooksAsync(string firebaseUid)
     {
@@ -91,4 +81,20 @@ public class CharDataCenter : MonoBehaviour
         }
         return charSkillBar;
     }
+
+    public async Task<CharEquipment> GetEquipmentAsync(string firebaseUid, CharInventory charInventory)
+    {
+        var charEquipment = await FirebaseService.Instance.GetSingle<CharEquipment>(FirebasePaths.Equipments, firebaseUid);
+        if (charEquipment == null)
+        {
+            charEquipment = new CharEquipment()
+            {
+                UserId = firebaseUid,
+                Weapon = charInventory.Items.Find(x => x.ItemSOId == "beginner_sword"),
+                Armor = charInventory.Items.Find(x => x.ItemSOId == "beginner_armor")
+            };
+            await FirebaseService.Instance.SaveSingle(FirebasePaths.Equipments, charEquipment);
+        }
+        return charEquipment;
+    }    
 }
