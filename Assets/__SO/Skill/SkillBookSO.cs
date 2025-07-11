@@ -8,7 +8,7 @@ public class SkillBookSO : ScriptableObject
   [SerializeField]
   public string SkillName;
   [SerializeField]
-  public int ActionPoints;
+  public int ManaCost = 0;
   [TextArea]
   [SerializeField]
   public string Description;
@@ -16,4 +16,6 @@ public class SkillBookSO : ScriptableObject
   public Sprite SkillIcon;
   [SerializeField]
   public WeaponClass WeaponClass;
+  [SerializeField]
+  public SkillType SkillType;
 }
