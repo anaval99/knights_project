@@ -49,6 +49,12 @@ public class CharDataCenter : MonoBehaviour
         this.CharEquipmentObs.OnNext(equipment);
     }
 
+    public async Task SaveSkillBar(CharSkillBar skillBar)
+    {
+        await FirebaseService.Instance.SaveSingle(FirebasePaths.SkillBars, skillBar);
+        this.CharSkillBarObs.OnNext(skillBar);
+    }
+
     public async Task<CharInventory> GetInventoryAsync(string firebaseUid)
     {
         var charInventory = await FirebaseService.Instance.GetSingle<CharInventory>(FirebasePaths.Inventories, firebaseUid);
