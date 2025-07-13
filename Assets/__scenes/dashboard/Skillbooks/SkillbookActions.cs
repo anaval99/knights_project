@@ -11,6 +11,8 @@ public class SkillbookActions : MonoBehaviour
     CharDataCenter charDataCenter;
     [SerializeField]
     List<Button> equipSkillButtons;
+    [SerializeField]
+    GameObject SkillBar;
 
     public BehaviorSubject<SkillBook> SelectedSkillBookObs = new(null);
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,6 +29,13 @@ public class SkillbookActions : MonoBehaviour
     void OnEnable()
     {
         this.SelectedSkillBookObs.OnNext(null);
+        this.SkillBar.SetActive(true);
+    }
+
+    void OnDisable()
+    {
+        this.SelectedSkillBookObs.OnNext(null);
+        this.SkillBar.SetActive(false);
     }
 
     // Update is called once per frame

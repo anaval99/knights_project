@@ -43,7 +43,7 @@ MonoBehaviour:
     width: 3440
     height: 1357
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Hierarchy
   m_RootView: {fileID: 5}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -1412,7 +1412,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: b4f1ffffb6f1ffffbaf1ffff1afbffff1cfbffffbaae0000ccae0000f0ae0000f4ae0000faae00000aaf00002caf000036af0000
+      m_ExpandedIDs: 14fbffff18fbffff1afbffff1cfbffffc2ae0000faae000004af00000aaf00002eaf0000bcaf000086b10000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 

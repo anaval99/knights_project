@@ -36,8 +36,8 @@ public class SkillbookUI : MonoBehaviour
                 if (selectedSkillBook != null && this.currentSkillBook != null)
                 {
                     focused = selectedSkillBook.SkillBookSOId == this.currentSkillBook.SkillBookSOId;
-                    this.FocusedSymbol.SetActive(focused);
                 }
+                this.FocusedSymbol.SetActive(focused);
             })
             .AddTo(this);
     }
