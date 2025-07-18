@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Firebase.Firestore;
 using UnityEngine;
 
@@ -19,4 +20,11 @@ public class CharAvatar : IFirebaseDoc
   public string UserId { get; set; }
   [FirestoreProperty]
   public string AvatarId { get; set; } = Guid.NewGuid().ToString();
+
+  [FirestoreProperty]
+  public string Party1AvatarId { get; set; } = "";
+  [FirestoreProperty]
+  public string Party2AvatarId { get; set; } = "";
+  [FirestoreProperty]
+  public List<string> FriendAvatarIds { get; set; } = new ();
 }

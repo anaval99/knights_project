@@ -11,6 +11,7 @@ public class CharDataCenter : MonoBehaviour
     public BehaviorSubject<CharInventory> CharInventoryObs = new(null);
     public BehaviorSubject<CharSkillBooks> CharSkillBooksObs = new(null);
     public BehaviorSubject<CharSkillBar> CharSkillBarObs = new(null);
+    public BehaviorSubject<CharAvatar> CharAvatarObs = new(null);
     #endregion Events
     [SerializeField]
     EquipmentRenderer equipmentRenderer;
@@ -40,6 +41,13 @@ public class CharDataCenter : MonoBehaviour
         this.CharInventoryObs.OnNext(charInventory);
         this.CharSkillBooksObs.OnNext(charSkillBooks);
         this.CharSkillBarObs.OnNext(charSkillBar);
+        this.CharAvatarObs.OnNext(charAvatar);
+    }
+
+    public async Task SaveAvatar(CharAvatar avatar)
+    {
+        await FirebaseService.Instance.SaveSingle(FirebasePaths.Avatars, avatar);
+        this.CharAvatarObs.OnNext(avatar);
     }
 
     public async Task SaveEquipment(CharEquipment equipment)

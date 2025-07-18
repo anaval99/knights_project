@@ -1,6 +1,8 @@
 using R3;
 using R3.Triggers;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DashboardController : MonoBehaviour
 {
@@ -10,11 +12,14 @@ public class DashboardController : MonoBehaviour
     EquipmentRenderer equipmentRenderer;
     [SerializeField]
     CharDataCenter charDataCenter;
+    [SerializeField]
+    Button logoutButton;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        var test1 = new BehaviorSubject<string>("test1");
-        test1.Subscribe(value => Debug.Log($"Received value: {value}")).AddTo(this);
+        this.logoutButton.OnClickAsObservable()
+            .Subscribe(this.Logout)
+            .AddTo(this);
     }
 
     // Update is called once per frame
@@ -28,7 +33,7 @@ public class DashboardController : MonoBehaviour
         // Ensure Firebase is initialized before loading the avatar
         this.LoadAvatar();
     }
-    
+
     async void LoadAvatar()
     {
         // Get the Firebase UID from the FirebaseService
@@ -41,5 +46,11 @@ public class DashboardController : MonoBehaviour
 
         // Load character data asynchronously
         await charDataCenter.LoadCharDataAsync(firebaseUid);
+    }
+
+    void Logout(Unit unit)
+    {
+        Debug.Log("User logged out successfully.");
+        SceneManager.LoadScene("__scenes/dashboard/dashboard");
     }
 }

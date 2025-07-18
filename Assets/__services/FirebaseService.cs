@@ -110,4 +110,20 @@ public class FirebaseService
         var db = Firebase.Firestore.FirebaseFirestore.DefaultInstance;
         return db.Collection(pathPrefix + path);
     }
+
+    public async Task<System.Collections.Generic.List<T>> QueryMany<T>(string path, Func<Firebase.Firestore.Query, Firebase.Firestore.Query> queryBuilder)
+    {
+        var collectionRef = this.GetCollectionRef(path);
+        var query = queryBuilder(collectionRef);
+        var querySnapshot = await query.GetSnapshotAsync();
+        var results = new System.Collections.Generic.List<T>();
+        foreach (var doc in querySnapshot.Documents)
+        {
+            if (doc.Exists)
+            {
+                results.Add(doc.ConvertTo<T>());
+            }
+        }
+        return results;
+    }
 }
