@@ -51,6 +51,6 @@ public class DashboardController : MonoBehaviour
     void Logout(Unit unit)
     {
         Debug.Log("User logged out successfully.");
-        SceneManager.LoadScene("__scenes/dashboard/dashboard");
+        SceneManager.LoadScene("__scenes/home/home");
     }
 }
