@@ -16,7 +16,7 @@ public class FriendActionsUI : MonoBehaviour
     public BehaviorSubject<CharAvatar> SelectedFriendObs = new(null);
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {   
+    {
         this.SelectedFriendObs
             .Subscribe(avatar =>
             {
@@ -24,16 +24,58 @@ public class FriendActionsUI : MonoBehaviour
                 this.friendNameText.text = avatar.CharacterName;
             })
             .AddTo(this);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        this.party1Button.OnClickAsObservable()
+            .Subscribe(_ => this.AddFriendToParty(1))
+            .AddTo(this);
+        this.party2Button.OnClickAsObservable()
+            .Subscribe(_ => this.AddFriendToParty(2))
+            .AddTo(this);
     }
 
     void OnEnable()
     {
         this.SelectedFriendObs.OnNext(null);
+    }
+
+    async void AddFriendToParty(int partyNumber)
+    {
+        var selectedAvatar = this.SelectedFriendObs.Value;
+        if (selectedAvatar == null)
+        {
+            Debug.LogWarning("No friend selected to add to party.");
+            return;
+        }
+
+        var playerAvatar = charDataCenter.CharAvatarObs.Value;
+        if (playerAvatar == null)
+        {
+            Debug.LogWarning("Player avatar is not loaded.");
+            return;
+        }
+
+        if (partyNumber == 1 && playerAvatar.Party1AvatarId != selectedAvatar.AvatarId)
+        {
+            playerAvatar.Party1AvatarId = selectedAvatar.AvatarId;
+            if (playerAvatar.Party2AvatarId == selectedAvatar.AvatarId)
+            {
+                playerAvatar.Party2AvatarId = null; // Remove from party 2 if already there
+            }
+        }
+        else if (partyNumber == 2 && playerAvatar.Party2AvatarId != selectedAvatar.AvatarId)
+        {
+            playerAvatar.Party2AvatarId = selectedAvatar.AvatarId;
+            if (playerAvatar.Party1AvatarId == selectedAvatar.AvatarId)
+            {
+                playerAvatar.Party1AvatarId = null; // Remove from party 1 if already there
+            }
+        } 
+        else
+        {
+            Debug.LogWarning($"Avatar {selectedAvatar.CharacterName} is already in party {partyNumber}.");
+            return;
+        }
+
+        await charDataCenter.SaveAvatar(playerAvatar);
+        Debug.Log($"Added {selectedAvatar.CharacterName} to party {partyNumber}.");
     }
 }
