@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -37,21 +38,33 @@ public class CombatController : MonoBehaviour
         await LoadPartyAvatarsAsync(party1AvatarId, party2AvatarId);
     }
 
-    async Task LoadPartyAvatarsAsync(string party1AvatarId, string party2AvatarId)
+    async Task LoadParty1AvatarAsync(string party1AvatarId, List<CharAvatar> partyAvatars)
     {
-        var partyAvatarIds = new[] { party1AvatarId, party2AvatarId };
-        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("AvatarId", new[] { party1AvatarId, party2AvatarId }));
         if (party1AvatarId != null && partyAvatars.Count > 0)
         {
             var party1Avatar = partyAvatars.Find(a => a.AvatarId == party1AvatarId);
             this.party1Rig.gameObject.SetActive(true);
             await this.party1Rig.charDataCenter.LoadCharDataAsync(party1Avatar.UserId);
         }
+    }
+
+    async Task LoadParty2AvatarAsync(string party2AvatarId, List<CharAvatar> partyAvatars)
+    {
         if (party2AvatarId != null && partyAvatars.Count > 0)
         {
             var party2Avatar = partyAvatars.Find(a => a.AvatarId == party2AvatarId);
             this.party2Rig.gameObject.SetActive(true);
             await this.party2Rig.charDataCenter.LoadCharDataAsync(party2Avatar.UserId);
         }
+    }
+
+    async Task LoadPartyAvatarsAsync(string party1AvatarId, string party2AvatarId)
+    {
+        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("AvatarId", new[] { party1AvatarId, party2AvatarId }));
+
+        var loadParty1Task = LoadParty1AvatarAsync(party1AvatarId, partyAvatars);
+        var loadParty2Task = LoadParty2AvatarAsync(party2AvatarId, partyAvatars);
+
+        await Task.WhenAll(loadParty1Task, loadParty2Task);
     }
 }
