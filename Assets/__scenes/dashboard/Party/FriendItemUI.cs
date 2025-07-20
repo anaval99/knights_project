@@ -26,22 +26,7 @@ public class FriendItemUI : MonoBehaviour
             })
             .AddTo(this);
         this.friendActionsUI.SelectedFriendObs
-            .Subscribe(selectedAvatar =>
-            {
-                var color = Color.black;
-                this.backgroundImage.color = Color.black; // Reset color
-                if (selectedAvatar != null && this.friendAvatar != null && selectedAvatar.AvatarId == this.friendAvatar.AvatarId)
-                {
-                    // Highlight the selected friend
-                    color = Color.yellow; // Example highlight color
-                }
-                else if (this.friendAvatar != null)
-                {
-                    // Reset if no friend is selected or if avatar is null
-                    color = Color.white; // Default color
-                }
-                this.backgroundImage.color = color;
-            })
+            .Subscribe(this.SetFocusStatus)
             .AddTo(this);
         this.charDataCenter.CharAvatarObs
             .Subscribe(avatar => this.SetPartyStatus(avatar))
@@ -52,6 +37,23 @@ public class FriendItemUI : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void SetFocusStatus(CharAvatar selectedAvatar)
+    {
+        var color = Color.black;
+        this.backgroundImage.color = Color.black; // Reset color
+        if (selectedAvatar != null && this.friendAvatar != null && selectedAvatar.AvatarId == this.friendAvatar.AvatarId)
+        {
+            // Highlight the selected friend
+            color = Color.yellow; // Example highlight color
+        }
+        else if (this.friendAvatar != null)
+        {
+            // Reset if no friend is selected or if avatar is null
+            color = Color.white; // Default color
+        }
+        this.backgroundImage.color = color;
     }
 
     void SetPartyStatus(CharAvatar playerAvatar)
@@ -84,5 +86,6 @@ public class FriendItemUI : MonoBehaviour
         this.friendNameText.text = friendName;
         this.backgroundImage.color = color;
         this.SetPartyStatus(this.charDataCenter.CharAvatarObs.Value);
+        this.SetFocusStatus(this.friendActionsUI.SelectedFriendObs.Value);
     }
 }

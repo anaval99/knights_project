@@ -18,6 +18,7 @@ public class FriendActionsUI : MonoBehaviour
     void Start()
     {
         this.SelectedFriendObs
+            .Where(avatar => avatar != null)
             .Subscribe(avatar =>
             {
                 this.friendNameText.text = string.Empty;
