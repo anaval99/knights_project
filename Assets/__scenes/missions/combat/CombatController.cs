@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using R3;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour
@@ -10,6 +11,8 @@ public class CombatController : MonoBehaviour
     private PlayerRig party1Rig;
     [SerializeField]
     private PlayerRig party2Rig;
+
+    public BehaviorSubject<CombatState> CombatStateObs = new(new CombatState());
     void Start()
     {
         // Initialize combat setup
@@ -30,8 +33,8 @@ public class CombatController : MonoBehaviour
         party2Rig.gameObject.SetActive(false);
         // load player rig data
         string playerId = FirebaseService.Instance.GetUserId();
-        await playerRig.charDataCenter.LoadCharDataAsync(playerId);
-        var playerAvatar = playerRig.charDataCenter.CharAvatarObs.Value;
+        await playerRig.CharDataCenter.LoadCharDataAsync(playerId);
+        var playerAvatar = playerRig.CharDataCenter.CharAvatarObs.Value;
         string party1AvatarId = playerAvatar.Party1AvatarId;
         string party2AvatarId = playerAvatar.Party2AvatarId;
         // load party avatars
@@ -44,7 +47,7 @@ public class CombatController : MonoBehaviour
         {
             var party1Avatar = partyAvatars.Find(a => a.AvatarId == party1AvatarId);
             this.party1Rig.gameObject.SetActive(true);
-            await this.party1Rig.charDataCenter.LoadCharDataAsync(party1Avatar.UserId);
+            await this.party1Rig.CharDataCenter.LoadCharDataAsync(party1Avatar.UserId);
         }
     }
 
@@ -54,7 +57,7 @@ public class CombatController : MonoBehaviour
         {
             var party2Avatar = partyAvatars.Find(a => a.AvatarId == party2AvatarId);
             this.party2Rig.gameObject.SetActive(true);
-            await this.party2Rig.charDataCenter.LoadCharDataAsync(party2Avatar.UserId);
+            await this.party2Rig.CharDataCenter.LoadCharDataAsync(party2Avatar.UserId);
         }
     }
 
