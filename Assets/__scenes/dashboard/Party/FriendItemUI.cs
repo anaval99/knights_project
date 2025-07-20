@@ -36,7 +36,6 @@ public class FriendItemUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
     }
 
     void SetFocusStatus(CharAvatar selectedAvatar)
