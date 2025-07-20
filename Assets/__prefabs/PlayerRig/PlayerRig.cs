@@ -6,4 +6,6 @@ public class PlayerRig : MonoBehaviour
     public CharDataCenter CharDataCenter;
     [SerializeField]
     public PlayerAnimation PlayerAnimation;
+    [SerializeField]
+    public PlayerCombatHandler PlayerCombatHandler;
 }

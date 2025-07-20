@@ -19,10 +19,9 @@ public class CombatController : MonoBehaviour
         InitializeCombatAsync();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetCombatState(CombatState state)
     {
-
+        this.CombatStateObs.OnNext(state);
     }
 
     async void InitializeCombatAsync()
@@ -39,6 +38,23 @@ public class CombatController : MonoBehaviour
         string party2AvatarId = playerAvatar.Party2AvatarId;
         // load party avatars
         await LoadPartyAvatarsAsync(party1AvatarId, party2AvatarId);
+        var state = this.CombatStateObs.Value;
+        state.Phase = CombatPhase.Start; // set initial combat phase
+        this.SetCombatState(state);
+        var allRigs = new List<PlayerRig> { playerRig };
+        if (party1Rig.gameObject.activeSelf)
+        {
+            allRigs.Add(party1Rig);
+        }
+        if (party2Rig.gameObject.activeSelf)
+        {
+            allRigs.Add(party2Rig);
+        }
+        // Initialize combat handlers for all rigs
+        foreach (var rig in allRigs)
+        {
+            rig.PlayerCombatHandler.InitializeCombatHandler(this.CombatStateObs);
+        }
     }
 
     async Task LoadParty1AvatarAsync(string party1AvatarId, List<CharAvatar> partyAvatars)

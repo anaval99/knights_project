@@ -12,6 +12,8 @@ public class PlayerAnimation : MonoBehaviour
     private CharDataCenter charDataCenter;
     [SerializeField]
     private EquipmentList equipmentList;
+
+    private (ItemSO, GameObject) weaponSOGO;
     private void Start()
     {
         this.charDataCenter.CharEquipmentObs
@@ -21,6 +23,7 @@ public class PlayerAnimation : MonoBehaviour
             .Select(weapon =>
             {
                 var (so, go) = this.equipmentList.GetSOGO(weapon);
+                this.weaponSOGO = (so, go);
                 return so;
             })
             .Subscribe(this.onChangeWeapon)
@@ -47,6 +50,22 @@ public class PlayerAnimation : MonoBehaviour
         if (clip != null)
         {
             this.animancerComponent.Play(clip);
+        }
+    }
+
+    public void PlayPatrollingAnimation()
+    {
+        var patrolClip = this.weaponSOGO.Item1.WeaponClass switch
+        {
+            WeaponClass.Sword => this.animationList.GetClip(SwordAnims.SprintFWD_Battle_InPlace_THS),
+            WeaponClass.Bow => this.animationList.GetClip(ArrowAnims.SprintFWD_Battle_InPlace_BowAndArrow),
+            WeaponClass.Wand => this.animationList.GetClip(WandAnims.SprintFWD_Battle_InPlace_MagicWand),
+            _ => null
+        };
+
+        if (patrolClip != null)
+        {
+            this.animancerComponent.Play(patrolClip, 0.1f); // Play with a fade duration of 0.1 seconds
         }
     }
 }
