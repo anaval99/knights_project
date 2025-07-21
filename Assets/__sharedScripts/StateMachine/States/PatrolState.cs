@@ -27,7 +27,7 @@ public class PatrolState : IRxState
         {
             string patrolClip = PlayerAnims.SprintFWD_Battle_InPlace.WithWeapon(_weaponSO.WeaponClass);
             var clip = this._animationList.GetClip(patrolClip);
-            this._animancer.Play(clip);
+            this._animancer.Play(clip, 0.1f);
             return Observable.Never<int>();
         });
     }

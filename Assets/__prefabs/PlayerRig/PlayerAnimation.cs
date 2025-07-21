@@ -40,9 +40,14 @@ public class PlayerAnimation : MonoBehaviour
             return;
         }
 
+        this.PlayIdleAnimation();
+    }
+    
+    public void PlayIdleAnimation()
+    {
         var idleState = new IdleState(
             this.animancerComponent,
-            weaponSO,
+            this.weaponSOGO.Item1,
             this.animationList
         );
         this.rxStateMachine.SetState(idleState);
@@ -50,11 +55,11 @@ public class PlayerAnimation : MonoBehaviour
 
     public void PlayPatrollingAnimation()
     {
-       var patrolState = new PatrolState(
-            this.animancerComponent,
-            this.weaponSOGO.Item1,
-            this.animationList
-        );
+        var patrolState = new PatrolState(
+             this.animancerComponent,
+             this.weaponSOGO.Item1,
+             this.animationList
+         );
         this.rxStateMachine.SetState(patrolState);
     }
 }

@@ -26,7 +26,7 @@ public class IdleState: IRxState
         {
             string idleClip = PlayerAnims.Idle_Battle.WithWeapon(_weaponSO.WeaponClass);
             var clip = this._animationList.GetClip(idleClip);
-            this._animancer.Play(clip);
+            this._animancer.Play(clip, 0.1f);
             return Observable.Never<int>();
         });
     }

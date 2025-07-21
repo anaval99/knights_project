@@ -43,7 +43,7 @@ MonoBehaviour:
     width: 3440
     height: 1357
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Inspector
   m_RootView: {fileID: 5}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 97
+  controlID: 122
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -938,9 +938,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 13.17245, y: 4.0748453, z: -8.833042}
+    m_Target: {x: -23.349623, y: 0.8747976, z: 5.8137994}
     speed: 2
-    m_Value: {x: 13.17245, y: 4.0748453, z: -8.833042}
+    m_Value: {x: -23.349623, y: 0.8747976, z: 5.8137994}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -986,9 +986,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.2477983, y: -0.026154047, z: 0.0066921716, w: 0.96843714}
+    m_Target: {x: 0.009801313, y: -0.57691807, z: 0.0069227708, w: 0.8167162}
     speed: 2
-    m_Value: {x: -0.2477983, y: 0.026154045, z: -0.006692171, w: -0.9684371}
+    m_Value: {x: -0.009801313, y: 0.57691807, z: -0.0069227708, w: -0.81671613}
   m_Size:
     m_Target: 10
     speed: 2
@@ -1067,7 +1067,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 7cf0ffff1cfbffff22af0000
+      m_ExpandedIDs: 4ce3ffffe0e5ffff1cfbffff2aaf0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1139,7 +1139,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__scenes/missions/combat
+    - Assets/__prefabs/PlayerRig
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1149,16 +1149,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__scenes/missions/combat
+  - Assets/__prefabs/PlayerRig
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 10450100
-    m_LastClickedID: 83216
-    m_ExpandedIDs: 00000000384301003a4301003c4301003e43010040430100424301004443010046430100484301004a4301004c4301004e43010050430100
+    m_SelectedIDs: 4a430100
+    m_LastClickedID: 82762
+    m_ExpandedIDs: 000000004e43010050430100524301005443010056430100584301005a4301005c4301005e43010060430100624301006443010066430100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1187,7 +1187,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000384301003a4301003c4301003e43010040430100424301004443010046430100484301004a4301004c4301004e43010050430100
+    m_ExpandedIDs: 000000004e43010050430100524301005443010056430100584301005a4301005c4301005e43010060430100624301006443010066430100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

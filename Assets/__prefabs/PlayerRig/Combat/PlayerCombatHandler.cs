@@ -19,7 +19,12 @@ public class PlayerCombatHandler : MonoBehaviour
                 case CombatPhase.Patrolling:
                     // Handle patrolling logic
                     Debug.Log("Player is patrolling.");
-                    this.DoPatrol();
+                    this.playerAnimation.PlayPatrollingAnimation();
+                    break;
+                case CombatPhase.BattleStart:
+                    // Handle battle start logic
+                    Debug.Log("Battle has started.");
+                    this.playerAnimation.PlayIdleAnimation();
                     break;
                 case CombatPhase.None:
                 default:
@@ -29,12 +34,5 @@ public class PlayerCombatHandler : MonoBehaviour
             }
         })
         .AddTo(this);
-    }
-
-    void DoPatrol()
-    {
-        // Logic for patrolling
-        Debug.Log("Player is patrolling the area.");
-        this.playerAnimation.PlayPatrollingAnimation();
     }
 }
