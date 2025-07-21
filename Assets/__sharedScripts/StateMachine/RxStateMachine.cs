@@ -1,0 +1,27 @@
+using R3;
+using UnityEngine;
+
+public class RxStateMachine : MonoBehaviour
+{
+    private BehaviorSubject<IRxState> CurrentStateObs = new BehaviorSubject<IRxState>(null);
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        this.CurrentStateObs.Where(state => state != null)
+            .Select(state => state.Play())
+            .Switch()
+            .Subscribe()
+            .AddTo(this);
+    }
+    
+    public void SetState(IRxState newState)
+    {
+        this.CurrentStateObs.OnNext(newState);
+    }
+}

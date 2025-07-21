@@ -12,6 +12,8 @@ public class PlayerAnimation : MonoBehaviour
     private CharDataCenter charDataCenter;
     [SerializeField]
     private EquipmentList equipmentList;
+    [SerializeField]
+    private RxStateMachine rxStateMachine;
 
     private (ItemSO, GameObject) weaponSOGO;
     private void Start()
@@ -38,34 +40,21 @@ public class PlayerAnimation : MonoBehaviour
             return;
         }
 
-        // Modern switch expression (C# 8.0+)
-        var clip = weaponSO.WeaponClass switch
-        {
-            WeaponClass.Sword => this.animationList.GetClip(SwordAnims.Idle_Battle_THS),
-            WeaponClass.Bow => this.animationList.GetClip(ArrowAnims.Idle_Battle_BowAndArrow),
-            WeaponClass.Wand => this.animationList.GetClip(WandAnims.Idle_Battle_MagicWand),
-            _ => null
-        };
-
-        if (clip != null)
-        {
-            this.animancerComponent.Play(clip);
-        }
+        var idleState = new IdleState(
+            this.animancerComponent,
+            weaponSO,
+            this.animationList
+        );
+        this.rxStateMachine.SetState(idleState);
     }
 
     public void PlayPatrollingAnimation()
     {
-        var patrolClip = this.weaponSOGO.Item1.WeaponClass switch
-        {
-            WeaponClass.Sword => this.animationList.GetClip(SwordAnims.SprintFWD_Battle_InPlace_THS),
-            WeaponClass.Bow => this.animationList.GetClip(ArrowAnims.SprintFWD_Battle_InPlace_BowAndArrow),
-            WeaponClass.Wand => this.animationList.GetClip(WandAnims.SprintFWD_Battle_InPlace_MagicWand),
-            _ => null
-        };
-
-        if (patrolClip != null)
-        {
-            this.animancerComponent.Play(patrolClip, 0.1f); // Play with a fade duration of 0.1 seconds
-        }
+       var patrolState = new PatrolState(
+            this.animancerComponent,
+            this.weaponSOGO.Item1,
+            this.animationList
+        );
+        this.rxStateMachine.SetState(patrolState);
     }
 }
