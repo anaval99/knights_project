@@ -18,12 +18,10 @@ public class PlayerCombatHandler : MonoBehaviour
                     break;
                 case CombatPhase.Patrolling:
                     // Handle patrolling logic
-                    Debug.Log("Player is patrolling.");
                     this.playerAnimation.PlayPatrollingAnimation();
                     break;
                 case CombatPhase.BattleStart:
                     // Handle battle start logic
-                    Debug.Log("Battle has started.");
                     this.playerAnimation.PlayIdleAnimation();
                     break;
                 case CombatPhase.None:

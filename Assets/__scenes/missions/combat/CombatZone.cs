@@ -11,6 +11,7 @@ public class CombatZone : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
+        string otherLayer = LayerMask.LayerToName(other.gameObject.layer);
         if (!hasTriggered)
         {
             hasTriggered = true;
