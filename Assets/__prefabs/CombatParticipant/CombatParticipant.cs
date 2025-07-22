@@ -1,5 +1,6 @@
 using R3;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatParticipant : MonoBehaviour
 {
@@ -12,4 +13,43 @@ public class CombatParticipant : MonoBehaviour
     public int Defense = 10;
     [SerializeField]
     public int Damage = 20;
+
+    [SerializeField]
+    public Slider HealthSlider;
+    [SerializeField]
+    Image FillColor;
+    [SerializeField]
+    TMPro.TextMeshProUGUI HealthNumber;
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (HealthSlider != null)
+        {
+            HealthSlider.value = (float)CurrentHealth / MaxHealth;
+        }
+            // 23, 149, 149 by default, yellow if less than 66%, red if less than 33%
+            Color color = new Color(0.090f, 0.584f, 0.584f);
+            if (HealthSlider.value < 0.33f)
+            {
+                color = Color.red;
+            }
+            else if (HealthSlider.value < 0.66f)
+            {
+                color = Color.yellow;
+            }
+
+            if (FillColor != null)
+            {
+                FillColor.color = color;
+            }
+
+            if (HealthNumber != null)
+            {
+                HealthNumber.text = $"{CurrentHealth}/{MaxHealth}";
+                HealthNumber.color = color;
+            }
+
+        
+    }
 }

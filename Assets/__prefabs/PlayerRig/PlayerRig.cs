@@ -8,4 +8,6 @@ public class PlayerRig : MonoBehaviour
     public PlayerAnimation PlayerAnimation;
     [SerializeField]
     public PlayerCombatHandler PlayerCombatHandler;
+    [SerializeField]
+    public CombatParticipant PlayerCombatParticipant;
 }

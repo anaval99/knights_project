@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -22,6 +23,28 @@ public class CombatController : MonoBehaviour
     public void SetCombatState(CombatState state)
     {
         this.CombatStateObs.OnNext(state);
+        if (state.Phase == CombatPhase.BattleStart)
+        {
+            InitBattleStart(state);
+            Debug.Log("Combat phase set to BattleStart with " + state.ShuffledParticipants.Count + " participants.");
+        }
+        else if (state.Phase == CombatPhase.Start)
+        {
+            Debug.Log("Combat phase set to Start.");
+        }
+        else
+        {
+            Debug.Log("Combat phase set to " + state.Phase);
+        }
+    }
+
+    void InitBattleStart(CombatState state)
+    {
+        // concat player and enemy participants
+        state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
+        // now shuffle the participants
+        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => Random.value).ToList();
+        state.TurnIndex = 0;
     }
 
     async void InitializeCombatAsync()
@@ -40,7 +63,6 @@ public class CombatController : MonoBehaviour
         await LoadPartyAvatarsAsync(party1AvatarId, party2AvatarId);
         var state = this.CombatStateObs.Value;
         state.Phase = CombatPhase.Start; // set initial combat phase
-        this.SetCombatState(state);
         var allRigs = new List<PlayerRig> { playerRig };
         if (party1Rig.gameObject.activeSelf)
         {
@@ -55,6 +77,8 @@ public class CombatController : MonoBehaviour
         {
             rig.PlayerCombatHandler.InitializeCombatHandler(this.CombatStateObs);
         }
+        state.PlayerParticipants.AddRange(allRigs.Select(r => r.PlayerCombatParticipant));
+        this.SetCombatState(state);
     }
 
     async Task LoadParty1AvatarAsync(string party1AvatarId, List<CharAvatar> partyAvatars)

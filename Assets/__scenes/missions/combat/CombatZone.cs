@@ -21,14 +21,12 @@ public class CombatZone : MonoBehaviour
         {
             hasTriggered = true;
             Debug.Log("CombatZone triggered by: " + other.name);
-            var state = new CombatState
-            {
-                Phase = CombatPhase.BattleStart
-            };
-            combatController.SetCombatState(state);
             var enemies = GetCombatParticipants();
+            var state = combatController.CombatStateObs.Value;
+            state.EnemyParticipants = enemies;
+            state.Phase = CombatPhase.BattleStart;
+            combatController.SetCombatState(state);
             Debug.Log("CombatZone found " + enemies.Count + " combat participants: " + string.Join(", ", enemies.Select(e => e.name)));
-
         }
     }
 
@@ -40,7 +38,7 @@ public class CombatZone : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             CombatParticipant participant = collider.GetComponent<CombatParticipant>();
-            if (participant != null)
+            if (participant != null && !participant.name.Contains("Player"))
             {
                 participants.Add(participant);
             }

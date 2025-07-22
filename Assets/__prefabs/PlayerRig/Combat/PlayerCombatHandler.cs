@@ -5,6 +5,12 @@ public class PlayerCombatHandler : MonoBehaviour
 {
     [SerializeField]
     private PlayerAnimation playerAnimation;
+    [SerializeField]
+    private CharDataCenter charDataCenter;
+    [SerializeField]
+    private CombatParticipant combatParticipant;
+    [SerializeField]
+    private EquipmentList equipmentList;
 
     public void InitializeCombatHandler(Observable<CombatState> combatStateObs)
     {
@@ -32,5 +38,29 @@ public class PlayerCombatHandler : MonoBehaviour
             }
         })
         .AddTo(this);
+    }
+
+    void Start()
+    {
+        this.charDataCenter.CharEquipmentObs.Subscribe(equipment =>
+        {
+            this.ComputeStatsFromEquipment(equipment);
+        }).AddTo(this);
+    }
+
+    private void ComputeStatsFromEquipment(CharEquipment equipment)
+    {
+        // Example logic to get stats from equipment
+        if (equipment != null)
+        {
+            var armorSOGO = this.equipmentList.GetSOGO(equipment.Armor);
+            var weaponSOGO = this.equipmentList.GetSOGO(equipment.Weapon);
+            // armor
+            this.combatParticipant.MaxHealth = armorSOGO.Item1.Health;
+            this.combatParticipant.CurrentHealth = armorSOGO.Item1.Health;
+            this.combatParticipant.Defense = armorSOGO.Item1.Defense;
+            // weapon
+            this.combatParticipant.Damage = weaponSOGO.Item1.Damage;
+        }
     }
 }
