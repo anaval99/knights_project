@@ -24,15 +24,25 @@ public class CombatParticipant : MonoBehaviour
     TMPro.TextMeshProUGUI HealthNumber;
 
     private CombatController combatController;
-    public BehaviorSubject<bool> MyTurnStartObs = new BehaviorSubject<bool>(false);
+    public Subject<bool> MyTurnStartObs = new Subject<bool>();
+    public BehaviorSubject<bool> IsMyTurnObs = new BehaviorSubject<bool>(false);
 
     void Start()
     {
         this.combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
         this.combatController.CombatStateObs
             .Where(state => state != null)
-            .Select(state => state.Phase == CombatPhase.TurnStart && state.ShuffledParticipants[state.TurnIndex] == this)
-            .Subscribe(isMyTurn => this.MyTurnStartObs.OnNext(isMyTurn))
+            .Do(state =>
+            {
+                bool isTurnPhase = state.Phase.ToString().Contains("Turn");
+                bool isMyTurn = isTurnPhase && state.ShuffledParticipants[state.TurnIndex] == this;
+                this.IsMyTurnObs.OnNext(isMyTurn);
+                if (isMyTurn && state.Phase == CombatPhase.TurnStart)
+                {
+                    this.MyTurnStartObs.OnNext(true);
+                }
+            })
+            .Subscribe()
             .AddTo(this);
     }
 

@@ -43,7 +43,7 @@ public class PlayerCombatHandler : MonoBehaviour
     void Start()
     {
         this.charDataCenter.CharEquipmentObs.Subscribe(equipment => this.ComputeStatsFromEquipment(equipment)).AddTo(this);
-        this.combatParticipant.MyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurn => this.underGlow.gameObject.SetActive(isMyTurn)).AddTo(this);
+        this.combatParticipant.IsMyTurnObs.DistinctUntilChanged().Subscribe(isMyTurn => this.underGlow.gameObject.SetActive(isMyTurn)).AddTo(this);
     }
 
     private void ComputeStatsFromEquipment(CharEquipment equipment)

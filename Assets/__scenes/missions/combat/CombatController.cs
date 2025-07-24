@@ -44,9 +44,11 @@ public class CombatController : MonoBehaviour
         // concat player and enemy participants
         state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
         // now shuffle the participants
-        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => UnityEngine.Random.value).ToList();
+        var random = new System.Random();
+        random.Next(0, 100); // seed the random number generator
+        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => random.Next(0, 100)).ToList();
         state.TurnIndex = -1; // reset turn index
-        Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(_ =>
+        Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
         {
             // Start the first turn
             StartTurn(state);
