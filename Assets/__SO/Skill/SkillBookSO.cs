@@ -18,4 +18,6 @@ public class SkillBookSO : ScriptableObject
   public WeaponClass WeaponClass;
   [SerializeField]
   public SkillType SkillType;
+  [SerializeField]
+  public TargetType TargetType = TargetType.None;
 }
