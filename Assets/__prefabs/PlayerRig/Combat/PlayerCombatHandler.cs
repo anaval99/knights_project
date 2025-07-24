@@ -11,6 +11,8 @@ public class PlayerCombatHandler : MonoBehaviour
     private CombatParticipant combatParticipant;
     [SerializeField]
     private EquipmentList equipmentList;
+    [SerializeField]
+    private UnderGlow underGlow;
 
     public void InitializeCombatHandler(Observable<CombatState> combatStateObs)
     {
@@ -40,10 +42,8 @@ public class PlayerCombatHandler : MonoBehaviour
 
     void Start()
     {
-        this.charDataCenter.CharEquipmentObs.Subscribe(equipment =>
-        {
-            this.ComputeStatsFromEquipment(equipment);
-        }).AddTo(this);
+        this.charDataCenter.CharEquipmentObs.Subscribe(equipment => this.ComputeStatsFromEquipment(equipment)).AddTo(this);
+        this.combatParticipant.MyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurn => this.underGlow.gameObject.SetActive(isMyTurn)).AddTo(this);
     }
 
     private void ComputeStatsFromEquipment(CharEquipment equipment)
