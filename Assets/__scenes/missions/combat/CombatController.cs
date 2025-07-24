@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ public class CombatController : MonoBehaviour
         if (state.Phase == CombatPhase.BattleStart)
         {
             InitBattleStart(state);
-            Debug.Log("Combat phase set to BattleStart with " + state.ShuffledParticipants.Count + " participants.");
+            Debug.Log("Combat phase set to BattleStart with " + string.Join(", ", state.ShuffledParticipants.Select(p => p.name)) + " participants.");
         }
         else if (state.Phase == CombatPhase.Start)
         {
@@ -43,8 +44,25 @@ public class CombatController : MonoBehaviour
         // concat player and enemy participants
         state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
         // now shuffle the participants
-        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => Random.value).ToList();
-        state.TurnIndex = 0;
+        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => UnityEngine.Random.value).ToList();
+        state.TurnIndex = -1; // reset turn index
+        Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(_ =>
+        {
+            // Start the first turn
+            StartTurn(state);
+        });
+    }
+
+    void StartTurn(CombatState state)
+    {
+        state.TurnIndex = (state.TurnIndex + 1) % state.ShuffledParticipants.Count; // increment turn index and wrap around
+        var currentParticipant = state.ShuffledParticipants[state.TurnIndex];
+        Debug.Log($"Starting turn for {currentParticipant.name}.");
+        // Notify the participant to take their turn
+        Debug.Log($"Current participant: {currentParticipant.name}, Turn Index: {state.TurnIndex}");
+        // Set the phase to TurnStart
+        state.Phase = CombatPhase.TurnStart;
+        this.SetCombatState(state);
     }
 
     async void InitializeCombatAsync()

@@ -4,4 +4,5 @@ public enum CombatPhase
     Start,
     Patrolling,
     BattleStart,
+    TurnStart,
 }

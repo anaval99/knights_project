@@ -19,8 +19,6 @@ public class PlayerCombatHandler : MonoBehaviour
             switch (state.Phase)
             {
                 case CombatPhase.Start:
-                    // Handle combat start logic
-                    Debug.Log("Combat started.");
                     break;
                 case CombatPhase.Patrolling:
                     // Handle patrolling logic
