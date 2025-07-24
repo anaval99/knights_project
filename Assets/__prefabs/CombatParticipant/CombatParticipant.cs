@@ -30,6 +30,11 @@ public class CombatParticipant : MonoBehaviour
     void Start()
     {
         this.combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
+        if (this.combatController == null)
+        {
+            Debug.Log("Not in combat, skipping combat participant initialization.");
+            return;
+        }
         this.combatController.CombatStateObs
             .Where(state => state != null)
             .Do(state =>
