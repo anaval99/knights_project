@@ -8,6 +8,7 @@ public class CombatZone : MonoBehaviour
     bool hasTriggered = false;
     private CombatController combatController;
     private Collider selfCollider;
+
     void Start()
     {
         combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
@@ -21,13 +22,18 @@ public class CombatZone : MonoBehaviour
         {
             hasTriggered = true;
             Debug.Log("CombatZone triggered by: " + other.name);
-            var enemies = GetCombatParticipants();
-            var state = combatController.CombatStateObs.Value;
-            state.EnemyParticipants = enemies;
-            state.Phase = CombatPhase.BattleStart;
-            combatController.SetCombatState(state);
-            Debug.Log("CombatZone found " + enemies.Count + " combat participants: " + string.Join(", ", enemies.Select(e => e.name)));
+            this.SetBattleStart();
         }
+    }
+
+    [ContextMenu("Set Battle Start")]
+    void SetBattleStart()
+    {
+        var state = combatController.CombatStateObs.Value;
+        state.Phase = CombatPhase.BattleStart;
+        state.EnemyParticipants = GetCombatParticipants();
+        combatController.SetCombatState(state);
+        Debug.Log("CombatZone found " + state.EnemyParticipants + " combat participants: " + string.Join(", ", state.EnemyParticipants.Select(e => e.name)));
     }
 
     List<CombatParticipant> GetCombatParticipants()
