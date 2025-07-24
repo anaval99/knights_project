@@ -8,20 +8,27 @@ public class SkillButtonUI : MonoBehaviour
     [SerializeField]
     UnityEngine.UI.Image skillIcon;
     [SerializeField]
-    Skillbar skillbar;
-    [SerializeField]
     UnityEngine.UI.Button skillButton;
 
     private SkillBookSO skillBookSO;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        var combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
+        if (combatController == null)
+        {
+            Debug.Log("Not in combat, disabling skill button.");
+            return;
+        }
         this.skillButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
                 if (this.skillBookSO != null && this.skillBookSO.SkillType == SkillType.Active)
                 {
-                    this.skillbar.SelectedSkillBookSO.OnNext(this.skillBookSO);
+                    var state = combatController.CombatStateObs.Value;
+                    state.SelectedSkillBook = this.skillBookSO;
+                    state.Phase = CombatPhase.TurnSelectTarget;
+                    combatController.SetCombatState(state);
                 }
             })
             .AddTo(this);

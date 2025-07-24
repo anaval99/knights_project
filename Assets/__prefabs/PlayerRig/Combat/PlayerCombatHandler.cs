@@ -45,8 +45,22 @@ public class PlayerCombatHandler : MonoBehaviour
     void Start()
     {
         this.charDataCenter.CharEquipmentObs.Subscribe(equipment => this.ComputeStatsFromEquipment(equipment)).AddTo(this);
-        this.combatParticipant.IsMyTurnObs.DistinctUntilChanged().Subscribe(isMyTurn => this.underGlow.gameObject.SetActive(isMyTurn)).AddTo(this);
-        this.combatParticipant.IsMyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurnStart => this.skillbar.gameObject.SetActive(isMyTurnStart)).AddTo(this);
+        this.combatParticipant.IsMyTurnObs.DistinctUntilChanged().Subscribe(isMyTurn =>
+        {
+            this.underGlow.gameObject.SetActive(isMyTurn);
+            this.skillbar.gameObject.SetActive(isMyTurn);
+        }).AddTo(this);
+        this.combatParticipant.IsMyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurnStart =>
+        {
+            this.skillbar.skillbarUI.gameObject.SetActive(isMyTurnStart);
+            this.skillbar.potionsUI.gameObject.SetActive(isMyTurnStart);
+        }).AddTo(this);
+        Observable.CombineLatest(this.combatParticipant.IsMyTurnSelectTargetObs, this.combatParticipant.IsMyTurnConfirmActionObs).Subscribe(tuple =>
+        {
+            var isMyTurnSelectTarget = tuple[0];
+            var isMyTurnConfirmAction = tuple[1];
+            this.skillbar.skillInfo.gameObject.SetActive(isMyTurnSelectTarget || isMyTurnConfirmAction);
+        }).AddTo(this);
     }
 
     private void ComputeStatsFromEquipment(CharEquipment equipment)

@@ -15,6 +15,8 @@ public class CombatController : MonoBehaviour
     private PlayerRig party2Rig;
 
     public BehaviorSubject<CombatState> CombatStateObs = new(new CombatState());
+
+    private System.Random randomizer = new();
     void Start()
     {
         // Initialize combat setup
@@ -23,6 +25,7 @@ public class CombatController : MonoBehaviour
 
     public void SetCombatState(CombatState state)
     {
+        this.randomizer.Next(0, 100); // Ensure randomizer is initialized
         this.CombatStateObs.OnNext(state);
         if (state.Phase == CombatPhase.BattleStart)
         {
@@ -44,9 +47,7 @@ public class CombatController : MonoBehaviour
         // concat player and enemy participants
         state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
         // now shuffle the participants
-        var random = new System.Random();
-        random.Next(0, 100); // seed the random number generator
-        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => random.Next(0, 100)).ToList();
+        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => randomizer.Next(0, 100)).ToList();
         state.TurnIndex = -1; // reset turn index
         Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
         {
@@ -64,6 +65,7 @@ public class CombatController : MonoBehaviour
         Debug.Log($"Current participant: {currentParticipant.name}, Turn Index: {state.TurnIndex}");
         // Set the phase to TurnStart
         state.Phase = CombatPhase.TurnStart;
+        state.SelectedSkillBook = null; // reset selected skill book
         this.SetCombatState(state);
     }
 

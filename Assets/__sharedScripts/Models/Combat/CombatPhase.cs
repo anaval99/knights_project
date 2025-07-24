@@ -5,4 +5,7 @@ public enum CombatPhase
     Patrolling,
     BattleStart,
     TurnStart,
+    TurnSelectTarget,
+    TurnConfirmAction,
+    TurnAction,
 }
