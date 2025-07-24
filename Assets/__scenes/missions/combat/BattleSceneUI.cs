@@ -11,6 +11,13 @@ public class BattleSceneUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        this.CombatController.CombatStateObs
+            .Subscribe(state =>
+            {
+                // Show the button when combat starts
+                this.TapToStartButton.gameObject.SetActive(state.Phase == CombatPhase.Start);
+            })
+            .AddTo(this);
         this.TapToStartButton.OnClickAsObservable()
             .Subscribe(_ =>
             {

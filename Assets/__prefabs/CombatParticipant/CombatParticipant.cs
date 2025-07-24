@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using R3;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +17,10 @@ public class CombatParticipant : MonoBehaviour
     public int Damage = 20;
     [SerializeField]
     public int AP = 0;
+    [SerializeField]
+    Button SelectorButton;
+    [SerializeField]
+    bool IsEnemy = true;
 
     [SerializeField]
     public Slider HealthSlider;
@@ -31,12 +37,30 @@ public class CombatParticipant : MonoBehaviour
 
     void Start()
     {
+        if (this.gameObject.name.Contains("Player"))
+        {
+            IsEnemy = false;
+        }
         this.combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
         if (this.combatController == null)
         {
             Debug.Log("Not in combat, skipping combat participant initialization.");
             return;
         }
+        this.SelectorButton.OnClickAsObservable()
+            .Subscribe(_ =>
+            {
+                if (this.isCurrentTargetForConfirm())
+                {
+                    Debug.Log("CombatParticipant: " + this.name + " is already selected for confirm action.");
+                    return;
+                }
+                var state = combatController.CombatStateObs.Value;
+                state.SkillTargets = new List<CombatParticipant> { this };
+                state.Phase = CombatPhase.TurnConfirmAction;
+                combatController.SetCombatState(state);
+            })
+            .AddTo(this);
         this.combatController.CombatStateObs
             .Where(state => state != null)
             .Do(state =>
@@ -53,9 +77,22 @@ public class CombatParticipant : MonoBehaviour
 
                 bool isMyTurnConfirmAction = isMyTurn && state.Phase == CombatPhase.TurnConfirmAction;
                 this.IsMyTurnConfirmActionObs.OnNext(isMyTurnConfirmAction);
+
+                var selectedSkill = state.SelectedSkillBook;
+                bool isPlayerTargeting = !isMyTurn && state.Phase == CombatPhase.TurnSelectTarget;
+                bool isValidTarget = selectedSkill != null &&
+                                     (selectedSkill.TargetType == TargetType.AllySingle && !IsEnemy ||
+                                      selectedSkill.TargetType == TargetType.EnemySingle && IsEnemy);
+                this.SelectorButton.gameObject.SetActive((isPlayerTargeting && isValidTarget) || this.isCurrentTargetForConfirm());
             })
             .Subscribe()
             .AddTo(this);
+    }
+
+    bool isCurrentTargetForConfirm()
+    {
+        var state = this.combatController.CombatStateObs.Value;
+        return state.SkillTargets.Contains(this) && state.Phase == CombatPhase.TurnConfirmAction;
     }
 
     // Update is called once per frame

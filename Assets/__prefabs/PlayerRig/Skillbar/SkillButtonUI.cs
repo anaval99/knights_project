@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using R3;
 using UnityEngine;
 
@@ -27,7 +29,32 @@ public class SkillButtonUI : MonoBehaviour
                 {
                     var state = combatController.CombatStateObs.Value;
                     state.SelectedSkillBook = this.skillBookSO;
-                    state.Phase = CombatPhase.TurnSelectTarget;
+                    if (this.skillBookSO.TargetType == TargetType.AllySingle || this.skillBookSO.TargetType == TargetType.EnemySingle)
+                    {
+                        state.Phase = CombatPhase.TurnSelectTarget;
+                    }
+                    else
+                    {
+                        var currentTurnParticipant = state.ShuffledParticipants[state.TurnIndex];
+                        if (state.SelectedSkillBook.TargetType == TargetType.AllyAll)
+                        {
+                            state.SkillTargets = state.PlayerParticipants.Where(p => p != currentTurnParticipant).ToList();
+                        }
+                        else if (state.SelectedSkillBook.TargetType == TargetType.EnemyAll)
+                        {
+                            state.SkillTargets = state.EnemyParticipants.ToList();
+                        }
+                        else if (state.SelectedSkillBook.TargetType == TargetType.Self)
+                        {
+                            state.SkillTargets = new List<CombatParticipant> { currentTurnParticipant };
+                        }
+                        else if (state.SelectedSkillBook.TargetType == TargetType.AllyTeam)
+                        {
+                            state.SkillTargets = state.PlayerParticipants.ToList();
+                        }
+
+                        state.Phase = CombatPhase.TurnConfirmAction;
+                    }
                     combatController.SetCombatState(state);
                 }
             })

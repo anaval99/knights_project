@@ -9,4 +9,5 @@ public class CombatState
     public int TurnIndex { get; set; } = 0;
     public List<CombatParticipant> ShuffledParticipants { get; set; } = new List<CombatParticipant>();
     public SkillBookSO SelectedSkillBook { get; set; } = null;
+    public List<CombatParticipant> SkillTargets { get; set; } = new List<CombatParticipant>();
 }

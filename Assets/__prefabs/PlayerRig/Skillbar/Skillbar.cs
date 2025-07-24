@@ -1,5 +1,6 @@
 using R3;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Skillbar : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Skillbar : MonoBehaviour
     public PotionsUI potionsUI;
     [SerializeField]
     public SkillInfo skillInfo;
+    [SerializeField]
+    private Button skillCancelButton;
 
     private CombatController combatController;
 
@@ -22,6 +25,16 @@ public class Skillbar : MonoBehaviour
             Debug.Log("Not in combat, disabling skillbar.");
             return;
         }
+        this.skillCancelButton.OnClickAsObservable()
+            .Subscribe(_ =>
+            {
+                var state = combatController.CombatStateObs.Value;
+                state.Phase = CombatPhase.TurnStart;
+                state.SkillTargets.Clear();
+                state.SelectedSkillBook = null;
+                combatController.SetCombatState(state);
+            })
+            .AddTo(this);
         // Subscribe to combat state changes
         combatController.CombatStateObs
             .Where(state => state != null)
