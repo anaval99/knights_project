@@ -36,6 +36,14 @@ public class CombatController : MonoBehaviour
         {
             Debug.Log("Combat phase set to Start.");
         }
+        else if (state.Phase == CombatPhase.TurnEnd)
+        {
+            Observable.Timer(TimeSpan.FromSeconds(1)).Take(1).Subscribe(_ =>
+            {
+                // Next turn
+                StartTurn(state);
+            });
+        }        
         else
         {
             Debug.Log("Combat phase set to " + state.Phase);
@@ -49,11 +57,16 @@ public class CombatController : MonoBehaviour
         // now shuffle the participants
         state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => randomizer.Next(0, 100)).ToList();
         state.TurnIndex = -1; // reset turn index
-        Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
+        Observable.Timer(TimeSpan.FromSeconds(1)).Take(1).Subscribe(_ =>
         {
             // Start the first turn
             StartTurn(state);
         });
+    }
+
+    void InitBattleEnd(CombatState state)
+    {
+
     }
 
     void StartTurn(CombatState state)
@@ -66,6 +79,7 @@ public class CombatController : MonoBehaviour
         // Set the phase to TurnStart
         state.Phase = CombatPhase.TurnStart;
         state.SelectedSkillBook = null; // reset selected skill book
+        state.SkillTargets = new();
         this.SetCombatState(state);
     }
 

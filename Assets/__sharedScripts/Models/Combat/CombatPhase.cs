@@ -8,4 +8,5 @@ public enum CombatPhase
     TurnSelectTarget,
     TurnConfirmAction,
     TurnAction,
+    TurnEnd,
 }
