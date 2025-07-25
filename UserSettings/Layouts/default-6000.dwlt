@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 128
+  controlID: 86
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -1084,7 +1084,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 6c62fdff04e5ffff90f8ffffa0f9ffff14fbffff18fbffff1afbffff1cfbffff4aaf00004eaf00006caf00007eaf0000
+      m_ExpandedIDs: 4af8ffff0efbffff1afbffff1cfbffff9eaf0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1156,7 +1156,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__prefabs/PlayerRig/Skillbar
+    - Assets/__prefabs/CombatParticipant
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1166,16 +1166,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__prefabs/PlayerRig/Skillbar
+  - Assets/__prefabs/CombatParticipant
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 79}
-    m_SelectedIDs: 8c450100
-    m_LastClickedID: 83340
-    m_ExpandedIDs: 000000003445010036450100384501003a4501003c4501003e45010040450100424501004445010046450100484501004a4501004c450100
+    m_SelectedIDs: 62460100
+    m_LastClickedID: 83554
+    m_ExpandedIDs: 000000006c4501006e45010070450100724501007445010076450100784501007a4501007c4501007e450100804501008245010084450100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1204,7 +1204,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000003445010036450100384501003a4501003c4501003e45010040450100424501004445010046450100484501004a4501004c450100
+    m_ExpandedIDs: 000000006c4501006e45010070450100724501007445010076450100784501007a4501007c4501007e450100804501008245010084450100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1230,8 +1230,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 84af0000
-    m_LastClickedInstanceID: 44932
+    m_SelectedInstanceIDs: d0390200
+    m_LastClickedInstanceID: 145872
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009c0c04004c0d0400daea0000520d0400d4ea0000580d0400aeba0000fcd2000008da0000d8bd000070d50000d4b00000b0cb0000c218020050070200e8c60000502002004240050006d9030088fb03006efb030068fb0300248802007a960300
     m_RenameOverlay:
