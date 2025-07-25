@@ -43,7 +43,12 @@ public class CombatParticipant : MonoBehaviour
         {
             IsEnemy = false;
         }
-        this.combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
+        var combatControllerObject = GameObject.FindGameObjectWithTag("CombatController");
+        if (combatControllerObject == null)
+        {
+            return;
+        }
+        this.combatController = combatControllerObject.GetComponent<CombatController>();
         if (this.combatController == null)
         {
             Debug.Log("Not in combat, skipping combat participant initialization.");
