@@ -20,6 +20,8 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     Button SelectorButton;
     [SerializeField]
+    GameObject SelectionSymbol;
+    [SerializeField]
     bool IsEnemy = true;
 
     [SerializeField]
@@ -50,11 +52,6 @@ public class CombatParticipant : MonoBehaviour
         this.SelectorButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
-                if (this.isCurrentTargetForConfirm())
-                {
-                    Debug.Log("CombatParticipant: " + this.name + " is already selected for confirm action.");
-                    return;
-                }
                 var state = combatController.CombatStateObs.Value;
                 state.SkillTargets = new List<CombatParticipant> { this };
                 state.Phase = CombatPhase.TurnConfirmAction;
@@ -83,7 +80,8 @@ public class CombatParticipant : MonoBehaviour
                 bool isValidTarget = selectedSkill != null &&
                                      (selectedSkill.TargetType == TargetType.AllySingle && !IsEnemy ||
                                       selectedSkill.TargetType == TargetType.EnemySingle && IsEnemy);
-                this.SelectorButton.gameObject.SetActive((isPlayerTargeting && isValidTarget) || this.isCurrentTargetForConfirm());
+                this.SelectorButton.gameObject.SetActive(isPlayerTargeting && isValidTarget);
+                this.SelectionSymbol.SetActive(isCurrentTargetForConfirm());
             })
             .Subscribe()
             .AddTo(this);
