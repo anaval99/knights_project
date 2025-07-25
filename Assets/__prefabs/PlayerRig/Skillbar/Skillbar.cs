@@ -18,7 +18,13 @@ public class Skillbar : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        var combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
+        var combatObj = GameObject.FindGameObjectWithTag("CombatController");
+        if (!combatObj)
+        {
+            this.skillbarUI.gameObject.SetActive(true);
+            return;
+        }
+        var combatController = combatObj.GetComponent<CombatController>();
         this.combatController = combatController;
         if (combatController == null)
         {

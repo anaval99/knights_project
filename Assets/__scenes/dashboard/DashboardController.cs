@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using R3;
 using R3.Triggers;
 using UnityEngine;
@@ -14,12 +15,15 @@ public class DashboardController : MonoBehaviour
     CharDataCenter charDataCenter;
     [SerializeField]
     Button logoutButton;
+    [SerializeField]
+    List<GameObject> stuffToHide;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         this.logoutButton.OnClickAsObservable()
             .Subscribe(this.Logout)
             .AddTo(this);
+        this.stuffToHide.ForEach(x => x.SetActive(false));
     }
 
     // Update is called once per frame
