@@ -127,6 +127,7 @@ public class PlayerCombatHandler : MonoBehaviour
         this.playerAnimation.animancerComponent.transform.position = this.combatParticipant.homeSpot;
         this.playerAnimation.animancerComponent.transform.rotation = this.combatParticipant.homeRotation;
         this.playerAnimation.PlayIdleAnimation();
+        this.ForceTurn();
     }
 
     private IRxState CreateIdleState()
