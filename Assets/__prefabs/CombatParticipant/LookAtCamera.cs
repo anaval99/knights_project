@@ -12,7 +12,6 @@ public class LookAtCamera : MonoBehaviour
         if (mainCamera != null)
         {
             Observable.EveryUpdate()
-                .Take(1)
                 .Subscribe(_ => UpdateLook())
                 .AddTo(this);
         }

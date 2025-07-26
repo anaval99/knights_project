@@ -13,13 +13,13 @@ public class IdleState: IRxState
         AnimancerComponent animancer,
         ItemSO weaponSO,
         AnimationList animationList,
-        int duration = 0
+        int durationMS = 0
     )
     {
         _animancer = animancer;
         _weaponSO = weaponSO;
         _animationList = animationList;
-        this.durationMS = duration;
+        this.durationMS = durationMS;
     }
 
     public string Name { get; set; } = "IdleState";
@@ -33,7 +33,7 @@ public class IdleState: IRxState
             this._animancer.Play(clip, 0.1f);
             if (this.durationMS > 0)
             {
-                return Observable.Timer(TimeSpan.FromMilliseconds(this.durationMS)).Select(_ => 1);
+                return Observable.Timer(TimeSpan.FromMilliseconds(this.durationMS)).Select(_ => 1).Take(1);
             }
             return Observable.Never<int>();
         });

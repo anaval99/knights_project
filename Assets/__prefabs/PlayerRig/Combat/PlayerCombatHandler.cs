@@ -120,7 +120,12 @@ public class PlayerCombatHandler : MonoBehaviour
             this.playerAnimation.animationList
         );
         var idle = this.CreateIdleState();
-        var combined = new CombineState(dash, idle);
+        var back = new DashBackHomeState(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );        
+        var combined = new CombineState(dash, idle, back, idle);
         this.playerAnimation.rxStateMachine.SetState(combined);
     }
 
@@ -137,7 +142,8 @@ public class PlayerCombatHandler : MonoBehaviour
         var idleState = new IdleState(
             this.playerAnimation.animancerComponent,
             this.combatParticipant.weaponSOGO.Item1,
-            this.playerAnimation.animationList
+            this.playerAnimation.animationList,
+            500
         );
 
         return idleState;
