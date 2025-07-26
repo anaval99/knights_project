@@ -8,7 +8,11 @@ public class RxStateMachine : MonoBehaviour
     void Start()
     {
         this.CurrentStateObs.Where(state => state != null)
-            .Select(state => state.Play())
+            .Select(state =>
+            {
+                Debug.Log("Playing: " + state.Name);
+                return state.Play();
+            })
             .Switch()
             .Subscribe()
             .AddTo(this);

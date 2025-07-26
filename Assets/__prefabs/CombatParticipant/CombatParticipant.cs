@@ -31,11 +31,20 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     TMPro.TextMeshProUGUI HealthNumber;
 
-    private CombatController combatController;
+    public CombatController combatController;
+    public Vector3 meleeLandingSpot = Vector3.zero;
+    public Vector3 midRangeLandingSpot = Vector3.zero;
+    public Vector3 homeSpot = Vector3.zero;
+    public Quaternion homeRotation = Quaternion.identity;
+
     public BehaviorSubject<bool> IsMyTurnStartObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnSelectTargetObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnConfirmActionObs = new BehaviorSubject<bool>(false);
+    public BehaviorSubject<bool> IsMyTurnActionObs = new BehaviorSubject<bool>(false);
+
+    public (ItemSO, GameObject) armorSOGO;
+    public (ItemSO, GameObject) weaponSOGO;
 
     void Start()
     {
@@ -74,6 +83,9 @@ public class CombatParticipant : MonoBehaviour
 
                 bool isMyTurnConfirmAction = isMyTurn && state.Phase == CombatPhase.TurnConfirmAction;
                 this.IsMyTurnConfirmActionObs.OnNext(isMyTurnConfirmAction);
+
+                bool isMyTurnAction = isMyTurn && state.Phase == CombatPhase.TurnAction;
+                this.IsMyTurnActionObs.OnNext(isMyTurnAction);
 
                 var selectedSkill = state.SelectedSkillBook;
                 bool isPlayerTargeting = !isMyTurn && state.Phase == CombatPhase.TurnSelectTarget;

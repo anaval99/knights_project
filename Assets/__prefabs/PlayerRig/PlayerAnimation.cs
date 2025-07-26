@@ -5,15 +5,15 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     [SerializeField]
-    private AnimationList animationList;
+    public AnimationList animationList;
     [SerializeField]
-    private AnimancerComponent animancerComponent;
+    public AnimancerComponent animancerComponent;
     [SerializeField]
-    private CharDataCenter charDataCenter;
+    public CharDataCenter charDataCenter;
     [SerializeField]
-    private EquipmentList equipmentList;
+    public EquipmentList equipmentList;
     [SerializeField]
-    private RxStateMachine rxStateMachine;
+    public RxStateMachine rxStateMachine;
 
     private (ItemSO, GameObject) weaponSOGO;
     private void Start()
@@ -42,7 +42,7 @@ public class PlayerAnimation : MonoBehaviour
 
         this.PlayIdleAnimation();
     }
-    
+
     public void PlayIdleAnimation()
     {
         var idleState = new IdleState(

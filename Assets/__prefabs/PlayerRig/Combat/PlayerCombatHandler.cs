@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using R3;
 using UnityEngine;
 
@@ -30,7 +31,14 @@ public class PlayerCombatHandler : MonoBehaviour
                     break;
                 case CombatPhase.BattleStart:
                     // Handle battle start logic
+                    this.ResetHomeSpots();
                     this.playerAnimation.PlayIdleAnimation();
+                    break;
+                case CombatPhase.TurnAction:
+                    if (this.combatParticipant == state.ShuffledParticipants[state.TurnIndex])
+                    {
+                        this.TestPlay();
+                    }
                     break;
                 case CombatPhase.None:
                 default:
@@ -58,13 +66,19 @@ public class PlayerCombatHandler : MonoBehaviour
         this.combatParticipant.IsMyTurnConfirmActionObs.DistinctUntilChanged().Subscribe(isMyTurnConfirm =>
         {
             this.skillbar.turnConfirmButton.gameObject.SetActive(isMyTurnConfirm);
-        }).AddTo(this);        
+        }).AddTo(this);
         Observable.CombineLatest(this.combatParticipant.IsMyTurnSelectTargetObs, this.combatParticipant.IsMyTurnConfirmActionObs).Subscribe(tuple =>
         {
             var isMyTurnSelectTarget = tuple[0];
             var isMyTurnConfirmAction = tuple[1];
             this.skillbar.skillInfo.gameObject.SetActive(isMyTurnSelectTarget || isMyTurnConfirmAction);
         }).AddTo(this);
+    }
+
+    private void ResetHomeSpots()
+    {
+        this.combatParticipant.homeSpot = this.playerAnimation.animancerComponent.transform.position;
+        this.combatParticipant.homeRotation = this.playerAnimation.animancerComponent.transform.rotation;
     }
 
     private void ComputeStatsFromEquipment(CharEquipment equipment)
@@ -75,11 +89,57 @@ public class PlayerCombatHandler : MonoBehaviour
             var armorSOGO = this.equipmentList.GetSOGO(equipment.Armor);
             var weaponSOGO = this.equipmentList.GetSOGO(equipment.Weapon);
             // armor
+            this.combatParticipant.armorSOGO = armorSOGO;
             this.combatParticipant.MaxHealth = armorSOGO.Item1.Health;
             this.combatParticipant.CurrentHealth = armorSOGO.Item1.Health;
             this.combatParticipant.Defense = armorSOGO.Item1.Defense;
             // weapon
+            this.combatParticipant.weaponSOGO = weaponSOGO;
             this.combatParticipant.Damage = weaponSOGO.Item1.Damage;
         }
+    }
+
+    [ContextMenu("Test >>> Turn")]
+    private void ForceTurn()
+    {
+        var controller = this.GetCombatController();
+        var state = controller.CombatStateObs.Value;
+        state.SelectedSkillBook = null;
+        state.SkillTargets = new();
+        state.TurnIndex = state.ShuffledParticipants.IndexOf(this.combatParticipant);
+        state.Phase = CombatPhase.TurnStart;
+        controller.SetCombatState(state);
+    }
+
+    [ContextMenu("Test >>> Play")]
+    private void TestPlay()
+    {
+        var dash = new DashToTargetState(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
+        var idle = this.CreateIdleState();
+        var combined = new CombineState(dash, idle);
+        this.playerAnimation.rxStateMachine.SetState(combined);
+    }
+
+    [ContextMenu("Test >>> Home")]
+    private void BackToHome()
+    {
+        this.playerAnimation.animancerComponent.transform.position = this.combatParticipant.homeSpot;
+        this.playerAnimation.animancerComponent.transform.rotation = this.combatParticipant.homeRotation;
+        this.playerAnimation.PlayIdleAnimation();
+    }
+
+    private IRxState CreateIdleState()
+    {
+        var idleState = new IdleState(
+            this.playerAnimation.animancerComponent,
+            this.combatParticipant.weaponSOGO.Item1,
+            this.playerAnimation.animationList
+        );
+
+        return idleState;
     }
 }
