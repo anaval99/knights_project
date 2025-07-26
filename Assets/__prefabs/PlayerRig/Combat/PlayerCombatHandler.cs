@@ -114,17 +114,9 @@ public class PlayerCombatHandler : MonoBehaviour
     [ContextMenu("Test >>> Play")]
     private void TestPlay()
     {
-        var dash = new DashToTargetState(
-            this.combatParticipant,
-            this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
-        );
+        var dash = this.CreateDashState();
         var idle = this.CreateIdleState();
-        var back = new DashBackHomeState(
-            this.combatParticipant,
-            this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
-        );        
+        var back = this.CreateBackState();
         var combined = new CombineState(dash, idle, back, idle);
         this.playerAnimation.rxStateMachine.SetState(combined);
     }
@@ -147,5 +139,25 @@ public class PlayerCombatHandler : MonoBehaviour
         );
 
         return idleState;
+    }
+
+    private IRxState CreateDashState()
+    {
+        var dash = new DashToTargetState(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
+        return dash;
+    }
+
+    private IRxState CreateBackState()
+    {
+        var back = new DashBackHomeState(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
+        return back;        
     }
 }
