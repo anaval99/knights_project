@@ -12,22 +12,19 @@ public class Skillbar : MonoBehaviour
     public SkillInfo skillInfo;
     [SerializeField]
     private Button skillCancelButton;
+    [SerializeField]
+    public Button turnConfirmButton;
 
     private CombatController combatController;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        var combatObj = GameObject.FindGameObjectWithTag("CombatController");
-        if (!combatObj)
-        {
-            this.skillbarUI.gameObject.SetActive(true);
-            return;
-        }
-        var combatController = combatObj.GetComponent<CombatController>();
+        var combatController = this.GetCombatController();
         this.combatController = combatController;
         if (combatController == null)
         {
+            this.skillbarUI.gameObject.SetActive(true);
             Debug.Log("Not in combat, disabling skillbar.");
             return;
         }
@@ -41,25 +38,12 @@ public class Skillbar : MonoBehaviour
                 combatController.SetCombatState(state);
             })
             .AddTo(this);
-        // Subscribe to combat state changes
-        combatController.CombatStateObs
-            .Where(state => state != null)
-            .Subscribe(state =>
+        this.turnConfirmButton.OnClickAsObservable()
+            .Subscribe(_ =>
             {
-                if (state.Phase == CombatPhase.TurnSelectTarget || state.Phase == CombatPhase.TurnConfirmAction)
-                {
-                    this.skillbarUI.gameObject.SetActive(false);
-                    this.potionsUI.gameObject.SetActive(false);
-                    this.skillInfo.gameObject.SetActive(true);
-                    this.skillInfo.SetText(state.SelectedSkillBook != null ? state.SelectedSkillBook.Description : string.Empty);
-                }
-                else
-                {
-                    this.skillbarUI.gameObject.SetActive(true);
-                    this.potionsUI.gameObject.SetActive(true);
-                    this.skillInfo.gameObject.SetActive(false);
-                }
-            })
-            .AddTo(this);
+                var state = combatController.CombatStateObs.Value;
+                state.Phase = CombatPhase.TurnAction;
+                combatController.SetCombatState(state);
+            }).AddTo(this);
     }
 }

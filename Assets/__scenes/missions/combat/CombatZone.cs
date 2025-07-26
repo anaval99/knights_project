@@ -11,7 +11,7 @@ public class CombatZone : MonoBehaviour
 
     void Start()
     {
-        combatController = GameObject.FindGameObjectWithTag("CombatController").GetComponent<CombatController>();
+        combatController = this.GetCombatController();
         selfCollider = GetComponent<Collider>();
     }
 

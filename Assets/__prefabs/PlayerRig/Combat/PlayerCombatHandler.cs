@@ -55,6 +55,10 @@ public class PlayerCombatHandler : MonoBehaviour
             this.skillbar.skillbarUI.gameObject.SetActive(isMyTurnStart);
             this.skillbar.potionsUI.gameObject.SetActive(isMyTurnStart);
         }).AddTo(this);
+        this.combatParticipant.IsMyTurnConfirmActionObs.DistinctUntilChanged().Subscribe(isMyTurnConfirm =>
+        {
+            this.skillbar.turnConfirmButton.gameObject.SetActive(isMyTurnConfirm);
+        }).AddTo(this);        
         Observable.CombineLatest(this.combatParticipant.IsMyTurnSelectTargetObs, this.combatParticipant.IsMyTurnConfirmActionObs).Subscribe(tuple =>
         {
             var isMyTurnSelectTarget = tuple[0];
