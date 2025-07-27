@@ -2,8 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Firebase.Firestore;
 using R3;
 using UnityEngine;
+
+public class OnHitEvent
+{
+    public CombatParticipant Source;
+    public CombatParticipant Target;
+}
 
 public class CombatController : MonoBehaviour
 {
@@ -15,6 +22,11 @@ public class CombatController : MonoBehaviour
     private PlayerRig party2Rig;
 
     public BehaviorSubject<CombatState> CombatStateObs = new(new CombatState());
+    public Subject<OnHitEvent> OnHitObs = new();
+    public CombatParticipant CurrentParticipant
+    {
+        get => this.CombatStateObs.Value.ShuffledParticipants[this.CombatStateObs.Value.TurnIndex];
+    }
 
     private System.Random randomizer = new();
     void Start()
@@ -43,11 +55,17 @@ public class CombatController : MonoBehaviour
                 // Next turn
                 StartTurn(state);
             });
-        }        
+        }
         else
         {
             Debug.Log("Combat phase set to " + state.Phase);
         }
+    }
+
+    public void TriggerOnHit(OnHitEvent ev)
+    {
+        Debug.Log("TriggerOnHit");
+        this.OnHitObs.OnNext(ev);
     }
 
     void InitBattleStart(CombatState state)

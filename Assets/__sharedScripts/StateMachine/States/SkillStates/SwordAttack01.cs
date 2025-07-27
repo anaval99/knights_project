@@ -21,10 +21,21 @@ public class SwordAttack01 : IRxState
     {
         var clipName = PlayerAnims.Attack01.WithWeapon(player.weaponSOGO.Item1.WeaponClass);
         var clip = this.animationList.GetClip(clipName);
+        var controller = player.combatController;
+        var state = controller.CombatStateObs.Value;
+        var target = state.SkillTargets[0];
         return Observable.Defer(() =>
         {
             this.animancer.Play(clip);
-            return Observable.Timer(TimeSpan.FromMilliseconds(clip.length * 1000)).Take(1).Select(_ => 1);
+            var onhitObs = Observable.Timer(TimeSpan.FromMilliseconds(clip.length / 2 * 1000))
+                .Take(1).Select(_ => 1)
+                .Do(_ => controller.TriggerOnHit(new OnHitEvent
+                {
+                    Source = controller.CurrentParticipant,
+                    Target = target
+                }));
+            var clipEndObs = Observable.Timer(TimeSpan.FromMilliseconds(clip.length * 1000)).Take(1).Select(_ => 1);
+            return Observable.Merge(onhitObs, clipEndObs);
         });
     }
 }
