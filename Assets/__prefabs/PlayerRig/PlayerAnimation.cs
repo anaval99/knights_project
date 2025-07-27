@@ -15,7 +15,7 @@ public class PlayerAnimation : MonoBehaviour
     [SerializeField]
     public RxStateMachine rxStateMachine;
 
-    private (ItemSO, GameObject) weaponSOGO;
+    public (ItemSO, GameObject) weaponSOGO;
     private void Start()
     {
         this.charDataCenter.CharEquipmentObs

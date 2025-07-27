@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using R3;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
-public class PlayerCombatHandler : MonoBehaviour
+public partial class PlayerCombatHandler : MonoBehaviour
 {
     [SerializeField]
     private PlayerAnimation playerAnimation;
@@ -37,7 +38,8 @@ public class PlayerCombatHandler : MonoBehaviour
                 case CombatPhase.TurnAction:
                     if (this.combatParticipant == state.ShuffledParticipants[state.TurnIndex])
                     {
-                        this.TestPlay();
+                        var skillSOId = state.SelectedSkillBook.name;
+                        this.PerformTurnAction(skillSOId);
                     }
                     break;
                 case CombatPhase.None:
@@ -100,7 +102,7 @@ public class PlayerCombatHandler : MonoBehaviour
     }
 
     [ContextMenu("Test >>> Turn")]
-    private void ForceTurn()
+    public void ForceTurn()
     {
         var controller = this.GetCombatController();
         var state = controller.CombatStateObs.Value;
@@ -112,17 +114,22 @@ public class PlayerCombatHandler : MonoBehaviour
     }
 
     [ContextMenu("Test >>> Play")]
-    private void TestPlay()
+    public void TestPlay()
     {
+        var attack01 = new SwordAttack01(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
         var dash = this.CreateDashState();
         var idle = this.CreateIdleState();
         var back = this.CreateBackState();
-        var combined = new CombineState(dash, idle, back, idle);
+        var combined = new CombineState(dash, idle, attack01, back, idle);
         this.playerAnimation.rxStateMachine.SetState(combined);
     }
 
     [ContextMenu("Test >>> Home")]
-    private void BackToHome()
+    public void BackToHome()
     {
         this.playerAnimation.animancerComponent.transform.position = this.combatParticipant.homeSpot;
         this.playerAnimation.animancerComponent.transform.rotation = this.combatParticipant.homeRotation;
@@ -130,19 +137,19 @@ public class PlayerCombatHandler : MonoBehaviour
         this.ForceTurn();
     }
 
-    private IRxState CreateIdleState()
+    public IRxState CreateIdleState()
     {
         var idleState = new IdleState(
             this.playerAnimation.animancerComponent,
             this.combatParticipant.weaponSOGO.Item1,
             this.playerAnimation.animationList,
-            500
+            200
         );
 
         return idleState;
     }
 
-    private IRxState CreateDashState()
+    public IRxState CreateDashState()
     {
         var dash = new DashToTargetState(
             this.combatParticipant,
@@ -152,13 +159,23 @@ public class PlayerCombatHandler : MonoBehaviour
         return dash;
     }
 
-    private IRxState CreateBackState()
+    public IRxState CreateBackState()
     {
         var back = new DashBackHomeState(
             this.combatParticipant,
             this.playerAnimation.animancerComponent,
             this.playerAnimation.animationList
         );
-        return back;        
+        return back;
+    }
+
+    public void PerformTurnAction(string skillSOId)
+    {
+        var state = skillSOId switch
+        {
+            "beginner_slash" => this.BeginnerSlash(),
+            _ => throw new System.Exception("uknown skill: " + skillSOId),
+        };
+        this.playerAnimation.rxStateMachine.SetState(state);
     }
 }

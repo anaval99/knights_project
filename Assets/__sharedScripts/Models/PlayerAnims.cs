@@ -1,3 +1,6 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
 public static class PlayerAnims
 {
     public static string Attack01 = "Attack01";
@@ -51,6 +54,11 @@ public static class PlayerAnims
     public static string RollLFT_Battle_InPlace = "RollLFT_Battle_InPlace";
     public static string RollRGT_Battle_InPlace = "RollRGT_Battle_InPlace";
     public static string SprintFWD_Battle_InPlace = "SprintFWD_Battle_InPlace";
+
+    public static string WithWeapon(this string animName, (ItemSO, GameObject) WeaponSOGO)
+    {
+        return animName.WithWeapon(WeaponSOGO.Item1.WeaponClass);
+    }
 
     public static string WithWeapon(this string animName, WeaponClass weaponClass)
     {
