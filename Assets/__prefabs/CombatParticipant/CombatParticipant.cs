@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class CombatParticipant : MonoBehaviour
 {
+    [SerializeField]
+    public ProjectileMaker ProjectileMaker;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField]
     public int MaxHealth = 100;
@@ -32,9 +34,13 @@ public class CombatParticipant : MonoBehaviour
     TMPro.TextMeshProUGUI HealthNumber;
 
     public CombatController combatController;
+    [HideInInspector]
     public Vector3 meleeLandingSpot = Vector3.zero;
+    [HideInInspector]
     public Vector3 midRangeLandingSpot = Vector3.zero;
+    [HideInInspector]
     public Vector3 homeSpot = Vector3.zero;
+    [HideInInspector]
     public Quaternion homeRotation = Quaternion.identity;
 
     public BehaviorSubject<bool> IsMyTurnStartObs = new BehaviorSubject<bool>(false);
@@ -46,8 +52,13 @@ public class CombatParticipant : MonoBehaviour
     public (ItemSO, GameObject) armorSOGO;
     public (ItemSO, GameObject) weaponSOGO;
 
+    public Collider Collider;
+
     void Start()
     {
+        this.Collider = this.GetComponent<BoxCollider>();
+        this.homeSpot = this.transform.position;
+        this.homeRotation = this.transform.rotation;
         if (this.gameObject.name.Contains("Player"))
         {
             IsEnemy = false;

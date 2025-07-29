@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Animancer.FSM;
 using R3;
 using UnityEditor.PackageManager;
 using UnityEngine;
@@ -18,10 +19,13 @@ public partial class PlayerCombatHandler : MonoBehaviour
     [SerializeField]
     private Skillbar skillbar;
 
+    private CombatState currentState;
+
     public void InitializeCombatHandler(Observable<CombatState> combatStateObs)
     {
         combatStateObs.Subscribe(state =>
         {
+            this.currentState = state;
             switch (state.Phase)
             {
                 case CombatPhase.Start:
@@ -135,6 +139,13 @@ public partial class PlayerCombatHandler : MonoBehaviour
         this.playerAnimation.animancerComponent.transform.rotation = this.combatParticipant.homeRotation;
         this.playerAnimation.PlayIdleAnimation();
         this.ForceTurn();
+    }
+
+    [ContextMenu("Test >>> Projectile")]
+    public void TestProjectile()
+    {
+        var target = this.currentState.SkillTargets[0];
+        this.combatParticipant.ProjectileMaker.CreateProjectile("Rocket", target);
     }
 
     public IRxState CreateIdleState()
