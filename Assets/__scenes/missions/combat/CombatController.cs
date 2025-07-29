@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class OnHitEvent
 {
+    public string TaskID;
     public CombatParticipant Source;
     public CombatParticipant Target;
 }

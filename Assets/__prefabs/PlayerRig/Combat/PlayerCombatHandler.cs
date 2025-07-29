@@ -185,6 +185,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
         var state = skillSOId switch
         {
             "beginner_slash" => this.BeginnerSlash(),
+            "beginner_shot" => this.BeginnerShot(),
             _ => throw new System.Exception("uknown skill: " + skillSOId),
         };
         this.playerAnimation.rxStateMachine.SetState(state);

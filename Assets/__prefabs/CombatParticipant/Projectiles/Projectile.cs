@@ -17,16 +17,15 @@ public class Projectile : MonoBehaviour
 
     }
 
-    public void Fire(CombatParticipant Target, GameObject Template)
+    public Observable<int> Fire(CombatParticipant Target, GameObject Template)
     {
         this.transform.LookAt(Target.transform);
-        this.MoveTowards(this.transform.position, Target.Collider.bounds.center, this.Duration)
-            .Subscribe(onNext: _ => {}, onCompleted: _ =>
+        return this.MoveTowards(this.transform.position, Target.Collider.bounds.center, this.Duration)
+            .Do(onNext: _ => {}, onCompleted: _ =>
             {
                 GameObject.Destroy(Template);
                 GameObject.Destroy(this.gameObject);
                 Debug.Log(Template.name + " has reached target");
-            })
-            .AddTo(this);
+            });
     }
 }

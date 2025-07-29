@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using R3;
 using UnityEngine;
 
 public class ProjectileMaker : MonoBehaviour
@@ -30,7 +31,7 @@ public class ProjectileMaker : MonoBehaviour
         Gizmos.DrawSphere(transform.position, 0.25f);
     }
 
-    public void CreateProjectile(string projectileName, CombatParticipant target)
+    public Observable<int> CreateProjectile(string projectileName, CombatParticipant target)
     {
         // make copies
         var projectileToFire = GameObject.Instantiate(this.projectile, this.transform);
@@ -38,8 +39,11 @@ public class ProjectileMaker : MonoBehaviour
         var templateCopy = GameObject.Instantiate(projectileTemplate, projectileToFire.transform);
 
         // set parents
-        templateCopy.SetActive(true);
-        projectileToFire.gameObject.SetActive(true);
-        projectileToFire.Fire(target, templateCopy);
+        return Observable.Defer(() =>
+        {
+            templateCopy.SetActive(true);
+            projectileToFire.gameObject.SetActive(true);
+            return projectileToFire.Fire(target, templateCopy);
+        });
     }
 }
