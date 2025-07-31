@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
 
     public Observable<int> Fire(CombatParticipant Target, GameObject Template)
     {
-        this.transform.LookAt(Target.transform);
+        this.transform.LookAt(Target.Collider.bounds.center);
         return this.MoveTowards(this.transform.position, Target.Collider.bounds.center, this.Duration)
             .Do(onNext: _ => {}, onCompleted: _ =>
             {

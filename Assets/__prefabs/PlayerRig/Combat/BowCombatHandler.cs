@@ -3,10 +3,14 @@ public partial class PlayerCombatHandler
     public IRxState BeginnerShot()
     {
         var idle = this.CreateIdleState();
+        var lookAt = this.LookAtTargetState();
         var atk = this.BowAttack01();
+        var backHome = this.RotateBackHomeState();
         var state = new CombineState(
+            lookAt,
             idle,
             atk,
+            backHome,
             idle
         );
         return state;

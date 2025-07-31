@@ -160,6 +160,28 @@ public partial class PlayerCombatHandler : MonoBehaviour
         return idleState;
     }
 
+    public IRxState LookAtTargetState()
+    {
+        var state = new LookAtState(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
+
+        return state;
+    }
+
+    public IRxState RotateBackHomeState()
+    {
+        var state = new RotateBackHomeState(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
+
+        return state;
+    }
+
     public IRxState CreateDashState()
     {
         var dash = new DashToTargetState(

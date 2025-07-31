@@ -43,22 +43,63 @@ public static class MonoBehaviourExtensions
 
     public static Observable<int> LookAtSmoothly(this MonoBehaviour mono, Vector3 targetWorldPosition, float duration)
     {
-        var completed = new Subject<bool>();
+        Quaternion initialRotation = mono.transform.rotation;
+
+        Vector3 flatTargetPosition = new Vector3(targetWorldPosition.x, mono.transform.position.y, targetWorldPosition.z);
+        Vector3 directionToTarget = flatTargetPosition - mono.transform.position;
+
+        if (directionToTarget.sqrMagnitude < 0.0001f)
+        {
+            return Observable.Return(1).Take(1);
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget, Vector3.up);
+
         float timeElapsed = 0;
-        return Observable.EveryUpdate().Select(_ => 1)
+
+        return Observable.EveryUpdate()
+            .Select(_ => 1)
             .Do(_ =>
             {
                 if (timeElapsed < duration)
                 {
+                    float t = timeElapsed / duration;
+                    float easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
 
+                    mono.transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, easedT);
+                    timeElapsed += Time.deltaTime;
                 }
                 else
                 {
-                    completed.OnNext(true);
-                    completed.OnCompleted();
+                    mono.transform.rotation = targetRotation;
                 }
-                timeElapsed += Time.deltaTime;
             })
-            .TakeUntil(completed);
-    }    
+            .TakeWhile(_ => timeElapsed < duration + float.Epsilon);
+    }
+
+    public static Observable<int> RotateSmoothly(this MonoBehaviour mono, Quaternion targetRotation, float duration)
+    {
+        Quaternion initialRotation = mono.transform.rotation;
+
+        float timeElapsed = 0;
+
+        return Observable.EveryUpdate()
+            .Select(_ => 1)
+            .Do(_ =>
+            {
+                if (timeElapsed < duration)
+                {
+                    float t = timeElapsed / duration;
+                    float easedT = Mathf.Sin(t * Mathf.PI * 0.5f);
+
+                    mono.transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, easedT);
+                    timeElapsed += Time.deltaTime;
+                }
+                else
+                {
+                    mono.transform.rotation = targetRotation;
+                }
+            })
+            .TakeWhile(_ => timeElapsed < duration + float.Epsilon);
+    }
 }
