@@ -28,6 +28,7 @@ public class CombatController : MonoBehaviour
     {
         get => this.CombatStateObs.Value.ShuffledParticipants[this.CombatStateObs.Value.TurnIndex];
     }
+    public CombatState State => this.CombatStateObs.Value;
 
     private System.Random randomizer = new();
     void Start()
@@ -51,11 +52,7 @@ public class CombatController : MonoBehaviour
         }
         else if (state.Phase == CombatPhase.TurnEnd)
         {
-            Observable.Timer(TimeSpan.FromSeconds(1)).Take(1).Subscribe(_ =>
-            {
-                // Next turn
-                StartTurn(state);
-            });
+            StartTurn(state);
         }
         else
         {

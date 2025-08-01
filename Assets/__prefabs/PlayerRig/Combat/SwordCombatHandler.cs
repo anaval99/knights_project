@@ -11,7 +11,8 @@ public partial class PlayerCombatHandler
             idle,
             atk,
             back,
-            idle
+            idle,
+            new TurnEndState(this.combatParticipant)
         );
         return state;
     }

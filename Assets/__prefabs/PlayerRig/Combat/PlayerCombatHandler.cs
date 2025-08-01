@@ -201,12 +201,40 @@ public partial class PlayerCombatHandler : MonoBehaviour
         return back;
     }
 
+    public IRxState PerformRangeAttack01()
+    {
+        var idle = this.CreateIdleState();
+        var lookAt = this.LookAtTargetState();
+        var atk = this.RangeAttack01();
+        var backHome = this.RotateBackHomeState();
+        var state = new CombineState(
+            lookAt,
+            idle,
+            atk,
+            backHome,
+            idle,
+            new TurnEndState(this.combatParticipant)
+        );
+        return state;
+    }
+
+    public IRxState RangeAttack01()
+    {
+        var attack01 = new RangeAttack01(
+            this.combatParticipant,
+            this.playerAnimation.animancerComponent,
+            this.playerAnimation.animationList
+        );
+        return attack01;
+    }    
+
     public void PerformTurnAction(string skillSOId)
     {
         var state = skillSOId switch
         {
             "beginner_slash" => this.BeginnerSlash(),
-            "beginner_shot" => this.BeginnerShot(),
+            "beginner_shot" => this.PerformRangeAttack01(),
+            "beginner_bolt" => this.PerformRangeAttack01(),
             _ => throw new System.Exception("uknown skill: " + skillSOId),
         };
         this.playerAnimation.rxStateMachine.SetState(state);

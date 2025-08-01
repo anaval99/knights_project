@@ -2,12 +2,12 @@ using System;
 using Animancer;
 using R3;
 
-public class BowAttack01: IRxState
+public class RangeAttack01: IRxState
 {
     private CombatParticipant player;
     private AnimancerComponent animancer;
     private AnimationList animationList;
-    public BowAttack01(
+    public RangeAttack01(
         CombatParticipant player, AnimancerComponent animancer, AnimationList animationList)
     {
         this.player = player;
@@ -15,7 +15,7 @@ public class BowAttack01: IRxState
         this.animationList = animationList;
     }
 
-    public string Name { get; set; } = "BowAttack01";
+    public string Name { get; set; } = "RangeAttack01";
 
     public Observable<int> Play()
     {
