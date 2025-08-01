@@ -48,8 +48,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
                     break;
                 case CombatPhase.None:
                 default:
-                    // Handle other phases or no combat
-                    Debug.Log("No combat phase active.");
+                    
                     break;
             }
         })
