@@ -9,7 +9,8 @@ public static class AnimExtensions
     {
         return Observable.Defer(() =>
         {
-            anim.Play(clip);
+            var playClip = anim.Play(clip);
+            playClip.Time = 0f;
             var clipEndObs = Observable.Timer(TimeSpan.FromMilliseconds(clip.length * 1000)).Take(1).Select(_ => 1);
             return clipEndObs;
         });
