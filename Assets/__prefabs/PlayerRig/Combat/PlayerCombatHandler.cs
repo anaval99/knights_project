@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Animancer.FSM;
 using R3;
+using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
@@ -42,8 +43,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
                 case CombatPhase.TurnAction:
                     if (this.combatParticipant == state.ShuffledParticipants[state.TurnIndex])
                     {
-                        var skillSOId = state.SelectedSkillBook.name;
-                        this.PerformTurnAction(skillSOId);
+                        this.PerformTurnAction(state.SelectedSkillBook);
                     }
                     break;
                 case CombatPhase.None:
@@ -114,21 +114,6 @@ public partial class PlayerCombatHandler : MonoBehaviour
         state.TurnIndex = state.ShuffledParticipants.IndexOf(this.combatParticipant);
         state.Phase = CombatPhase.TurnStart;
         controller.SetCombatState(state);
-    }
-
-    [ContextMenu("Test >>> Play")]
-    public void TestPlay()
-    {
-        var attack01 = new SwordAttack01(
-            this.combatParticipant,
-            this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
-        );
-        var dash = this.CreateDashState();
-        var idle = this.CreateIdleState();
-        var back = this.CreateBackState();
-        var combined = new CombineState(dash, idle, attack01, back, idle);
-        this.playerAnimation.rxStateMachine.SetState(combined);
     }
 
     [ContextMenu("Test >>> Home")]
@@ -228,14 +213,14 @@ public partial class PlayerCombatHandler : MonoBehaviour
         return attack01;
     }    
 
-    public void PerformTurnAction(string skillSOId)
+    public void PerformTurnAction(SkillBookSO skillBookSO)
     {
-        var state = skillSOId switch
+        var state = skillBookSO.name switch
         {
-            "beginner_slash" => this.BeginnerSlash(),
+            "beginner_slash" => this.BeginnerSlash(skillBookSO),
             "beginner_shot" => this.PerformRangeAttack01(),
             "beginner_bolt" => this.PerformRangeAttack01(),
-            _ => throw new System.Exception("uknown skill: " + skillSOId),
+            _ => throw new System.Exception("uknown skill: " + skillBookSO.name),
         };
         this.playerAnimation.rxStateMachine.SetState(state);
     }

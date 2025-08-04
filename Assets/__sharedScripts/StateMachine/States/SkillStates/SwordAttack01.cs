@@ -7,12 +7,14 @@ public class SwordAttack01 : IRxState
     private CombatParticipant player;
     private AnimancerComponent animancer;
     private AnimationList animationList;
+    private SkillBookSO skillBookSO;
     public SwordAttack01(
-        CombatParticipant player, AnimancerComponent animancer, AnimationList animationList)
+        CombatParticipant player, AnimancerComponent animancer, AnimationList animationList, SkillBookSO skillBookSO)
     {
         this.player = player;
         this.animancer = animancer;
         this.animationList = animationList;
+        this.skillBookSO = skillBookSO;
     }
 
     public string Name { get; set; } = "SwordAttack01";
@@ -32,7 +34,8 @@ public class SwordAttack01 : IRxState
                 .Do(_ => controller.TriggerOnHit(new OnHitEvent
                 {
                     Source = controller.CurrentParticipant,
-                    Target = target
+                    Target = target,
+                    SkillBookSO = this.skillBookSO,
                 }));
             var clipEndObs = Observable.Timer(TimeSpan.FromMilliseconds(clip.length * 1000)).Take(1).Select(_ => 1);
             return Observable.Merge(onhitObs, clipEndObs);

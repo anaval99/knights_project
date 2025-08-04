@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using R3;
 using Unity.VisualScripting;
@@ -69,6 +70,7 @@ public class CombatParticipant : MonoBehaviour
             Debug.Log("Not in combat, skipping combat participant initialization.");
             return;
         }
+        this.combatController.OnHitObs.Where(ev => ev.Target == this).Subscribe(this.OnHit).AddTo(this);
         this.SelectorButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
@@ -143,6 +145,20 @@ public class CombatParticipant : MonoBehaviour
         {
             HealthNumber.text = $"{CurrentHealth}/{MaxHealth}";
             HealthNumber.color = color;
-        }  
+        }
+    }
+
+    void OnHit(OnHitEvent onHitEvent)
+    {
+        int health = this.CurrentHealth - this.ComputeDamage(onHitEvent);
+        health = Math.Max(0, health);
+        this.CurrentHealth = health;
+    }
+
+    int ComputeDamage(OnHitEvent onHitEvent)
+    {
+        int skillDamage = onHitEvent.Source.Damage * onHitEvent.SkillBookSO.DamagePercent / 100;
+        int takenDmg = skillDamage - this.Defense;
+        return Math.Max(0, takenDmg);
     }
 }

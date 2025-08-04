@@ -1,10 +1,10 @@
 public partial class PlayerCombatHandler
 {
-    public IRxState BeginnerSlash()
+    public IRxState BeginnerSlash(SkillBookSO skillBookSO)
     {
         var dash = this.CreateDashState();
         var idle = this.CreateIdleState();
-        var atk = this.Attack01();
+        var atk = this.Attack01(skillBookSO);
         var back = this.CreateBackState();
         var state = new CombineState(
             dash,
@@ -17,12 +17,13 @@ public partial class PlayerCombatHandler
         return state;
     }
 
-    public IRxState Attack01()
+    public IRxState Attack01(SkillBookSO skillBookSO)
     {
         var attack01 = new SwordAttack01(
             this.combatParticipant,
             this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
+            this.playerAnimation.animationList,
+            skillBookSO
         );
         return attack01;
     }

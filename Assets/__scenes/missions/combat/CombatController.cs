@@ -8,9 +8,11 @@ using UnityEngine;
 
 public class OnHitEvent
 {
-    public string TaskID;
+    public string TaskID = Guid.NewGuid().ToString();
     public CombatParticipant Source;
     public CombatParticipant Target;
+    public SkillBookSO SkillBookSO;
+    public int Damage;
 }
 
 public class CombatController : MonoBehaviour
