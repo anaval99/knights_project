@@ -20,6 +20,8 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     public int AP = 0;
     [SerializeField]
+    public float meleeRange = 0.1f;
+    [SerializeField]
     Button SelectorButton;
     [SerializeField]
     GameObject SelectionSymbol;
@@ -34,8 +36,6 @@ public class CombatParticipant : MonoBehaviour
     TMPro.TextMeshProUGUI HealthNumber;
 
     public CombatController combatController;
-    [HideInInspector]
-    public Vector3 meleeLandingSpot = Vector3.zero;
     [HideInInspector]
     public Vector3 midRangeLandingSpot = Vector3.zero;
     [HideInInspector]

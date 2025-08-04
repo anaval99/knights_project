@@ -10,7 +10,6 @@ public class LandingSpot : MonoBehaviour
 
     void Start()
     {
-        meleeSpotOwners.ForEach(x => x.meleeLandingSpot = this.transform.position);
         midRangeSpotOwners.ForEach(x => x.midRangeLandingSpot = this.transform.position);
     }
 
