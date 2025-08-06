@@ -37,20 +37,7 @@ public class EnemyComponent : MonoBehaviour
                 combatController.SetCombatState(state);
             }).AddTo(this);
 
-            this.combatController.OnHitObs.Where(x => x.Target == this.CombatParticipant && this.enemyDefinitionSO.OnHitAnimation != null)
-                .Subscribe(x =>
-                {
-                    var onHitState = new PlayClipState()
-                    {
-                        Animancer = this.animancer,
-                        AnimationClip = this.enemyDefinitionSO.OnHitAnimation,
-                    };
-                    var state = new CombineState(
-                        onHitState,
-                        this.IdleState()
-                    );
-                    this.rxStateMachine.SetState(onHitState);
-                }).AddTo(this);
+            this.combatController.OnHitObs.Where(ev => ev.Target == this.CombatParticipant).Subscribe(this.HandleHit).AddTo(this);
         }
     }
 
@@ -78,5 +65,40 @@ public class EnemyComponent : MonoBehaviour
             Animancer = this.animancer,
             AnimationClip = this.enemyDefinitionSO.IdleAnimation
         };
+    }
+
+    private IRxState DeathState()
+    {
+        return new PlayClipState()
+        {
+            Animancer = this.animancer,
+            AnimationClip = this.enemyDefinitionSO.DeathAnimation
+        };
+    }
+
+    private void HandleHit(OnHitEvent ev)
+    {
+        bool isAlive = this.CombatParticipant.OnHit(ev);
+        if (isAlive)
+        {
+            var onHitState = new PlayClipState()
+            {
+                Animancer = this.animancer,
+                AnimationClip = this.enemyDefinitionSO.OnHitAnimation,
+            };
+            var state = new CombineState(
+                onHitState,
+                this.IdleState()
+            );
+            this.rxStateMachine.SetState(state);
+        }
+        else
+        {
+            this.rxStateMachine.SetState(this.DeathState());
+            this.combatController.TriggerOnDeath(new OnDeathEvent
+            {
+                DeadParticipant = this.CombatParticipant
+            });
+        }
     }
 }

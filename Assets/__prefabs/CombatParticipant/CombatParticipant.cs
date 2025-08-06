@@ -70,7 +70,7 @@ public class CombatParticipant : MonoBehaviour
             Debug.Log("Not in combat, skipping combat participant initialization.");
             return;
         }
-        this.combatController.OnHitObs.Where(ev => ev.Target == this).Subscribe(this.OnHit).AddTo(this);
+        
         this.SelectorButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
@@ -82,7 +82,7 @@ public class CombatParticipant : MonoBehaviour
             .AddTo(this);
         this.combatController.CombatStateObs
             .Where(state => state != null)
-            .Do(state =>
+            .Do(onNext: state =>
             {
                 bool isTurnPhase = state.Phase.ToString().Contains("Turn");
                 bool isMyTurn = isTurnPhase && state.ShuffledParticipants[state.TurnIndex] == this;
@@ -107,7 +107,12 @@ public class CombatParticipant : MonoBehaviour
                                       selectedSkill.TargetType == TargetType.EnemySingle && IsEnemy);
                 this.SelectorButton.gameObject.SetActive(isPlayerTargeting && isValidTarget);
                 this.SelectionSymbol.SetActive(isCurrentTargetForConfirm());
+            }, onCompleted: _ =>
+            {
+                this.SelectorButton.gameObject.SetActive(false);
+                this.SelectionSymbol.SetActive(false);
             })
+            .TakeUntil(this.combatController.OnDeathObs.Where(x => x.DeadParticipant == this).Take(1))
             .Subscribe()
             .AddTo(this);
     }
@@ -148,11 +153,17 @@ public class CombatParticipant : MonoBehaviour
         }
     }
 
-    void OnHit(OnHitEvent onHitEvent)
+    /// <summary>
+    /// returns true if alive
+    /// </summary>
+    /// <param name="onHitEvent"></param>
+    /// <returns></returns>
+    public bool OnHit(OnHitEvent onHitEvent)
     {
         int health = this.CurrentHealth - this.ComputeDamage(onHitEvent);
         health = Math.Max(0, health);
         this.CurrentHealth = health;
+        return this.CurrentHealth > 0;
     }
 
     int ComputeDamage(OnHitEvent onHitEvent)

@@ -6,6 +6,12 @@ using Firebase.Firestore;
 using R3;
 using UnityEngine;
 
+public class OnDeathEvent
+{
+    public string TaskID = Guid.NewGuid().ToString();
+    public CombatParticipant DeadParticipant;
+}
+
 public class OnHitEvent
 {
     public string TaskID = Guid.NewGuid().ToString();
@@ -26,6 +32,7 @@ public class CombatController : MonoBehaviour
 
     public BehaviorSubject<CombatState> CombatStateObs = new(new CombatState());
     public Subject<OnHitEvent> OnHitObs = new();
+    public Subject<OnDeathEvent> OnDeathObs = new();
     public CombatParticipant CurrentParticipant
     {
         get => this.CombatStateObs.Value.ShuffledParticipants[this.CombatStateObs.Value.TurnIndex];
@@ -66,6 +73,12 @@ public class CombatController : MonoBehaviour
     {
         Debug.Log("TriggerOnHit");
         this.OnHitObs.OnNext(ev);
+    }
+
+    public void TriggerOnDeath(OnDeathEvent ev)
+    {
+        Debug.Log("TriggerOnHit");
+        this.OnDeathObs.OnNext(ev);
     }
 
     void InitBattleStart(CombatState state)
