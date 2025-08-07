@@ -2,13 +2,13 @@ using System;
 using Animancer;
 using R3;
 
-public class SwordAttack01 : IRxState
+public class MeleeAttack01 : IRxState
 {
     private CombatParticipant player;
     private AnimancerComponent animancer;
     private AnimationList animationList;
     private SkillBookSO skillBookSO;
-    public SwordAttack01(
+    public MeleeAttack01(
         CombatParticipant player, AnimancerComponent animancer, AnimationList animationList, SkillBookSO skillBookSO)
     {
         this.player = player;
@@ -17,7 +17,7 @@ public class SwordAttack01 : IRxState
         this.skillBookSO = skillBookSO;
     }
 
-    public string Name { get; set; } = "SwordAttack01";
+    public string Name { get; set; } = "MeleeAttack01";
 
     public Observable<int> Play()
     {

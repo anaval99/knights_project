@@ -44,16 +44,19 @@ public class CombatParticipant : MonoBehaviour
     [HideInInspector]
     public Quaternion homeRotation = Quaternion.identity;
 
+    #region events
     public BehaviorSubject<bool> IsMyTurnStartObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnSelectTargetObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnConfirmActionObs = new BehaviorSubject<bool>(false);
     public BehaviorSubject<bool> IsMyTurnActionObs = new BehaviorSubject<bool>(false);
+    #endregion events
 
     public (ItemSO, GameObject) armorSOGO;
     public (ItemSO, GameObject) weaponSOGO;
 
     public Collider Collider;
+    public bool IsDead => this.CurrentHealth <= 0;
 
     void Start()
     {

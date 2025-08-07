@@ -61,6 +61,10 @@ public class CombatController : MonoBehaviour
         }
         else if (state.Phase == CombatPhase.TurnEnd)
         {
+            if (state.EnemyParticipants.All(x => x.IsDead))
+            {
+                this.InitBattleEnd(state);
+            }
             StartTurn(state);
         }
         else
@@ -97,12 +101,22 @@ public class CombatController : MonoBehaviour
 
     void InitBattleEnd(CombatState state)
     {
-
+        state.Phase = CombatPhase.Patrolling;
+        state.EnemyParticipants = new();
+        state.TurnIndex = -1;
+        state.SkillTargets = new();
+        state.SelectedSkillBook = null;
+        state.ShuffledParticipants = new();
+        this.SetCombatState(state);
     }
 
     void StartTurn(CombatState state)
     {
         state.TurnIndex = (state.TurnIndex + 1) % state.ShuffledParticipants.Count; // increment turn index and wrap around
+        while (state.ShuffledParticipants[state.TurnIndex].CurrentHealth == 0) // if dead
+        {
+            state.TurnIndex = (state.TurnIndex + 1) % state.ShuffledParticipants.Count; // increment turn index and wrap around
+        }
         var currentParticipant = state.ShuffledParticipants[state.TurnIndex];
         Debug.Log($"Starting turn for {currentParticipant.name}.");
         // Notify the participant to take their turn

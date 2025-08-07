@@ -186,11 +186,11 @@ public partial class PlayerCombatHandler : MonoBehaviour
         return back;
     }
 
-    public IRxState PerformRangeAttack01()
+    public IRxState PerformRangeAttack01(SkillBookSO skillBookSO)
     {
         var idle = this.CreateIdleState();
         var lookAt = this.LookAtTargetState();
-        var atk = this.RangeAttack01();
+        var atk = this.RangeAttack01(skillBookSO);
         var backHome = this.RotateBackHomeState();
         var state = new CombineState(
             lookAt,
@@ -203,23 +203,25 @@ public partial class PlayerCombatHandler : MonoBehaviour
         return state;
     }
 
-    public IRxState RangeAttack01()
+    public IRxState RangeAttack01(SkillBookSO skillBookSO)
     {
-        var attack01 = new RangeAttack01(
-            this.combatParticipant,
-            this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
-        );
+        var attack01 = new RangeAttack01()
+        {
+            Player = this.combatParticipant,
+            Animancer = this.playerAnimation.animancerComponent,
+            AnimationList = this.playerAnimation.animationList,
+            SkillBookSO = skillBookSO,
+        };
         return attack01;
-    }    
+    }
 
     public void PerformTurnAction(SkillBookSO skillBookSO)
     {
         var state = skillBookSO.name switch
         {
             "beginner_slash" => this.BeginnerSlash(skillBookSO),
-            "beginner_shot" => this.PerformRangeAttack01(),
-            "beginner_bolt" => this.PerformRangeAttack01(),
+            "beginner_shot" => this.PerformRangeAttack01(skillBookSO),
+            "beginner_bolt" => this.PerformRangeAttack01(skillBookSO),
             _ => throw new System.Exception("uknown skill: " + skillBookSO.name),
         };
         this.playerAnimation.rxStateMachine.SetState(state);

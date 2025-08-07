@@ -19,7 +19,7 @@ public partial class PlayerCombatHandler
 
     public IRxState Attack01(SkillBookSO skillBookSO)
     {
-        var attack01 = new SwordAttack01(
+        var attack01 = new MeleeAttack01(
             this.combatParticipant,
             this.playerAnimation.animancerComponent,
             this.playerAnimation.animationList,
