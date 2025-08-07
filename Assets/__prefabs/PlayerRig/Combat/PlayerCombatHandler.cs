@@ -46,9 +46,12 @@ public partial class PlayerCombatHandler : MonoBehaviour
                         this.PerformTurnAction(state.SelectedSkillBook);
                     }
                     break;
+                case CombatPhase.FinalBattleEnd:
+                    this.VictoryPose();
+                    break;
                 case CombatPhase.None:
                 default:
-                    
+
                     break;
             }
         })
@@ -223,6 +226,17 @@ public partial class PlayerCombatHandler : MonoBehaviour
             "beginner_shot" => this.PerformRangeAttack01(skillBookSO),
             "beginner_bolt" => this.PerformRangeAttack01(skillBookSO),
             _ => throw new System.Exception("uknown skill: " + skillBookSO.name),
+        };
+        this.playerAnimation.rxStateMachine.SetState(state);
+    }
+
+    public void VictoryPose()
+    {
+        var clip = this.playerAnimation.animationList.GetClip(PlayerAnims.Victory.WithWeapon(this.combatParticipant.weaponSOGO));
+        var state = new PlayClipState()
+        {
+            Animancer = this.playerAnimation.animancerComponent,
+            AnimationClip = clip
         };
         this.playerAnimation.rxStateMachine.SetState(state);
     }

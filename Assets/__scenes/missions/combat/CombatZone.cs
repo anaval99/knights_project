@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CombatZone : MonoBehaviour
 {
+    [SerializeField]
+    bool isFinalZone;
     bool hasTriggered = false;
     private CombatController combatController;
     private Collider selfCollider;
@@ -30,6 +32,7 @@ public class CombatZone : MonoBehaviour
     void SetBattleStart()
     {
         var state = combatController.CombatStateObs.Value;
+        state.isFinalZone = this.isFinalZone;
         state.Phase = CombatPhase.BattleStart;
         state.EnemyParticipants = GetCombatParticipants();
         combatController.SetCombatState(state);

@@ -101,7 +101,7 @@ public class CombatController : MonoBehaviour
 
     void InitBattleEnd(CombatState state)
     {
-        state.Phase = CombatPhase.Patrolling;
+        state.Phase = state.isFinalZone ? CombatPhase.FinalBattleEnd : CombatPhase.Patrolling;
         state.EnemyParticipants = new();
         state.TurnIndex = -1;
         state.SkillTargets = new();

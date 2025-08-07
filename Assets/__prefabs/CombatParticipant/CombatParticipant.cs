@@ -108,14 +108,11 @@ public class CombatParticipant : MonoBehaviour
                 bool isValidTarget = selectedSkill != null &&
                                      (selectedSkill.TargetType == TargetType.AllySingle && !IsEnemy ||
                                       selectedSkill.TargetType == TargetType.EnemySingle && IsEnemy);
-                this.SelectorButton.gameObject.SetActive(isPlayerTargeting && isValidTarget);
-                this.SelectionSymbol.SetActive(isCurrentTargetForConfirm());
-            }, onCompleted: _ =>
-            {
-                this.SelectorButton.gameObject.SetActive(false);
-                this.SelectionSymbol.SetActive(false);
+
+                bool isDead = this.IsDead;
+                this.SelectorButton.gameObject.SetActive(isPlayerTargeting && isValidTarget && !isDead);
+                this.SelectionSymbol.SetActive(isCurrentTargetForConfirm() && !isDead);
             })
-            .TakeUntil(this.combatController.OnDeathObs.Where(x => x.DeadParticipant == this).Take(1))
             .Subscribe()
             .AddTo(this);
     }

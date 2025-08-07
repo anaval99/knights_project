@@ -9,4 +9,5 @@ public enum CombatPhase
     TurnConfirmAction,
     TurnAction,
     TurnEnd,
+    FinalBattleEnd,
 }
