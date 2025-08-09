@@ -11,17 +11,35 @@ public class SkillButtonUI : MonoBehaviour
     UnityEngine.UI.Image skillIcon;
     [SerializeField]
     UnityEngine.UI.Button skillButton;
+    [SerializeField]
+    EquipmentList EquipmentList;
+    [SerializeField]
+    CharDataCenter CharDataCenter;
+    [SerializeField]
+    GameObject DisabledSymbol;
+
+    private (ItemSO, GameObject) weaponSOGO = (null, null);
 
     private SkillBookSO skillBookSO;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        this.DisabledSymbol.SetActive(false);
         var combatController = this.GetCombatController();
         if (combatController == null)
         {
             Debug.Log("Not in combat, disabling skill button.");
             return;
         }
+
+        this.CharDataCenter.CharEquipmentObs
+            .Subscribe(eq =>
+            {
+                var sogo = this.EquipmentList.GetSOGO(eq.Weapon);
+                this.weaponSOGO = sogo;
+                this.SetButtonDisabledState();
+            }).AddTo(this);
+
         this.skillButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
@@ -79,5 +97,17 @@ public class SkillButtonUI : MonoBehaviour
         this.skillBookSO = skillBookSO;
         this.skillIcon.sprite = skillBookSO.SkillIcon;
         this.skillIcon.gameObject.SetActive(true);
+        this.SetButtonDisabledState();
+    }
+
+    public void SetButtonDisabledState()
+    {
+        var weaponSO = this.weaponSOGO.Item1;
+        var skillEnabled = weaponSO != null && this.skillBookSO != null && (
+            weaponSO.WeaponClass == this.skillBookSO.WeaponClass ||
+            this.skillBookSO.WeaponClass == WeaponClass.None
+        );
+        this.DisabledSymbol.SetActive(!skillEnabled);
+        this.skillButton.interactable = skillEnabled;        
     }
 }

@@ -43,7 +43,7 @@ MonoBehaviour:
     width: 3440
     height: 1357
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Hierarchy
   m_RootView: {fileID: 5}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 116
+  controlID: 49
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -1156,7 +1156,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__prefabs/CombatParticipant
+    - Assets/RPGTinyHeroWavePBR/Animation/TwoHandSword
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1166,15 +1166,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__prefabs/CombatParticipant
+  - Assets/RPGTinyHeroWavePBR/Animation/TwoHandSword
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 79}
-    m_SelectedIDs: ba470100
-    m_LastClickedID: 83898
+    scrollPos: {x: 0, y: 508}
+    m_SelectedIDs: c4490100
+    m_LastClickedID: 84420
     m_ExpandedIDs: 000000009a4601009c4601009e460100a0460100a2460100a4460100a6460100a8460100aa460100ac460100ae460100b0460100b2460100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1233,7 +1233,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c62300009c0c04004c0d0400daea0000520d0400d4ea0000580d0400aeba0000fcd2000008da0000d8bd000070d50000d4b00000b0cb0000c218020050070200e8c60000502002004240050006d9030088fb03006efb030068fb0300248802007a960300383d0300
+    m_ExpandedInstanceIDs: c62300009c0c04004c0d0400daea0000520d0400d4ea0000580d0400aeba0000fcd2000008da0000d8bd000070d50000d4b00000b0cb0000c218020050070200e8c60000502002004240050006d9030088fb03006efb030068fb0300248802007a960300383d0300e64a0100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
