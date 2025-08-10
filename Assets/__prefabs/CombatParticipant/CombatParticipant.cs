@@ -35,6 +35,8 @@ public class CombatParticipant : MonoBehaviour
     Image FillColor;
     [SerializeField]
     TMPro.TextMeshProUGUI HealthNumber;
+    [SerializeField]
+    FloatingDamage floatingDamage;
 
     public CombatController combatController;
     [HideInInspector]
@@ -160,7 +162,9 @@ public class CombatParticipant : MonoBehaviour
     /// <returns></returns>
     public bool OnHit(OnHitEvent onHitEvent)
     {
-        int health = this.CurrentHealth - this.ComputeDamage(onHitEvent);
+        int damage = this.ComputeDamage(onHitEvent);
+        this.floatingDamage.StartFloat(damage, false);
+        int health = this.CurrentHealth - damage;
         health = Math.Max(0, health);
         this.CurrentHealth = health;
         return this.CurrentHealth > 0;
