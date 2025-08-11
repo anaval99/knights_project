@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Animancer;
 using R3;
 using UnityEngine;
@@ -22,7 +23,17 @@ public class DashToTargetState : IRxState
         var clip = this.animationList.GetClip(clipName);
         var target = player.combatController.CombatStateObs.Value.SkillTargets[0];
         var startLocation = animancer.transform.position;
+        var toSpot = this.GetTargetSpot(target);
 
+        return Observable.Defer(() =>
+        {
+            this.animancer.Play(clip);
+            return animancer.MoveTowards(startLocation, toSpot, clip.length);
+        });
+    }
+
+    public Vector3 GetTargetSpot(CombatParticipant target)
+    {
         // Define your desired melee range
         float meleeRange = player.meleeRange;
         // Get the closest point on the target's collider to the player's position
@@ -34,11 +45,6 @@ public class DashToTargetState : IRxState
         // Ensure the player stays on their homeSpot's y-level
         toLocation.y = player.homeSpot.y;
         toLocation.z = target.Collider.bounds.center.z;
-
-        return Observable.Defer(() =>
-        {
-            this.animancer.Play(clip);
-            return animancer.MoveTowards(startLocation, toLocation, clip.length);
-        });
+        return toLocation;
     }
 }
