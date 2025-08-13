@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -39,7 +40,16 @@ public class CharDataCenter : MonoBehaviour
         // emit the loaded data
         this.CharEquipmentObs.OnNext(charEquipment);
         this.CharInventoryObs.OnNext(charInventory);
-        this.CharSkillBooksObs.OnNext(charSkillBooks);
+        var fakeSkillBook = new CharSkillBooks();
+        var fakelist = charSkillBooks.SkillBooks;
+        fakeSkillBook.SkillBooks = fakelist.Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).ToList();
+        this.CharSkillBooksObs.OnNext(fakeSkillBook);
         this.CharSkillBarObs.OnNext(charSkillBar);
         this.CharAvatarObs.OnNext(charAvatar);
     }

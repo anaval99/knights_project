@@ -5,6 +5,8 @@ using UnityEngine;
 public class SkillbooksContainer : ListContainer
 {
     [SerializeField]
+    ListPager listPager;
+    [SerializeField]
     private List<SkillbookUI> skillbookUIs = new();
     [SerializeField]
     private CharDataCenter charDataCenter;
@@ -12,7 +14,8 @@ public class SkillbooksContainer : ListContainer
     void Start()
     {
         this.PopulateListItems(skillbookUIs, 21);
-        this.charDataCenter.CharSkillBooksObs.Subscribe(this.Render).AddTo(this);
+        var source = this.charDataCenter.CharSkillBooksObs.Select(x => x.SkillBooks);
+        this.listPager.Feed(source, 21).Subscribe(this.Render).AddTo(this);
     }
 
     // Update is called once per frame
@@ -21,12 +24,8 @@ public class SkillbooksContainer : ListContainer
 
     }
 
-    void Render(CharSkillBooks charSkillBooks)
+    void Render(PagedList<SkillBook> pageDSkillbookList)
     {
-        if (charSkillBooks == null || charSkillBooks.SkillBooks == null)
-        {
-            return;
-        }
-        this.RenderItems(this.skillbookUIs, charSkillBooks.SkillBooks, 0, (skillbookUI, data) => skillbookUI.Render(data));
+        this.RenderItems(this.skillbookUIs, pageDSkillbookList.Data, 0, (skillbookUI, data) => skillbookUI.Render(data));
     }
 }
