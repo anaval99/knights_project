@@ -4,6 +4,7 @@ using R3;
 public class CombineState : IRxState
 {
     public string Name { get; set; } = "";
+    public bool Merge { get; set; } = false;
     private IRxState[] states;
 
     public CombineState(params IRxState[] states)
@@ -14,6 +15,7 @@ public class CombineState : IRxState
 
     public Observable<int> Play()
     {
-        return Observable.Concat(this.states.Select(x => x.Play()));
+        return !this.Merge ? Observable.Concat(this.states.Select(x => x.Play()))
+            : Observable.Merge(this.states.Select(x => x.Play()));
     }
 }

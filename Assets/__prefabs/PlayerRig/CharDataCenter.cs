@@ -40,16 +40,16 @@ public class CharDataCenter : MonoBehaviour
         // emit the loaded data
         this.CharEquipmentObs.OnNext(charEquipment);
         this.CharInventoryObs.OnNext(charInventory);
-        var fakeSkillBook = new CharSkillBooks();
-        var fakelist = charSkillBooks.SkillBooks;
-        fakeSkillBook.SkillBooks = fakelist.Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
-        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
-        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
-        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
-        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
-        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
-        .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).ToList();
-        this.CharSkillBooksObs.OnNext(fakeSkillBook);
+        // var fakeSkillBook = new CharSkillBooks();
+        // var fakelist = charSkillBooks.SkillBooks;
+        // fakeSkillBook.SkillBooks = fakelist.Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        // .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        // .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        // .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        // .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        // .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist)
+        // .Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).Concat(fakelist).ToList();
+        this.CharSkillBooksObs.OnNext(charSkillBooks);
         this.CharSkillBarObs.OnNext(charSkillBar);
         this.CharAvatarObs.OnNext(charAvatar);
     }

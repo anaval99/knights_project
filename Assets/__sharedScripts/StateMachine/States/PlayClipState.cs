@@ -17,8 +17,8 @@ public class PlayClipState : IRxState
         }
 
         return Observable.Defer(() =>
-            {
-                return Animancer.PlayAsObservable(this.AnimationClip);
-            });
+        {
+            return Animancer.PlayAsObservable(this.AnimationClip);
+        });
     }
 }

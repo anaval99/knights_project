@@ -135,6 +135,13 @@ public partial class PlayerCombatHandler : MonoBehaviour
         this.combatParticipant.ProjectileMaker.CreateProjectile("Rocket", target);
     }
 
+    public AnimationClip GetClipWithWeapon(string animName)
+    {
+        var clipName = animName.WithWeapon(this.combatParticipant.weaponSOGO);
+        var clip = this.playerAnimation.animationList.GetClip(clipName);
+        return clip;
+    }
+
     public IRxState CreateIdleState()
     {
         var idleState = new IdleState(
@@ -171,10 +178,11 @@ public partial class PlayerCombatHandler : MonoBehaviour
 
     public IRxState CreateDashState()
     {
+        var clip = this.GetClipWithWeapon(PlayerAnims.DashFWD_Battle_InPlace);
         var dash = new DashToTargetState(
             this.combatParticipant,
             this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
+            clip
         );
         return dash;
     }
@@ -184,7 +192,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
         var back = new DashBackHomeState(
             this.combatParticipant,
             this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
+            this.GetClipWithWeapon(PlayerAnims.DashBWD_Battle_InPlace)
         );
         return back;
     }

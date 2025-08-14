@@ -6,6 +6,8 @@ using UnityEngine;
 public class ItemsContainer : ListContainer
 {
     [SerializeField]
+    ListPager listPager;
+    [SerializeField]
     CharDataCenter charDataCenter;
     [SerializeField]
     List<ItemUI> itemUIs;
@@ -13,12 +15,14 @@ public class ItemsContainer : ListContainer
     void Start()
     {
         this.PopulateListItems(itemUIs, 28);
-        this.charDataCenter.CharInventoryObs.Subscribe(this.Render).AddTo(this);
+        this.listPager.Feed(this.charDataCenter.CharInventoryObs.Select(x => x.Items), 28)
+            .Select(x => x.Data)
+            .Subscribe(this.Render).AddTo(this);
     }
 
-    void Render(CharInventory inventory)
+    void Render(List<Item> items)
     {    
-        this.RenderItems(this.itemUIs, inventory.Items, 0, (itemUI, data) => itemUI.Render(data));
+        this.RenderItems(this.itemUIs, items, 0, (itemUI, data) => itemUI.Render(data));
     }
 
     void OnDestroy()

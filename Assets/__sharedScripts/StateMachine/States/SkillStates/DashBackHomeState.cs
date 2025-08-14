@@ -1,29 +1,28 @@
 using Animancer;
 using R3;
+using UnityEngine;
 
 public class DashBackHomeState : IRxState
 {
-    private CombatParticipant player;
-    private AnimancerComponent animancer;
-    private AnimationList animationList;
+    private CombatParticipant _participant;
+    private AnimancerComponent _animancer;
+    private AnimationClip _clip;
     public string Name { get; set; } = "dash_home";
     public DashBackHomeState(
-        CombatParticipant player, AnimancerComponent animancer, AnimationList animationList)
+        CombatParticipant player, AnimancerComponent animancer, AnimationClip clip)
     {
-        this.player = player;
-        this.animancer = animancer;
-        this.animationList = animationList;
+        this._participant = player;
+        this._animancer = animancer;
+        this._clip = clip;
     }
 
     public Observable<int> Play()
     {
-        var clipName = PlayerAnims.DashBWD_Battle_InPlace.WithWeapon(player.weaponSOGO.Item1.WeaponClass);
-        var clip = this.animationList.GetClip(clipName);
-        var currentLocation = animancer.transform.position;
+        var currentLocation = _animancer.transform.position;
         return Observable.Defer(() =>
         {
-            this.animancer.Play(clip);
-            return animancer.MoveTowards(currentLocation, player.homeSpot, clip.length);
+            this._animancer.Play(this._clip);
+            return _animancer.MoveTowards(currentLocation, _participant.homeSpot, this._clip.length);
         });
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Animancer;
 using Animancer.FSM;
 using R3;
@@ -12,6 +13,8 @@ public class EnemyComponent : MonoBehaviour
     private EnemyDefinitionSO enemyDefinitionSO;
     [SerializeField]
     public CombatParticipant CombatParticipant;
+    [SerializeField]
+    public int TestAtkIndex = 0;
 
     CombatController combatController;
 
@@ -39,6 +42,21 @@ public class EnemyComponent : MonoBehaviour
 
             this.combatController.OnHitObs.Where(ev => ev.Target == this.CombatParticipant).Subscribe(this.HandleHit).AddTo(this);
         }
+    }
+
+    [ContextMenu("TestAtk")]
+    public void TestAtk()
+    {
+        this.PerformGenericAttack(this.enemyDefinitionSO.GenericEnemyAttacks[this.TestAtkIndex]);
+    }
+
+    public void PerformGenericAttack(GenericEnemyAttack atk)
+    {
+        var actualAtk = new PlayClipState()
+        {
+            Animancer = this.animancer,
+            AnimationClip = atk.Animation,
+        };
     }
 
     // Update is called once per frame
