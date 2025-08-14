@@ -31,11 +31,11 @@ public class ProjectileMaker : MonoBehaviour
         Gizmos.DrawSphere(transform.position, 0.25f);
     }
 
-    public Observable<int> CreateProjectile(string projectileName, CombatParticipant target)
+    public Observable<int> CreateProjectile(ProjectileType projectileType, CombatParticipant target)
     {
         // make copies
         var projectileToFire = GameObject.Instantiate(this.projectile, this.transform);
-        var projectileTemplate = this.templates.FirstOrDefault(x => x.name == projectileName);
+        var projectileTemplate = this.templates.FirstOrDefault(x => x.name == projectileType.ToString());
         var templateCopy = GameObject.Instantiate(projectileTemplate, projectileToFire.transform);
 
         // set parents

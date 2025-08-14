@@ -27,7 +27,7 @@ public class RangeAttack01: IRxState
         {
             var playObs = this.Animancer.PlayAsObservable(clip);
             var onhitObs = Observable.Timer(TimeSpan.FromMilliseconds(clip.length / 2 * 1000))
-                .Take(1).Select(_ => Player.ProjectileMaker.CreateProjectile("Rocket", target).Do(onCompleted: _ =>
+                .Take(1).Select(_ => Player.ProjectileMaker.CreateProjectile(ProjectileType.Rocket, target).Do(onCompleted: _ =>
                 {
                     controller.TriggerOnHit(new OnHitEvent
                     {

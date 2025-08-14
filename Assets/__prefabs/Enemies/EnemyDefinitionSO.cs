@@ -19,7 +19,7 @@ public class GenericEnemyAttack
     [SerializeField]
     public float MeleeOffset = 0.1f;
     [SerializeField]
-    public string ProjectileName = "RedBlob";
+    public ProjectileType ProjectileType = ProjectileType.None;
 }
 
 [CreateAssetMenu(fileName = "EnemyDefinitionSO", menuName = "Scriptable Objects/EnemyDefinitionSO")]
@@ -28,5 +28,7 @@ public class EnemyDefinitionSO : ScriptableObject
     public AnimationClip IdleAnimation;
     public AnimationClip OnHitAnimation;
     public AnimationClip DeathAnimation;
+    public AnimationClip DashAnimation;
+    public AnimationClip BackAnimation;
     public GenericEnemyAttack[] GenericEnemyAttacks;
 }

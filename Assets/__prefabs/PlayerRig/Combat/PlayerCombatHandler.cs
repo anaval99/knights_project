@@ -132,7 +132,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
     public void TestProjectile()
     {
         var target = this.currentState.SkillTargets[0];
-        this.combatParticipant.ProjectileMaker.CreateProjectile("Rocket", target);
+        this.combatParticipant.ProjectileMaker.CreateProjectile(ProjectileType.Rocket, target);
     }
 
     public AnimationClip GetClipWithWeapon(string animName)
