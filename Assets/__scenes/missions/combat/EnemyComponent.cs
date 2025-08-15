@@ -35,6 +35,8 @@ public class EnemyComponent : MonoBehaviour
                 {
                     return;
                 }
+                this.CombatParticipant.homeSpot = this.animancer.transform.position;
+                this.CombatParticipant.homeRotation = this.animancer.transform.rotation;
                 var hasAttacks = this.enemyDefinitionSO.GenericEnemyAttacks != null
                     && this.enemyDefinitionSO.GenericEnemyAttacks.Length > 0;
                 Debug.Log("Enemy start:" + this.enemyDefinitionSO.name);
@@ -70,7 +72,7 @@ public class EnemyComponent : MonoBehaviour
         controller.SetCombatState(state);        
     }
 
-    [ContextMenu("TestAtk")]
+    [ContextMenu("TestAtk()")]
     public void TestAtk()
     {
         this.PerformGenericAttack(this.enemyDefinitionSO.GenericEnemyAttacks[this.TestAtkIndex]);
@@ -78,12 +80,13 @@ public class EnemyComponent : MonoBehaviour
 
     public void PerformGenericAttack(GenericEnemyAttack atk)
     {
-        this.CombatParticipant.homeSpot = this.animancer.transform.position;
         var actualAtk = new PlayClipState()
         {
             Animancer = this.animancer,
             AnimationClip = atk.Animation,
         };
+        var turnEnd = new TurnEndState(this.CombatParticipant);
+        var idle = new IdleState(this.animancer, this.enemyDefinitionSO.IdleAnimation, 200);
         if (atk.IsMelee)
         {
             var dash = new DashToTargetState(this.CombatParticipant, this.animancer, this.enemyDefinitionSO.DashAnimation);
@@ -91,7 +94,21 @@ public class EnemyComponent : MonoBehaviour
             this.rxStateMachine.SetState(new CombineState(
                 dash,
                 actualAtk,
-                back
+                back,
+                idle,
+                turnEnd
+            ));
+        }
+        else
+        {
+            var lookat = new LookAtState(this.CombatParticipant, this.animancer);
+            var rotateBack = new RotateBackHomeState(this.CombatParticipant, this.animancer);
+            this.rxStateMachine.SetState(new CombineState(
+                lookat,
+                actualAtk,
+                rotateBack,
+                idle,
+                turnEnd
             ));
         }
     }

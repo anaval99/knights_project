@@ -144,10 +144,10 @@ public partial class PlayerCombatHandler : MonoBehaviour
 
     public IRxState CreateIdleState()
     {
+        var clip = this.GetClipWithWeapon(PlayerAnims.Idle_Battle);
         var idleState = new IdleState(
             this.playerAnimation.animancerComponent,
-            this.combatParticipant.weaponSOGO.Item1,
-            this.playerAnimation.animationList,
+            clip,
             200
         );
 
@@ -158,8 +158,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
     {
         var state = new LookAtState(
             this.combatParticipant,
-            this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
+            this.playerAnimation.animancerComponent
         );
 
         return state;
@@ -169,8 +168,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
     {
         var state = new RotateBackHomeState(
             this.combatParticipant,
-            this.playerAnimation.animancerComponent,
-            this.playerAnimation.animationList
+            this.playerAnimation.animancerComponent
         );
 
         return state;

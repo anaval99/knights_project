@@ -9,9 +9,17 @@ public class CombineState : IRxState
 
     public CombineState(params IRxState[] states)
     {
-        this.Name = string.Join('>', states.Select(x => x.Name));
+        this.Merge = false;
+        this.Name = $"({string.Join(">", states.Select(x => x.Name))})";
         this.states = states;
     }
+
+    public CombineState(bool merge, params IRxState[] states)
+    {
+        this.Merge = merge;
+        this.Name = $"({string.Join("+", states.Select(x => x.Name))})";
+        this.states = states;
+    }    
 
     public Observable<int> Play()
     {

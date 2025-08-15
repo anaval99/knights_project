@@ -45,10 +45,10 @@ public class PlayerAnimation : MonoBehaviour
 
     public void PlayIdleAnimation()
     {
+        var clip = this.animationList.GetClip(PlayerAnims.Idle_Battle.WithWeapon(this.weaponSOGO));
         var idleState = new IdleState(
             this.animancerComponent,
-            this.weaponSOGO.Item1,
-            this.animationList
+            clip
         );
         this.rxStateMachine.SetState(idleState);
     }

@@ -5,14 +5,12 @@ public class RotateBackHomeState : IRxState
 {
     private CombatParticipant player;
     private AnimancerComponent animancer;
-    private AnimationList animationList;
     public string Name { get; set; } = "rotate";
     public RotateBackHomeState(
-        CombatParticipant player, AnimancerComponent animancer, AnimationList animationList)
+        CombatParticipant player, AnimancerComponent animancer)
     {
         this.player = player;
         this.animancer = animancer;
-        this.animationList = animationList;
     }
 
     public Observable<int> Play()

@@ -1,25 +1,23 @@
 using System;
 using Animancer;
 using R3;
+using UnityEngine;
 
 public class IdleState: IRxState
 {
     private readonly AnimancerComponent _animancer;
-    private readonly ItemSO _weaponSO;
-    private readonly AnimationList _animationList;
-    private int durationMS = 0;
+    private AnimationClip _clip;
+    private int _durationMS = 0;
 
     public IdleState(
         AnimancerComponent animancer,
-        ItemSO weaponSO,
-        AnimationList animationList,
+        AnimationClip clip,
         int durationMS = 0
     )
     {
-        _animancer = animancer;
-        _weaponSO = weaponSO;
-        _animationList = animationList;
-        this.durationMS = durationMS;
+        this._animancer = animancer;
+        this._clip = clip;
+        this._durationMS = durationMS;
     }
 
     public string Name { get; set; } = "IdleState";
@@ -28,12 +26,10 @@ public class IdleState: IRxState
     {
         return Observable.Defer(() =>
         {
-            string idleClip = PlayerAnims.Idle_Battle.WithWeapon(_weaponSO.WeaponClass);
-            var clip = this._animationList.GetClip(idleClip);
-            this._animancer.Play(clip, 0.1f);
-            if (this.durationMS > 0)
+            this._animancer.Play(this._clip, 0.1f);
+            if (this._durationMS > 0)
             {
-                return Observable.Timer(TimeSpan.FromMilliseconds(this.durationMS)).Select(_ => 1).Take(1);
+                return Observable.Timer(TimeSpan.FromMilliseconds(this._durationMS)).Select(_ => 1).Take(1);
             }
             return Observable.Never<int>();
         });
