@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 89
+  controlID: 130
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -955,9 +955,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 1072.8198, y: 514.695, z: -0.4608}
+    m_Target: {x: 154.31529, y: -1460.4083, z: 2041.3102}
     speed: 2
-    m_Value: {x: 1072.8198, y: 514.695, z: -0.4608}
+    m_Value: {x: 154.31529, y: -1460.4083, z: 2041.3102}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1003,9 +1003,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.1416685, y: 0.030907532, z: -0.0044766464, w: -0.98953635}
+    m_Target: {x: -0.30519158, y: -0.02458947, z: 0.007707957, w: -0.9520725}
     speed: 2
-    m_Value: {x: -0.14166851, y: 0.030907534, z: -0.0044766464, w: -0.98953635}
+    m_Value: {x: -0.30519158, y: -0.02458947, z: 0.007707957, w: -0.95207244}
   m_Size:
     m_Target: 1264.571
     speed: 2
@@ -1084,7 +1084,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 00f0fdff62eaffffe2eeffff26efffffecf6fffff8f6ffffdcf7ffffe0f7ffff1afbffff1cfbffff1eb00000
+      m_ExpandedIDs: 1ae1ffffe0f7ffffeaf7ffff1afbffff1cfbffff22b0000052b00000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1156,7 +1156,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__prefabs/Enemies/Slime
+    - Assets/RPGTinyHeroWavePBR/Animation/TwoHandSword
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1166,16 +1166,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__prefabs/Enemies/Slime
+  - Assets/RPGTinyHeroWavePBR/Animation/TwoHandSword
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 127}
-    m_SelectedIDs: 904b0100
-    m_LastClickedID: 84880
-    m_ExpandedIDs: 000000004c4901004e49010050490100524901005449010056490100584901005a4901005c4901005e490100604901006249010064490100
+    scrollPos: {x: 0, y: 620}
+    m_SelectedIDs: 70ad0100
+    m_LastClickedID: 109936
+    m_ExpandedIDs: 0000000050490100524901005449010056490100584901005a4901005c4901005e4901006049010062490100644901006649010068490100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1204,7 +1204,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000004c4901004e49010050490100524901005449010056490100584901005a4901005c4901005e490100604901006249010064490100
+    m_ExpandedIDs: 0000000050490100524901005449010056490100584901005a4901005c4901005e4901006049010062490100644901006649010068490100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

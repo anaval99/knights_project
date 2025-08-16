@@ -40,6 +40,7 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     UnderGlow underGlow;
 
+    [HideInInspector]
     public CombatController combatController;
     [HideInInspector]
     public Vector3 midRangeLandingSpot = Vector3.zero;
@@ -59,6 +60,7 @@ public class CombatParticipant : MonoBehaviour
     public (ItemSO, GameObject) armorSOGO;
     public (ItemSO, GameObject) weaponSOGO;
 
+    [HideInInspector]
     public Collider Collider;
     public bool IsDead => this.CurrentHealth <= 0;
 
