@@ -87,13 +87,21 @@ public class EnemyComponent : MonoBehaviour
         };
         var turnEnd = new TurnEndState(this.CombatParticipant);
         var idle = new IdleState(this.animancer, this.enemyDefinitionSO.IdleAnimation, 200);
+
         if (atk.IsMelee)
         {
             var dash = new DashToTargetState(this.CombatParticipant, this.animancer, this.enemyDefinitionSO.DashAnimation);
             var back = new DashBackHomeState(this.CombatParticipant, this.animancer, this.enemyDefinitionSO.BackAnimation);
+            var hit = new TriggerHitState()
+            {
+                Damage = atk.Damage,
+                Source = this.CombatParticipant,
+                Target = this.combatController.State.SkillTargets[0],
+                TimingSeconds = atk.Animation.length / 2
+            };
             this.rxStateMachine.SetState(new CombineState(
                 dash,
-                actualAtk,
+                new CombineState(true, actualAtk, hit),
                 back,
                 idle,
                 turnEnd

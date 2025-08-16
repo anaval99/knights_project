@@ -19,6 +19,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
     private Skillbar skillbar;
 
     private CombatState currentState;
+    private CombatController controller;
 
     public void InitializeCombatHandler(Observable<CombatState> combatStateObs)
     {
@@ -54,6 +55,12 @@ public partial class PlayerCombatHandler : MonoBehaviour
             }
         })
         .AddTo(this);
+
+        this.controller = this.GetCombatController();
+        if (controller != null)
+        {
+            controller.OnHitObs.Where(ev => ev.Target == this.combatParticipant).Subscribe(this.HandleHit).AddTo(this);
+        }
     }
 
     void Start()
@@ -101,6 +108,37 @@ public partial class PlayerCombatHandler : MonoBehaviour
             // weapon
             this.combatParticipant.weaponSOGO = weaponSOGO;
             this.combatParticipant.Damage = weaponSOGO.Item1.Damage;
+        }
+    }
+
+    void HandleHit(OnHitEvent ev)
+    {
+        bool isAlive = this.combatParticipant.OnHit(ev);
+        if (isAlive)
+        {
+            var hitClip = this.GetClipWithWeapon(PlayerAnims.GetHit02);
+            var hitState = new PlayClipState()
+            {
+                Animancer = this.playerAnimation.animancerComponent,
+                AnimationClip = hitClip
+            };
+            this.playerAnimation.rxStateMachine.SetState(new CombineState(
+                hitState,
+                this.CreateIdleState()
+            ));
+        }
+        else
+        {
+            var deathClip = this.GetClipWithWeapon(PlayerAnims.Die02);
+            this.playerAnimation.rxStateMachine.SetState(new PlayClipState()
+            {
+                Animancer = this.playerAnimation.animancerComponent,
+                AnimationClip = deathClip
+            });
+            this.controller.TriggerOnDeath(new OnDeathEvent
+            {
+                DeadParticipant = this.combatParticipant
+            });            
         }
     }
 

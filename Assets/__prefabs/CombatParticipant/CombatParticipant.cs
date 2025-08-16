@@ -175,7 +175,11 @@ public class CombatParticipant : MonoBehaviour
 
     int ComputeDamage(OnHitEvent onHitEvent)
     {
-        int skillDamage = onHitEvent.Source.Damage * onHitEvent.SkillBookSO.DamagePercent / 100;
+        int skillDamage = onHitEvent.Damage;
+        if (onHitEvent.SkillBookSO != null)
+        {
+            skillDamage = onHitEvent.Source.Damage * onHitEvent.SkillBookSO.DamagePercent / 100;
+        }
         int takenDmg = skillDamage - this.Defense;
         return Math.Max(0, takenDmg);
     }
