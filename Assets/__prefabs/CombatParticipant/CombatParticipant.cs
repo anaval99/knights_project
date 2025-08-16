@@ -37,6 +37,8 @@ public class CombatParticipant : MonoBehaviour
     TMPro.TextMeshProUGUI HealthNumber;
     [SerializeField]
     FloatingDamage floatingDamage;
+    [SerializeField]
+    UnderGlow underGlow;
 
     public CombatController combatController;
     [HideInInspector]
@@ -92,6 +94,7 @@ public class CombatParticipant : MonoBehaviour
                 bool isTurnPhase = state.Phase.ToString().Contains("Turn");
                 bool isMyTurn = isTurnPhase && state.ShuffledParticipants[state.TurnIndex] == this;
                 this.IsMyTurnObs.OnNext(isMyTurn);
+                this.underGlow.gameObject.SetActive(isMyTurn);
 
                 bool isMyTurnStart = isMyTurn && state.Phase == CombatPhase.TurnStart;
                 this.IsMyTurnStartObs.OnNext(isMyTurnStart);

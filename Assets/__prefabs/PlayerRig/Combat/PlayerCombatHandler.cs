@@ -16,8 +16,6 @@ public partial class PlayerCombatHandler : MonoBehaviour
     [SerializeField]
     private EquipmentList equipmentList;
     [SerializeField]
-    private UnderGlow underGlow;
-    [SerializeField]
     private Skillbar skillbar;
 
     private CombatState currentState;
@@ -63,7 +61,6 @@ public partial class PlayerCombatHandler : MonoBehaviour
         this.charDataCenter.CharEquipmentObs.Subscribe(equipment => this.ComputeStatsFromEquipment(equipment)).AddTo(this);
         this.combatParticipant.IsMyTurnObs.DistinctUntilChanged().Subscribe(isMyTurn =>
         {
-            this.underGlow.gameObject.SetActive(isMyTurn);
             this.skillbar.gameObject.SetActive(isMyTurn);
         }).AddTo(this);
         this.combatParticipant.IsMyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurnStart =>
