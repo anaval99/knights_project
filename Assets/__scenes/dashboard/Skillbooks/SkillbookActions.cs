@@ -13,6 +13,8 @@ public class SkillbookActions : MonoBehaviour
     List<Button> equipSkillButtons;
     [SerializeField]
     GameObject SkillBar;
+    [SerializeField]
+    GameObject PotionBar;
 
     public BehaviorSubject<SkillBook> SelectedSkillBookObs = new(null);
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,12 +32,14 @@ public class SkillbookActions : MonoBehaviour
     {
         this.SelectedSkillBookObs.OnNext(null);
         this.SkillBar.SetActive(true);
+        this.PotionBar.SetActive(true);
     }
 
     void OnDisable()
     {
         this.SelectedSkillBookObs.OnNext(null);
         this.SkillBar.SetActive(false);
+        this.PotionBar.SetActive(false);
     }
 
     // Update is called once per frame
