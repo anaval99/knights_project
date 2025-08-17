@@ -21,17 +21,11 @@ public class SkillButtonUI : MonoBehaviour
     private (ItemSO, GameObject) weaponSOGO = (null, null);
 
     private SkillBookSO skillBookSO;
+    private CombatController combatController;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         this.DisabledSymbol.SetActive(false);
-        var combatController = this.GetCombatController();
-        if (combatController == null)
-        {
-            Debug.Log("Not in combat, disabling skill button.");
-            return;
-        }
-
         this.CharDataCenter.CharEquipmentObs
             .Subscribe(eq =>
             {
@@ -39,6 +33,13 @@ public class SkillButtonUI : MonoBehaviour
                 this.weaponSOGO = sogo;
                 this.SetButtonDisabledState();
             }).AddTo(this);
+
+        this.combatController = this.GetCombatController();
+        if (this.combatController == null)
+        {
+            Debug.Log("Not in combat, disabling skill button.");
+            return;
+        }
 
         this.skillButton.OnClickAsObservable()
             .Subscribe(_ =>
@@ -102,6 +103,11 @@ public class SkillButtonUI : MonoBehaviour
 
     public void SetButtonDisabledState()
     {
+        if (this.combatController == null)
+        {
+            this.skillButton.interactable = false;
+            return;
+        }
         var weaponSO = this.weaponSOGO.Item1;
         var skillEnabled = weaponSO != null && this.skillBookSO != null && (
             weaponSO.WeaponClass == this.skillBookSO.WeaponClass ||
