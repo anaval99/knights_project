@@ -85,7 +85,7 @@ public class SkillButtonUI : MonoBehaviour
 
     }
 
-    public void Render(string skillBookSOId)
+    public void Render(string skillBookSOId, int quantity = -1)
     {
         this.skillBookSO = null;
         if (string.IsNullOrEmpty(skillBookSOId) || !this.skillBookList.SkillBookDictionary.ContainsKey(skillBookSOId))

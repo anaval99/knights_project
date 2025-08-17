@@ -8,9 +8,15 @@ using UnityEngine.UI;
 public class SkillbookActions : MonoBehaviour
 {
     [SerializeField]
+    SkillBookList skillBookList;
+    [SerializeField]
     CharDataCenter charDataCenter;
     [SerializeField]
     List<Button> equipSkillButtons;
+    [SerializeField]
+    Button equipHPPotionButton;
+    [SerializeField]
+    Button equipMPPotionButton;
     [SerializeField]
     GameObject SkillBar;
     [SerializeField]
@@ -22,10 +28,11 @@ public class SkillbookActions : MonoBehaviour
     {
         var equipIndexObs = Observable.Merge(this.equipSkillButtons.Select(button => button.OnClickAsObservable().Select(_ => this.equipSkillButtons.IndexOf(button))));
         equipIndexObs
-        .Where(_ => this.SelectedSkillBookObs.Value != null)
-        .Select(equipIndex => (equipIndex, this.charDataCenter.CharSkillBarObs.Value))
-        .Subscribe(this.SetSkillBar)
-        .AddTo(this);
+            .Where(_ => this.SelectedSkillBookObs.Value != null)
+            .Select(equipIndex => (equipIndex, this.charDataCenter.CharSkillBarObs.Value))
+            .Subscribe(this.SetSkillBar)
+            .AddTo(this);
+        this.SelectedSkillBookObs.Subscribe(this.SetAvailableButtons).AddTo(this);
     }
 
     void OnEnable()
@@ -46,6 +53,23 @@ public class SkillbookActions : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void SetAvailableButtons(SkillBook selectedSkillBook)
+    {
+        bool isSkill = false;
+        bool isHP = false;
+        bool isMP = false;
+        if (selectedSkillBook != null)
+        {
+            var skill = this.skillBookList.SkillBookDictionary[selectedSkillBook.SkillBookSOId];
+            isSkill = skill.SkillType == SkillType.Active || skill.SkillType == SkillType.Passive;
+            isHP = skill.SkillType == SkillType.HPPotion;
+            isMP = skill.SkillType == SkillType.MPPotion;
+        }
+        this.equipSkillButtons.ForEach(btn => btn.gameObject.SetActive(isSkill));
+        this.equipHPPotionButton.gameObject.SetActive(isHP);
+        this.equipMPPotionButton.gameObject.SetActive(isMP);
     }
 
     async void SetSkillBar((int equipIndex, CharSkillBar skillBar) index_skillbar)
