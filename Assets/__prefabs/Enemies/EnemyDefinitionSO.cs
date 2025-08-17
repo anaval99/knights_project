@@ -13,7 +13,7 @@ public class GenericEnemyAttack
     [SerializeField]
     public int Damage;
     [SerializeField]
-    public int AP;
+    public int ManaCost;
     [SerializeField]
     public bool IsMelee = true;
     [SerializeField]

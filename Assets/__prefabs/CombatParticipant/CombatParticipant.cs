@@ -19,7 +19,7 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     public int Damage = 20;
     [SerializeField]
-    public int AP = 0;
+    public int Mana = 0;
     [SerializeField]
     public float meleeRange = 0.1f;
     [SerializeField]
@@ -100,6 +100,10 @@ public class CombatParticipant : MonoBehaviour
 
                 bool isMyTurnStart = isMyTurn && state.Phase == CombatPhase.TurnStart;
                 this.IsMyTurnStartObs.OnNext(isMyTurnStart);
+                if (isMyTurnStart)
+                {
+                    this.Mana++;
+                }
 
                 bool isMyTurnSelectTarget = isMyTurn && state.Phase == CombatPhase.TurnSelectTarget;
                 this.IsMyTurnSelectTargetObs.OnNext(isMyTurnSelectTarget);

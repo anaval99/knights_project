@@ -22,4 +22,6 @@ public class SkillBookSO : ScriptableObject
   public TargetType TargetType = TargetType.None;
   [SerializeField]
   public int DamagePercent = 0;
+  [SerializeField]
+  public int HealAmount = 0;
 }
