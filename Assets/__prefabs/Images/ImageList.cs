@@ -34,7 +34,6 @@ public class ImageList : ScriptableObject
     if (this.images != null && this.images?.Length > 0)
     {
       this.images = this.images.DistinctBy(image => image.name).ToArray();
-      Debug.Log(this.images[0].name);
     }
   }
 

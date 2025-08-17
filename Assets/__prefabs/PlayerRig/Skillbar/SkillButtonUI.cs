@@ -17,6 +17,8 @@ public class SkillButtonUI : MonoBehaviour
     CharDataCenter CharDataCenter;
     [SerializeField]
     GameObject DisabledSymbol;
+    [SerializeField]
+    TMPro.TextMeshProUGUI UsageHint;
 
     private (ItemSO, GameObject) weaponSOGO = (null, null);
 
@@ -89,6 +91,7 @@ public class SkillButtonUI : MonoBehaviour
     public void Render(string skillBookSOId, int quantity = -1)
     {
         this.skillBookSO = null;
+        this.UsageHint.SetText("");
         if (string.IsNullOrEmpty(skillBookSOId) || !this.skillBookList.SkillBookDictionary.ContainsKey(skillBookSOId))
         {
             this.skillIcon.gameObject.SetActive(false);
@@ -98,16 +101,19 @@ public class SkillButtonUI : MonoBehaviour
         this.skillBookSO = skillBookSO;
         this.skillIcon.sprite = skillBookSO.SkillIcon;
         this.skillIcon.gameObject.SetActive(true);
+        if (quantity > -1)
+        {
+            this.UsageHint.SetText(quantity.ToString());
+        }
+        else if (this.skillBookSO.SkillType == SkillType.Active)
+        {
+            this.UsageHint.SetText(this.skillBookSO.ManaCost.ToString());
+        }
         this.SetButtonDisabledState();
     }
 
     public void SetButtonDisabledState()
     {
-        if (this.combatController == null)
-        {
-            this.skillButton.interactable = false;
-            return;
-        }
         var weaponSO = this.weaponSOGO.Item1;
         var skillEnabled = weaponSO != null && this.skillBookSO != null && (
             weaponSO.WeaponClass == this.skillBookSO.WeaponClass ||

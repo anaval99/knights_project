@@ -33,6 +33,16 @@ public class SkillbookActions : MonoBehaviour
             .Subscribe(this.SetSkillBar)
             .AddTo(this);
         this.SelectedSkillBookObs.Subscribe(this.SetAvailableButtons).AddTo(this);
+        this.equipHPPotionButton.OnClickAsObservable()
+            .Where(_ => this.SelectedSkillBookObs.Value != null)
+            .Select(_ => this.SelectedSkillBookObs.Value.SkillBookSOId)
+            .Subscribe(this.SetHPPotion)
+            .AddTo(this);
+        this.equipMPPotionButton.OnClickAsObservable()
+            .Where(_ => this.SelectedSkillBookObs.Value != null)
+            .Select(_ => this.SelectedSkillBookObs.Value.SkillBookSOId)
+            .Subscribe(this.SetMPPotion)
+            .AddTo(this);            
     }
 
     void OnEnable()
@@ -88,5 +98,19 @@ public class SkillbookActions : MonoBehaviour
             await this.charDataCenter.SaveSkillBar(skillBar);
             Debug.Log($"Set SkillBar at index {equipIndex} to {this.SelectedSkillBookObs.Value.SkillBookSOId}");
         }
+    }
+
+    async void SetHPPotion(string potionId)
+    {
+        var skillbar = charDataCenter.CharSkillBarObs.Value;
+        skillbar.LifePotionId = potionId;
+        await this.charDataCenter.SaveSkillBar(skillbar);
+    }
+
+    async void SetMPPotion(string potionId)
+    {
+        var skillbar = charDataCenter.CharSkillBarObs.Value;
+        skillbar.ManaPotionId = potionId;
+        await this.charDataCenter.SaveSkillBar(skillbar);
     }
 }

@@ -140,7 +140,6 @@ public class EnemyComponent : MonoBehaviour
     {
         if (animancer == null || this.enemyDefinitionSO.IdleAnimation == null)
         {
-            Debug.LogError("Animancer or Idle Animation is not set.");
             return;
         }
 

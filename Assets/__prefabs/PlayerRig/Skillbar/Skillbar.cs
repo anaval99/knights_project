@@ -25,6 +25,7 @@ public class Skillbar : MonoBehaviour
         if (combatController == null)
         {
             this.skillbarUI.gameObject.SetActive(true);
+            this.potionsUI.gameObject.SetActive(true);
             Debug.Log("Not in combat, disabling skillbar.");
             return;
         }

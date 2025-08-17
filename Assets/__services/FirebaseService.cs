@@ -88,7 +88,6 @@ public class FirebaseService
         var snapShot = await doc.GetSnapshotAsync();
         if (snapShot.Exists)
         {
-            Debug.Log($"Document found at path: {path} for UID: {uid}");
             return snapShot.ConvertTo<T>();
         }
         else
