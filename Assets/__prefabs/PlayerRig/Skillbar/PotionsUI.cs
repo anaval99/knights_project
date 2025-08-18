@@ -38,7 +38,7 @@ public class PotionsUI : MonoBehaviour
         {
             potionUI.Render(null);
         }
-        int count = books.Where(book => book.SkillBookSOId == potionSOId).Count();
+        int count = books.Where(b => b.SkillBookSOId == potionSOId).Sum(b => b.Quantity);
         potionUI.Render(potionSOId, count);
     }
 }

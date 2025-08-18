@@ -24,17 +24,24 @@ public class SkillButtonUI : MonoBehaviour
 
     private SkillBookSO skillBookSO;
     private CombatController combatController;
+    private BehaviorSubject<(string, int)> renderObs = new BehaviorSubject<(string, int)>(("__starter", 0));
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         this.DisabledSymbol.SetActive(false);
-        this.CharDataCenter.CharEquipmentObs
-            .Subscribe(eq =>
-            {
-                var sogo = this.EquipmentList.GetSOGO(eq.Weapon);
-                this.weaponSOGO = sogo;
-                this.SetButtonDisabledState();
-            }).AddTo(this);
+
+        Observable.CombineLatest(
+            this.CharDataCenter.CharEquipmentObs,
+            this.renderObs.Where(x => x.Item1 != "__starter"),
+            (equipment, renderInfo) => (equipment, renderInfo.Item1, renderInfo.Item2)
+        ).Subscribe((data) =>
+        {
+            var (eq, soId, qty) = data;
+            var sogo = this.EquipmentList.GetSOGO(eq.Weapon);
+            this.weaponSOGO = sogo;
+            this.ManuallyRender(soId, qty);
+        })
+        .AddTo(this);
 
         this.combatController = this.GetCombatController();
         if (this.combatController == null)
@@ -90,11 +97,18 @@ public class SkillButtonUI : MonoBehaviour
 
     public void Render(string skillBookSOId, int quantity = -1)
     {
+        this.renderObs.OnNext((skillBookSOId, quantity));
+    }
+
+    void ManuallyRender(string skillBookSOId, int quantity = -1)
+    {
         this.skillBookSO = null;
         this.UsageHint.SetText("");
         if (string.IsNullOrEmpty(skillBookSOId) || !this.skillBookList.SkillBookDictionary.ContainsKey(skillBookSOId))
         {
             this.skillIcon.gameObject.SetActive(false);
+            this.DisabledSymbol.SetActive(true);
+            this.skillButton.interactable = false;
             return;
         }
         var skillBookSO = skillBookList.SkillBookDictionary[skillBookSOId];
@@ -109,17 +123,28 @@ public class SkillButtonUI : MonoBehaviour
         {
             this.UsageHint.SetText(this.skillBookSO.ManaCost.ToString());
         }
-        this.SetButtonDisabledState();
+        this.SetButtonDisabledState(quantity);     
     }
 
-    public void SetButtonDisabledState()
+    public void SetButtonDisabledState(int quantity = -1)
     {
         var weaponSO = this.weaponSOGO.Item1;
-        var skillEnabled = weaponSO != null && this.skillBookSO != null && (
+        bool skillEnabled = weaponSO != null && this.skillBookSO != null && (
             weaponSO.WeaponClass == this.skillBookSO.WeaponClass ||
             this.skillBookSO.WeaponClass == WeaponClass.None
         );
-        this.DisabledSymbol.SetActive(!skillEnabled);
-        this.skillButton.interactable = skillEnabled;        
+        bool isPotion = this.skillBookSO != null &&
+            (this.skillBookSO.SkillType == SkillType.HPPotion || this.skillBookSO.SkillType == SkillType.MPPotion);
+        bool potionBtnEnabled = isPotion && quantity > 0;
+        if (isPotion)
+        {
+            this.DisabledSymbol.SetActive(!potionBtnEnabled);
+            this.skillButton.interactable = potionBtnEnabled;
+        }
+        else
+        {    
+            this.DisabledSymbol.SetActive(!skillEnabled);
+            this.skillButton.interactable = skillEnabled;
+        }
     }
 }
