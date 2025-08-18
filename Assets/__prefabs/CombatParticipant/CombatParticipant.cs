@@ -115,13 +115,13 @@ public class CombatParticipant : MonoBehaviour
                 this.IsMyTurnActionObs.OnNext(isMyTurnAction);
 
                 var selectedSkill = state.SelectedSkillBook;
-                bool isPlayerTargeting = !isMyTurn && state.Phase == CombatPhase.TurnSelectTarget;
+                bool isTargeting = state.Phase == CombatPhase.TurnSelectTarget;
                 bool isValidTarget = selectedSkill != null &&
                                      (selectedSkill.TargetType == TargetType.AllySingle && !IsEnemy ||
                                       selectedSkill.TargetType == TargetType.EnemySingle && IsEnemy);
 
                 bool isDead = this.IsDead;
-                this.SelectorButton.gameObject.SetActive(isPlayerTargeting && isValidTarget && !isDead);
+                this.SelectorButton.gameObject.SetActive(isTargeting && isValidTarget && !isDead);
                 this.SelectionSymbol.SetActive(isCurrentTargetForConfirm() && !isDead);
             })
             .Subscribe()

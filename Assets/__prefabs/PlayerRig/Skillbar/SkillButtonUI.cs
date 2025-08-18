@@ -53,7 +53,10 @@ public class SkillButtonUI : MonoBehaviour
         this.skillButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
-                if (this.skillBookSO != null && this.skillBookSO.SkillType == SkillType.Active)
+                if (this.skillBookSO != null && (
+                    this.skillBookSO.SkillType == SkillType.Active ||
+                    this.skillBookSO.SkillType == SkillType.HPPotion ||
+                    this.skillBookSO.SkillType == SkillType.MPPotion))
                 {
                     var state = combatController.CombatStateObs.Value;
                     state.SelectedSkillBook = this.skillBookSO;
