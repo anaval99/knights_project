@@ -26,9 +26,6 @@ public class FloatingDamage : MonoBehaviour
     // The starting position of the text, used to reset its position for each animation.
     private Vector3 initialPosition;
 
-    // The initial color of the text, used to reset its color for each animation.
-    private Color initialColor;
-
     /// <summary>
     /// Initializes the component.
     /// </summary>
@@ -41,7 +38,6 @@ public class FloatingDamage : MonoBehaviour
 
         // Store the initial state to reset for each animation.
         initialPosition = transform.localPosition;
-        initialColor = damageText.color;
         
         // Hide the text initially.
         damageText.enabled = false;
@@ -52,12 +48,12 @@ public class FloatingDamage : MonoBehaviour
     /// This method should be called externally (e.g., when an enemy takes damage).
     /// </summary>
     [ContextMenu("StartFloat()")]
-    public void StartFloat(int damage, bool isCritical)
+    public void StartFloat(int damage, bool isCritical, Color color)
     {
         // Reset the text position, color, and enable the component.
         damageText.SetText(damage.ToString());
         transform.localPosition = initialPosition;
-        damageText.color = initialColor;
+        damageText.color = color;
         damageText.enabled = true;
         
         // Set the timer for the animation.

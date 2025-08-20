@@ -79,6 +79,11 @@ public class CombatParticipant : MonoBehaviour
             Debug.Log("Not in combat, skipping combat participant initialization.");
             return;
         }
+
+        this.combatController
+            .OnHealObs.Where(heal => heal.Target == this)
+            .Subscribe(this.onHeal)
+            .AddTo(this);
         
         this.SelectorButton.OnClickAsObservable()
             .Subscribe(_ =>
@@ -172,12 +177,30 @@ public class CombatParticipant : MonoBehaviour
     public bool OnHit(OnHitEvent onHitEvent)
     {
         int damage = this.ComputeDamage(onHitEvent);
-        this.floatingDamage.StartFloat(damage, false);
+        this.floatingDamage.StartFloat(damage, false, Color.red);
         int health = this.CurrentHealth - damage;
         health = Math.Max(0, health);
         this.CurrentHealth = health;
         return this.CurrentHealth > 0;
     }
+
+    public void onHeal(OnHealEvent onHealEvent)
+    {
+        bool isHealHp = onHealEvent.HP > 0;
+        var color = isHealHp ? Color.green : Color.blue;
+        int amt = isHealHp ? onHealEvent.HP : onHealEvent.MP;
+        int currentValue = isHealHp ? this.CurrentHealth : this.Mana;
+        int newValue = currentValue + amt;
+        this.floatingDamage.StartFloat(amt, false, color);
+        if (isHealHp)
+        {
+            this.CurrentHealth = Math.Min(this.MaxHealth, newValue);
+        }
+        else
+        {
+            this.Mana = newValue;
+        }
+    }    
 
     int ComputeDamage(OnHitEvent onHitEvent)
     {
