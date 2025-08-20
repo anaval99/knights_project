@@ -21,6 +21,14 @@ public class OnHitEvent
     public int Damage;
 }
 
+public class OnHealEvent
+{
+    public int HP;
+    public int MP;
+    public SkillBookSO SkillBookSO;
+    public CombatParticipant Target;
+}
+
 public class CombatController : MonoBehaviour
 {
     [SerializeField]
@@ -33,6 +41,7 @@ public class CombatController : MonoBehaviour
     public BehaviorSubject<CombatState> CombatStateObs = new(new CombatState());
     public Subject<OnHitEvent> OnHitObs = new();
     public Subject<OnDeathEvent> OnDeathObs = new();
+    public Subject<OnHealEvent> OnHealObs = new();
     public CombatParticipant CurrentParticipant
     {
         get => this.CombatStateObs.Value.ShuffledParticipants[this.CombatStateObs.Value.TurnIndex];
@@ -81,9 +90,15 @@ public class CombatController : MonoBehaviour
 
     public void TriggerOnDeath(OnDeathEvent ev)
     {
-        Debug.Log("TriggerOnHit");
+        Debug.Log("TriggerOnDeath");
         this.OnDeathObs.OnNext(ev);
     }
+
+    public void TriggerOnHeal(OnHealEvent ev)
+    {
+        Debug.Log("TriggerOnHeal");
+        this.OnHealObs.OnNext(ev);
+    }    
 
     void InitBattleStart(CombatState state)
     {

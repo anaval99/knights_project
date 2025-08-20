@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Animancer.FSM;
 using R3;
 using Unity.VisualScripting;
@@ -230,6 +231,27 @@ public partial class PlayerCombatHandler : MonoBehaviour
         return back;
     }
 
+    public IRxState PerformPotion(SkillBookSO skillBookSO)
+    {
+        var targets = this.controller.State.SkillTargets;
+        var heals = targets.Select(target => new TriggerHealState()
+        {
+            Healer = this.combatParticipant,
+            SkillBookSO = this.controller.State.SelectedSkillBook,
+            Target = target,
+            HP = skillBookSO.SkillType == SkillType.HPPotion ? skillBookSO.HealAmount : 0,
+            MP = skillBookSO.SkillType == SkillType.MPPotion ? skillBookSO.HealAmount : 0,
+            Name = skillBookSO.name + "State"
+        });
+        var idle = this.CreateIdleState();
+        var end = new TurnEndState(this.combatParticipant);
+        return new CombineState(
+            idle,
+            new CombineState(true, heals.ToArray()),
+            end
+        );
+    }
+
     public IRxState PerformRangeAttack01(SkillBookSO skillBookSO)
     {
         var idle = this.CreateIdleState();
@@ -261,6 +283,11 @@ public partial class PlayerCombatHandler : MonoBehaviour
 
     public void PerformTurnAction(SkillBookSO skillBookSO)
     {
+        if (skillBookSO.SkillType == SkillType.HPPotion || skillBookSO.SkillType == SkillType.MPPotion)
+        {
+            this.playerAnimation.rxStateMachine.SetState(this.PerformPotion(skillBookSO));
+            return;
+        }
         var state = skillBookSO.name switch
         {
             "beginner_slash" => this.BeginnerSlash(skillBookSO),
