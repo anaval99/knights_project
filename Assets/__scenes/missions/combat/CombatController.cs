@@ -53,36 +53,71 @@ public class CombatController : MonoBehaviour
     {
         // Initialize combat setup
         InitializeCombatAsync();
+        this.ProcessSideEffects();
     }
 
     public void SetCombatState(CombatState state)
     {
         this.randomizer.Next(0, 100); // Ensure randomizer is initialized
         this.CombatStateObs.OnNext(state);
-        if (state.Phase == CombatPhase.BattleStart)
-        {
-            InitBattleStart(state);
-            Debug.Log("Combat phase set to BattleStart with " + string.Join(", ", state.ShuffledParticipants.Select(p => p.name)) + " participants.");
-        }
-        else if (state.Phase == CombatPhase.Start)
-        {
-            Debug.Log("Combat phase set to Start.");
-        }
-        else if (state.Phase == CombatPhase.TurnEnd)
-        {
-            if (state.EnemyParticipants.All(x => x.IsDead))
+        // if (state.Phase == CombatPhase.BattleStart)
+        // {
+        //     InitBattleStart(state);
+        //     Debug.Log("Combat phase set to BattleStart with " + string.Join(", ", state.ShuffledParticipants.Select(p => p.name)) + " participants.");
+        // }
+        // else if (state.Phase == CombatPhase.Start)
+        // {
+        //     Debug.Log("Combat phase set to Start.");
+        // }
+        // else if (state.Phase == CombatPhase.TurnEnd)
+        // {
+        //     if (state.EnemyParticipants.All(x => x.IsDead))
+        //     {
+        //         this.InitBattleEnd(state);
+        //     }
+        //     else
+        //     {
+        //         StartTurn(state);
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.Log("Combat phase set to " + state.Phase);
+        // }
+    }
+
+    void ProcessSideEffects()
+    {
+        this.CombatStateObs
+            .Debounce(TimeSpan.FromSeconds(0.1))
+            .Subscribe(state =>
             {
-                this.InitBattleEnd(state);
-            }
-            else
-            {
-                StartTurn(state);
-            }
-        }
-        else
-        {
-            Debug.Log("Combat phase set to " + state.Phase);
-        }
+                if (state.Phase == CombatPhase.BattleStart)
+                {
+                    InitBattleStart(state);
+                    Debug.Log("Combat phase set to BattleStart with " + string.Join(", ", state.ShuffledParticipants.Select(p => p.name)) + " participants.");
+                }
+                else if (state.Phase == CombatPhase.Start)
+                {
+                    Debug.Log("Combat phase set to Start.");
+                }
+                else if (state.Phase == CombatPhase.TurnEnd)
+                {
+                    if (state.EnemyParticipants.All(x => x.IsDead))
+                    {
+                        this.InitBattleEnd(state);
+                    }
+                    else
+                    {
+                        StartTurn(state);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Combat phase set to " + state.Phase);
+                }                
+            })
+            .AddTo(this);
     }
 
     public void TriggerOnHit(OnHitEvent ev)
@@ -103,8 +138,9 @@ public class CombatController : MonoBehaviour
         this.OnHealObs.OnNext(ev);
     }
 
-    void InitBattleStart(CombatState state)
+    void InitBattleStart(CombatState currState)
     {
+        var state = currState.Clone();
         // concat player and enemy participants
         state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
         // now shuffle the participants
