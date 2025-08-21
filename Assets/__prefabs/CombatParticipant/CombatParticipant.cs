@@ -86,7 +86,7 @@ public class CombatParticipant : MonoBehaviour
             .OnHealObs.Where(heal => heal.Target == this)
             .Subscribe(this.onHeal)
             .AddTo(this);
-        
+
         this.SelectorButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
@@ -106,20 +106,9 @@ public class CombatParticipant : MonoBehaviour
                 this.underGlow.gameObject.SetActive(isMyTurn);
 
                 bool isMyTurnStart = isMyTurn && state.Phase == CombatPhase.TurnStart;
-                this.IsMyTurnStartObs.OnNext(isMyTurnStart);
-                if (isMyTurnStart)
-                {
-                    this.Mana++;
-                }
-
                 bool isMyTurnSelectTarget = isMyTurn && state.Phase == CombatPhase.TurnSelectTarget;
-                this.IsMyTurnSelectTargetObs.OnNext(isMyTurnSelectTarget);
-
                 bool isMyTurnConfirmAction = isMyTurn && state.Phase == CombatPhase.TurnConfirmAction;
-                this.IsMyTurnConfirmActionObs.OnNext(isMyTurnConfirmAction);
-
                 bool isMyTurnAction = isMyTurn && state.Phase == CombatPhase.TurnAction;
-                this.IsMyTurnActionObs.OnNext(isMyTurnAction);
 
                 var selectedSkill = state.SelectedSkillBook;
                 bool isTargeting = state.Phase == CombatPhase.TurnSelectTarget;
@@ -130,9 +119,21 @@ public class CombatParticipant : MonoBehaviour
                 bool isDead = this.IsDead;
                 this.SelectorButton.gameObject.SetActive(isTargeting && isValidTarget && !isDead);
                 this.SelectionSymbol.SetActive(isCurrentTargetForConfirm() && !isDead);
+                this.IsMyTurnStartObs.OnNext(isMyTurnStart);
+                this.IsMyTurnSelectTargetObs.OnNext(isMyTurnSelectTarget);
+                this.IsMyTurnConfirmActionObs.OnNext(isMyTurnConfirmAction);
+                this.IsMyTurnActionObs.OnNext(isMyTurnAction);
             })
             .Subscribe()
             .AddTo(this);
+
+        this.IsMyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurnStart =>
+        {
+            if (isMyTurnStart)
+            {
+                this.Mana++;
+            }
+        }).AddTo(this);
     }
 
     bool isCurrentTargetForConfirm()
