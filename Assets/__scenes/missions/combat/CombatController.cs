@@ -98,7 +98,7 @@ public class CombatController : MonoBehaviour
     {
         Debug.Log("TriggerOnHeal");
         this.OnHealObs.OnNext(ev);
-    }    
+    }
 
     void InitBattleStart(CombatState state)
     {
@@ -211,5 +211,13 @@ public class CombatController : MonoBehaviour
         var loadParty2Task = LoadParty2AvatarAsync(party2AvatarId, partyAvatars);
 
         await Task.WhenAll(loadParty1Task, loadParty2Task);
+    }
+
+    public Observable<CombatState> GetMyState(CombatParticipant combatParticipant, CombatPhase combatPhase)
+    {
+        return this.CombatStateObs.Where(state =>
+            state != null
+            && state.Phase == combatPhase
+            && state.ShuffledParticipants[state.TurnIndex] == combatParticipant);
     }
 }

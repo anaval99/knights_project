@@ -21,6 +21,11 @@ public class EnemyComponent : MonoBehaviour
 
     private RxStateMachine rxStateMachine;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    bool HasAttacks()
+    {
+        return this.enemyDefinitionSO.GenericEnemyAttacks != null
+                    && this.enemyDefinitionSO.GenericEnemyAttacks.Length > 0;
+    }
     void Start()
     {
         rxStateMachine = GetComponent<RxStateMachine>();
@@ -37,24 +42,24 @@ public class EnemyComponent : MonoBehaviour
                 }
                 this.CombatParticipant.homeSpot = this.animancer.transform.position;
                 this.CombatParticipant.homeRotation = this.animancer.transform.rotation;
-                var hasAttacks = this.enemyDefinitionSO.GenericEnemyAttacks != null
-                    && this.enemyDefinitionSO.GenericEnemyAttacks.Length > 0;
-                Debug.Log("Enemy start:" + this.enemyDefinitionSO.name);
                 var state = combatController.State.Clone();
-                if (!hasAttacks)
-                {
-                    state.Phase = CombatPhase.TurnEnd;
-                    combatController.SetCombatState(state);
-                }
-                else
-                {
-                    var target = state.PlayerParticipants[0];
-                    state.Phase = CombatPhase.TurnAction;
-                    state.SkillTargets = new List<CombatParticipant>() { target };
-                    combatController.SetCombatState(state);
-                    Debug.Log("Enemy target:" + target.gameObject.name);
-                }
+                var target = state.PlayerParticipants[0];
+                state.Phase = CombatPhase.TurnAction;
+                state.SkillTargets = new List<CombatParticipant>() { target };
+                combatController.SetCombatState(state);
+                Debug.Log("Enemy target:" + target.gameObject.name);
             }).AddTo(this);
+
+            combatController.GetMyState(this.CombatParticipant, CombatPhase.TurnAction)
+                .Subscribe(state =>
+                {
+                    if (!this.HasAttacks())
+                    {
+                        this.rxStateMachine.SetState(new TurnEndState(this.CombatParticipant));
+                        return;
+                    }
+                })
+                .AddTo(this);
 
             this.combatController.OnHitObs.Where(ev => ev.Target == this.CombatParticipant).Subscribe(this.HandleHit).AddTo(this);
         }
@@ -75,11 +80,25 @@ public class EnemyComponent : MonoBehaviour
     [ContextMenu("TestAtk()")]
     public void TestAtk()
     {
+        if (!this.HasAttacks())
+        {
+            this.rxStateMachine.SetState(
+                new TurnEndState(this.CombatParticipant)
+            );
+            return;
+        }        
         this.PerformGenericAttack(this.enemyDefinitionSO.GenericEnemyAttacks[this.TestAtkIndex]);
     }
 
     public void PerformGenericAttack(GenericEnemyAttack atk)
     {
+        if (!this.HasAttacks())
+        {
+            this.rxStateMachine.SetState(
+                new TurnEndState(this.CombatParticipant)
+            );
+            return;
+        }
         var actualAtk = new PlayClipState()
         {
             Animancer = this.animancer,
