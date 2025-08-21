@@ -32,6 +32,8 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     public Slider HealthSlider;
     [SerializeField]
+    public TMPro.TextMeshProUGUI ManaText;
+    [SerializeField]
     Image FillColor;
     [SerializeField]
     TMPro.TextMeshProUGUI HealthNumber;
@@ -165,8 +167,9 @@ public class CombatParticipant : MonoBehaviour
         if (HealthNumber != null)
         {
             HealthNumber.text = $"{CurrentHealth}/{MaxHealth}";
-            HealthNumber.color = color;
+            HealthNumber.color = Color.white;
         }
+        this.ManaText.SetText(this.Mana.ToString());
     }
 
     /// <summary>
