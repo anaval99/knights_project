@@ -74,7 +74,10 @@ public class CombatController : MonoBehaviour
             {
                 this.InitBattleEnd(state);
             }
-            StartTurn(state);
+            else
+            {
+                StartTurn(state);
+            }
         }
         else
         {
@@ -105,11 +108,11 @@ public class CombatController : MonoBehaviour
         // concat player and enemy participants
         state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
         // now shuffle the participants
-        // state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => randomizer.Next(0, 100)).ToList();
+        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => randomizer.Next(0, 100)).ToList();
         // state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(cp => cp.name.Contains("Player")).ToList();
-        state.ShuffledParticipants = new List<CombatParticipant>(
-            state.EnemyParticipants.Concat(state.PlayerParticipants.Take(1))
-        );
+        // state.ShuffledParticipants = new List<CombatParticipant>(
+        //     state.EnemyParticipants.Concat(state.PlayerParticipants.Take(1))
+        // );
         state.TurnIndex = -1; // reset turn index
         Observable.Timer(TimeSpan.FromSeconds(1)).Take(1).Subscribe(_ =>
         {
