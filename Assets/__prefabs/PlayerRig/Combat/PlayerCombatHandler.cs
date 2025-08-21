@@ -147,7 +147,7 @@ public partial class PlayerCombatHandler : MonoBehaviour
     public void ForceTurn()
     {
         var controller = this.GetCombatController();
-        var state = controller.CombatStateObs.Value;
+        var state = controller.CombatStateObs.Value.Clone();
         state.SelectedSkillBook = null;
         state.SkillTargets = new();
         state.TurnIndex = state.ShuffledParticipants.IndexOf(this.combatParticipant);

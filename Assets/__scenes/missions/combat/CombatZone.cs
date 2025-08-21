@@ -31,7 +31,7 @@ public class CombatZone : MonoBehaviour
     [ContextMenu("Set Battle Start")]
     void SetBattleStart()
     {
-        var state = combatController.CombatStateObs.Value;
+        var state = combatController.CombatStateObs.Value.Clone();
         state.isFinalZone = this.isFinalZone;
         state.Phase = CombatPhase.BattleStart;
         state.EnemyParticipants = GetCombatParticipants();

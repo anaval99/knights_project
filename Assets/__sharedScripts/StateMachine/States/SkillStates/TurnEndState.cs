@@ -18,7 +18,7 @@ public class TurnEndState : IRxState
             var ctl = this.combatParticipant.combatController;
             return Observable.Timer(TimeSpan.FromMilliseconds(200)).Select(_ => 1).Take(1).Do(_ =>
             {
-                var state = ctl.CombatStateObs.Value;
+                var state = ctl.CombatStateObs.Value.Clone();
                 state.Phase = CombatPhase.TurnEnd;
                 ctl.SetCombatState(state);
             });

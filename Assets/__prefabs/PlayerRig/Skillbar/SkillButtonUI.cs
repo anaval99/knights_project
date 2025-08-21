@@ -58,7 +58,7 @@ public class SkillButtonUI : MonoBehaviour
                     this.skillBookSO.SkillType == SkillType.HPPotion ||
                     this.skillBookSO.SkillType == SkillType.MPPotion))
                 {
-                    var state = combatController.CombatStateObs.Value;
+                    var state = combatController.CombatStateObs.Value.Clone();
                     state.SelectedSkillBook = this.skillBookSO;
                     if (this.skillBookSO.TargetType == TargetType.AllySingle || this.skillBookSO.TargetType == TargetType.EnemySingle)
                     {

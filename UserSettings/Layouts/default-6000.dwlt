@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 127
+  controlID: 117
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -955,9 +955,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 57.11325, y: 0.461628, z: 3}
+    m_Target: {x: 16.706608, y: 2.244802, z: -0.88692576}
     speed: 2
-    m_Value: {x: 57.11325, y: 0.461628, z: 3}
+    m_Value: {x: 16.706608, y: 2.244802, z: -0.88692576}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1003,13 +1003,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.04019633, y: -0.005123454, z: 0.00030562215, w: 0.9993243}
+    m_Target: {x: 0.20596495, y: 0.58722377, z: -0.15744628, w: 0.7670064}
     speed: 2
-    m_Value: {x: -0.040196333, y: 0.005123454, z: -0.00030562218, w: -0.9993244}
+    m_Value: {x: 0.20596495, y: 0.58722377, z: -0.15744628, w: 0.7670064}
   m_Size:
-    m_Target: 2.1006281
+    m_Target: 0.5115843
     speed: 2
-    m_Value: 2.1006281
+    m_Value: 0.5115843
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1084,7 +1084,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 3ae8ffffaaebffff1cfbffff34b0000064b00000
+      m_ExpandedIDs: 3450ffff90edffff9aedffffa2edffffdaedffff1cfbffff38b0000068b000009ab00000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1156,7 +1156,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__prefabs/Enemies
+    - Assets/__prefabs/CombatParticipant
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1166,16 +1166,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__prefabs/Enemies
+  - Assets/__prefabs/CombatParticipant
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 127}
-    m_SelectedIDs: 064b0100
-    m_LastClickedID: 84742
-    m_ExpandedIDs: 00000000a6490100a8490100aa490100ac490100ae490100b0490100b2490100b4490100b6490100b8490100ba490100bc490100be490100
+    m_SelectedIDs: ce4a0100
+    m_LastClickedID: 84686
+    m_ExpandedIDs: 00000000e2490100e4490100e6490100e8490100ea490100ec490100ee490100f0490100f2490100f4490100f6490100f8490100fa490100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1204,7 +1204,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000a6490100a8490100aa490100ac490100ae490100b0490100b2490100b4490100b6490100b8490100ba490100bc490100be490100
+    m_ExpandedIDs: 00000000e2490100e4490100e6490100e8490100ea490100ec490100ee490100f0490100f2490100f4490100f6490100f8490100fa490100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1386,7 +1386,7 @@ MonoBehaviour:
   m_SerializedViewNames:
   - UnityEditor.GameView
   m_SerializedViewValues:
-  - C:\Users\arnold\knights_project\Library\PlayModeViewStates\659fe9a3c9867c7409593b332feef379
+  - C:\Users\arnold\knights_project\Library\PlayModeViewStates\4d8525936281b744d84fe79da2dda053
   m_PlayModeViewName: Device Simulator
   m_ShowGizmos: 0
   m_TargetDisplay: 0
@@ -1412,7 +1412,7 @@ MonoBehaviour:
     - '{"m_SerializationStates":{"thermalFoldout":false,"performanceFoldout":false,"developerFoldout":false,"indexerFoldout":false,"scalersFoldout":false,"deviceSettingsFoldout":false}}'
     - '{}'
     - '{}'
-    scale: 63
+    scale: 76
     fitToScreenEnabled: 0
     rotationDegree: 90
     highlightSafeAreaEnabled: 0

@@ -32,7 +32,7 @@ public class Skillbar : MonoBehaviour
         this.skillCancelButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
-                var state = combatController.CombatStateObs.Value;
+                var state = combatController.CombatStateObs.Value.Clone();
                 state.Phase = CombatPhase.TurnStart;
                 state.SkillTargets.Clear();
                 state.SelectedSkillBook = null;
@@ -42,7 +42,7 @@ public class Skillbar : MonoBehaviour
         this.turnConfirmButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
-                var state = combatController.CombatStateObs.Value;
+                var state = combatController.CombatStateObs.Value.Clone();
                 state.Phase = CombatPhase.TurnAction;
                 combatController.SetCombatState(state);
             }).AddTo(this);

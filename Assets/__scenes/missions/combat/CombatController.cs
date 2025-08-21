@@ -106,7 +106,10 @@ public class CombatController : MonoBehaviour
         state.ShuffledParticipants = state.PlayerParticipants.Concat(state.EnemyParticipants).ToList();
         // now shuffle the participants
         // state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(_ => randomizer.Next(0, 100)).ToList();
-        state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(cp => cp.name.Contains("Player")).ToList();
+        // state.ShuffledParticipants = state.ShuffledParticipants.OrderBy(cp => cp.name.Contains("Player")).ToList();
+        state.ShuffledParticipants = new List<CombatParticipant>(
+            state.EnemyParticipants.Concat(state.PlayerParticipants.Take(1))
+        );
         state.TurnIndex = -1; // reset turn index
         Observable.Timer(TimeSpan.FromSeconds(1)).Take(1).Subscribe(_ =>
         {
@@ -115,8 +118,9 @@ public class CombatController : MonoBehaviour
         });
     }
 
-    void InitBattleEnd(CombatState state)
+    void InitBattleEnd(CombatState currState)
     {
+        var state = currState.Clone();
         state.Phase = state.isFinalZone ? CombatPhase.FinalBattleEnd : CombatPhase.Patrolling;
         state.EnemyParticipants = new();
         state.TurnIndex = -1;
@@ -126,8 +130,9 @@ public class CombatController : MonoBehaviour
         this.SetCombatState(state);
     }
 
-    void StartTurn(CombatState state)
+    void StartTurn(CombatState currState)
     {
+        var state = currState.Clone();
         state.TurnIndex = (state.TurnIndex + 1) % state.ShuffledParticipants.Count; // increment turn index and wrap around
         while (state.ShuffledParticipants[state.TurnIndex].CurrentHealth == 0) // if dead
         {
@@ -158,7 +163,7 @@ public class CombatController : MonoBehaviour
         string party2AvatarId = playerAvatar.Party2AvatarId;
         // load party avatars
         await LoadPartyAvatarsAsync(party1AvatarId, party2AvatarId);
-        var state = this.CombatStateObs.Value;
+        var state = this.CombatStateObs.Value.Clone();
         state.Phase = CombatPhase.Start; // set initial combat phase
         var allRigs = new List<PlayerRig> { playerRig };
         if (party1Rig.gameObject.activeSelf)

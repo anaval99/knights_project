@@ -40,7 +40,7 @@ public class EnemyComponent : MonoBehaviour
                 var hasAttacks = this.enemyDefinitionSO.GenericEnemyAttacks != null
                     && this.enemyDefinitionSO.GenericEnemyAttacks.Length > 0;
                 Debug.Log("Enemy start:" + this.enemyDefinitionSO.name);
-                var state = combatController.State;
+                var state = combatController.State.Clone();
                 if (!hasAttacks)
                 {
                     state.Phase = CombatPhase.TurnEnd;
@@ -64,7 +64,7 @@ public class EnemyComponent : MonoBehaviour
     public void SetTurn()
     {
         var controller = this.GetCombatController();
-        var state = controller.CombatStateObs.Value;
+        var state = controller.CombatStateObs.Value.Clone();
         state.SelectedSkillBook = null;
         state.SkillTargets = new();
         state.TurnIndex = state.ShuffledParticipants.IndexOf(this.CombatParticipant);

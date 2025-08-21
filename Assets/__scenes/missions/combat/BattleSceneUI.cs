@@ -24,7 +24,7 @@ public class BattleSceneUI : MonoBehaviour
                 // Hide the button when tapped
                 this.TapToStartButton.gameObject.SetActive(false);
                 // Start the combat phase
-                var state = this.CombatController.CombatStateObs.Value;
+                var state = this.CombatController.CombatStateObs.Value.Clone();
                 state.Phase = CombatPhase.Patrolling;
                 this.CombatController.SetCombatState(state);
             })

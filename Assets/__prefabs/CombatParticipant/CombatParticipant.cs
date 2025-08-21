@@ -90,7 +90,7 @@ public class CombatParticipant : MonoBehaviour
         this.SelectorButton.OnClickAsObservable()
             .Subscribe(_ =>
             {
-                var state = combatController.CombatStateObs.Value;
+                var state = combatController.CombatStateObs.Value.Clone();
                 state.SkillTargets = new List<CombatParticipant> { this };
                 state.Phase = CombatPhase.TurnConfirmAction;
                 combatController.SetCombatState(state);
