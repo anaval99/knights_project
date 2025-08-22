@@ -40,7 +40,7 @@ public class CombatParticipant : MonoBehaviour
     [SerializeField]
     FloatingDamage floatingDamage;
     [SerializeField]
-    UnderGlow underGlow;
+    GameObject TurnArrow;
 
     [HideInInspector]
     public CombatController combatController;
@@ -103,7 +103,7 @@ public class CombatParticipant : MonoBehaviour
                 bool isTurnPhase = state.Phase.ToString().Contains("Turn");
                 bool isMyTurn = isTurnPhase && state.ShuffledParticipants[state.TurnIndex] == this;
                 this.IsMyTurnObs.OnNext(isMyTurn);
-                this.underGlow.gameObject.SetActive(isMyTurn);
+                this.TurnArrow.SetActive(isMyTurn);
 
                 bool isMyTurnStart = isMyTurn && state.Phase == CombatPhase.TurnStart;
                 bool isMyTurnSelectTarget = isMyTurn && state.Phase == CombatPhase.TurnSelectTarget;
@@ -127,9 +127,9 @@ public class CombatParticipant : MonoBehaviour
             .Subscribe()
             .AddTo(this);
 
-        this.IsMyTurnStartObs.DistinctUntilChanged().Subscribe(isMyTurnStart =>
+        this.IsMyTurnObs.DistinctUntilChanged().Subscribe(isMyTurn =>
         {
-            if (isMyTurnStart)
+            if (isMyTurn)
             {
                 this.Mana++;
             }
