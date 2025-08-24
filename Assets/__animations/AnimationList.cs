@@ -39,19 +39,19 @@ public class AnimationList : ScriptableObject
 
   void OnValidate()
   {
-    if (animationFBXFiles == null || animationFBXFiles.Count == 0)
-    {
-      Debug.LogWarning("Animation list is empty.");
-      return;
-    }
+    // if (animationFBXFiles == null || animationFBXFiles.Count == 0)
+    // {
+    //   Debug.LogWarning("Animation list is empty.");
+    //   return;
+    // }
 
-    this.animationFBXFiles = this.animationFBXFiles.DistinctBy(a => a.name).ToList();
-    this.AnimationClips = this.animationFBXFiles.Select(fbx =>
-    {
-      string assetPath = AssetDatabase.GetAssetPath(fbx);
-      Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
-      var clip = assets.OfType<AnimationClip>().FirstOrDefault(clip => clip.name == fbx.name);
-      return clip;
-    }).ToList();
+    // this.animationFBXFiles = this.animationFBXFiles.DistinctBy(a => a.name).ToList();
+    // this.AnimationClips = this.animationFBXFiles.Select(fbx =>
+    // {
+    //   string assetPath = AssetDatabase.GetAssetPath(fbx);
+    //   Object[] assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+    //   var clip = assets.OfType<AnimationClip>().FirstOrDefault(clip => clip.name == fbx.name);
+    //   return clip;
+    // }).ToList();
   }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using UnityEditor.AdaptivePerformance.Editor;
 using UnityEngine;
 
 // fb singleton service
