@@ -24,11 +24,19 @@ public class WelcomeScreen : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        this.TapToStartForm.SetActive(true);
+        this.TapToStartForm.SetActive(false);
         this.LoginForm.SetActive(false);
         System.Console.WriteLine("Welcome to the game!");
         this.BtnTapToStart.onClick.AddListener(OnTapToStart);
         this.BtnLogin.onClick.AddListener(OnClickLogin);
+        this.WaitForFirebase();
+    }
+
+    async void WaitForFirebase()
+    {
+        var fb = FirebaseService.Instance;
+        await fb.IsInitialized;
+        this.TapToStartForm.SetActive(true);
     }
 
     // Update is called once per frame

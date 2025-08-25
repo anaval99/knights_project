@@ -35,7 +35,18 @@ public class FirebaseService
 
     public async Task Init()
     {
-        var status = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
+        int maxTries = 10;
+        int tries = 0;
+        var status = Firebase.DependencyStatus.UnavailableOther;
+        while (status != Firebase.DependencyStatus.Available)
+        {
+            tries++;
+            status = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
+            if (tries >= maxTries)
+            {
+                break;
+            }
+        }
         if (status == Firebase.DependencyStatus.Available)
         {
             this.firebaseApp = Firebase.FirebaseApp.DefaultInstance;
