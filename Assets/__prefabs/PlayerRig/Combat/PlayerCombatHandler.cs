@@ -289,9 +289,18 @@ public partial class PlayerCombatHandler : MonoBehaviour
             "beginner_slash" => this.BeginnerSlash(skillBookSO),
             "beginner_shot" => this.PerformRangeAttack01(skillBookSO),
             "beginner_bolt" => this.PerformRangeAttack01(skillBookSO),
+            "skip_turn" => this.SkipTurnState(skillBookSO),
             _ => throw new System.Exception("uknown skill: " + skillBookSO.name),
         };
         this.playerAnimation.rxStateMachine.SetState(state);
+    }
+
+    public IRxState SkipTurnState(SkillBookSO skillBookSO)
+    {
+        return new CombineState(
+            this.CreateIdleState(),
+            new TurnEndState(this.combatParticipant)
+        );
     }
 
     public void VictoryPose()

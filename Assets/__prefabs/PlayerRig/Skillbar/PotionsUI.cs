@@ -11,6 +11,8 @@ public class PotionsUI : MonoBehaviour
     SkillButtonUI HPPotionButtonUI;
     [SerializeField]
     SkillButtonUI MPPotionButtonUI;
+    [SerializeField]
+    SkillButtonUI SkipButtonUI;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,6 +26,7 @@ public class PotionsUI : MonoBehaviour
             this.RenderPotion(this.HPPotionButtonUI, skillbar.LifePotionId, skillbooks.SkillBooks);
             this.RenderPotion(this.MPPotionButtonUI, skillbar.ManaPotionId, skillbooks.SkillBooks);
         }).AddTo(this);
+        this.SkipButtonUI.Render("skip_turn");
     }
 
     // Update is called once per frame
