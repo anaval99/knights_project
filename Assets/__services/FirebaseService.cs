@@ -110,7 +110,19 @@ public class FirebaseService
     public string GetUserId()
     {
         var auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        return auth.CurrentUser.UserId;
+        var user = auth.CurrentUser;
+        if (user == null || user.UserId == null)
+        {
+            return null;
+        }
+
+        return user.UserId;
+    }
+
+    public void Logout()
+    {
+        var auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        auth.SignOut();
     }
 
     public Firebase.Firestore.CollectionReference GetCollectionRef(string path)

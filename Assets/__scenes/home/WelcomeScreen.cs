@@ -53,7 +53,12 @@ public class WelcomeScreen : MonoBehaviour
 
     void OnTapToStart()
     {
-        Debug.Log("Tap to start the game!");
+        var userId = FirebaseService.Instance.GetUserId();
+        if (userId != null)
+        {
+            SceneManager.LoadScene("__scenes/dashboard/dashboard");
+            return;
+        }
         this.TapToStartForm.SetActive(false);
         this.LoginForm.SetActive(true);
     }

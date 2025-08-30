@@ -54,6 +54,7 @@ public class DashboardController : MonoBehaviour
 
     void Logout(Unit unit)
     {
+        FirebaseService.Instance.Logout();
         SceneManager.LoadScene("__scenes/home/home");
     }
 }
