@@ -32,7 +32,7 @@ public class OnHealEvent
 public class CombatController : MonoBehaviour
 {
     [SerializeField]
-    private PlayerRig playerRig;
+    public PlayerRig playerRig;
     [SerializeField]
     private PlayerRig party1Rig;
     [SerializeField]

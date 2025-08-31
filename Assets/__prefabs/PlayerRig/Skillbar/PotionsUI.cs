@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Mono.Cecil.Cil;
 using R3;
 using UnityEngine;
 
@@ -16,9 +17,16 @@ public class PotionsUI : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        var dataCenter = this.charDataCenter;
+        var controller = this.GetCombatController();
+        if (controller != null)
+        {
+            // in mission, you can only use your own potions
+            dataCenter = controller.playerRig.CharDataCenter;
+        }
         Observable.CombineLatest(
-            this.charDataCenter.CharSkillBarObs.Where(data => data != null),
-            this.charDataCenter.CharSkillBooksObs.Where(data => data != null),
+            dataCenter.CharSkillBarObs.Where(data => data != null),
+            dataCenter.CharSkillBooksObs.Where(data => data != null),
             (skillbar, skillbooks) => (skillbar, skillbooks)
         ).Subscribe(data =>
         {
