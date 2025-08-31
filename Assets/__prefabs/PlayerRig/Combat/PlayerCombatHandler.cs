@@ -229,6 +229,10 @@ public partial class PlayerCombatHandler : MonoBehaviour
 
     public IRxState PerformPotion(SkillBookSO skillBookSO)
     {
+        if (controller != null)
+        {
+            controller.UseConsumableSkillBook(skillBookSO.name, 1);
+        }
         var targets = this.controller.State.SkillTargets;
         var heals = targets.Select(target => new TriggerHealState()
         {

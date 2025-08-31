@@ -115,7 +115,7 @@ public class CombatController : MonoBehaviour
                 else
                 {
                     Debug.Log("Combat phase set to " + state.Phase);
-                }                
+                }
             })
             .AddTo(this);
     }
@@ -258,5 +258,16 @@ public class CombatController : MonoBehaviour
             state != null
             && state.Phase == combatPhase
             && state.ShuffledParticipants[state.TurnIndex] == combatParticipant);
+    }
+
+    public async void UseConsumableSkillBook(string consumableSOId, int qtyToUse)
+    {
+        var skillBooks = this.playerRig.CharDataCenter.CharSkillBooksObs.Value;
+        var skillBook = skillBooks.SkillBooks.FirstOrDefault(sb => sb.SkillBookSOId == consumableSOId);
+        if (skillBook != null)
+        {
+            skillBook.Quantity -= qtyToUse;
+            await this.playerRig.CharDataCenter.SaveSkillBooks(skillBooks);
+        }
     }
 }
