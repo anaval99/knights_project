@@ -1,11 +1,14 @@
 using R3;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BattleSceneUI : MonoBehaviour
 {
     [SerializeField]
     Button TapToStartButton;
+    [SerializeField]
+    Button DashboardButton;
     [SerializeField]
     CombatController CombatController;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,8 +30,13 @@ public class BattleSceneUI : MonoBehaviour
                 var state = this.CombatController.CombatStateObs.Value.Clone();
                 state.Phase = CombatPhase.Patrolling;
                 this.CombatController.SetCombatState(state);
-            })
-            .AddTo(this);
+            }).AddTo(this);
+        this.DashboardButton.OnClickAsObservable()
+            .Subscribe(_ =>
+            {
+                SceneManager.LoadScene("__scenes/dashboard/dashboard");
+            }).AddTo(this);
+            
     }
 
     // Update is called once per frame
