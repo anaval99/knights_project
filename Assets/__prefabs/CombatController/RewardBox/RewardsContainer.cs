@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RewardsContainer : ListContainer
@@ -19,6 +20,11 @@ public class RewardsContainer : ListContainer
 
     public void Render(LootSO lootSO)
     {
+        var loots = lootSO.LootedItems.Where(x =>
+        {
+            int dropRateResult = UnityEngine.Random.Range(1, 100);
+            return dropRateResult <= x.DropRatePercent;
+        }).ToList();
         this.PopulateListItems(this.RewardItemUIs, lootSO.LootedItems.Count);
         this.RenderItems(
             this.RewardItemUIs, lootSO.LootedItems, 0,
