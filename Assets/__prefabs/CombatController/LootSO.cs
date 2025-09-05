@@ -11,6 +11,8 @@ public class LootedItem
     public SkillBookSO SkillBookSO;
     [SerializeField]
     public int Qty;
+    [SerializeField]
+    public int DropRatePercent = 100;
 }
 
 [CreateAssetMenu(fileName = "LootSO", menuName = "Scriptable Objects/LootSO")]
