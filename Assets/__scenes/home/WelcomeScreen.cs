@@ -56,7 +56,7 @@ public class WelcomeScreen : MonoBehaviour
         var userId = FirebaseService.Instance.GetUserId();
         if (userId != null)
         {
-            SceneManager.LoadScene("__scenes/dashboard/dashboard");
+            this.LoadSceneAfterLogin();
             return;
         }
         this.TapToStartForm.SetActive(false);
@@ -83,23 +83,28 @@ public class WelcomeScreen : MonoBehaviour
         {
             await FirebaseService.Instance.Login(email, password);
             Debug.Log("Login successful!");
-            // Get avatar
-            var avatar = await FirebaseService.Instance.GetSingle<CharAvatar>(FirebasePaths.Avatars);
-            if (avatar == null)
-            {
-                // Proceed to the next screen or game state
-                SceneManager.LoadScene("__scenes/character_creation/character_creation");
-            }
-            else
-            {
-                // Load the main game scene
-                SceneManager.LoadScene("__scenes/dashboard/dashboard");
-            }
+            this.LoadSceneAfterLogin();
         }
         catch (Exception ex)
         {
             this.alerts.Error($"Login failed: {ex.Message}");
             this.BtnLogin.interactable = true; // Re-enable the button for retry
+        }
+    }
+
+    async void LoadSceneAfterLogin()
+    {
+        // Get avatar
+        var avatar = await FirebaseService.Instance.GetSingle<CharAvatar>(FirebasePaths.Avatars);
+        if (avatar == null)
+        {
+            // Proceed to the next screen or game state
+            SceneManager.LoadScene("__scenes/character_creation/character_creation");
+        }
+        else
+        {
+            // Load the main game scene
+            SceneManager.LoadScene("__scenes/dashboard/dashboard");
         }
     }
 }

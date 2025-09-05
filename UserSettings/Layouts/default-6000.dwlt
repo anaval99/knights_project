@@ -194,7 +194,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 117
+  controlID: 114
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -348,8 +348,8 @@ MonoBehaviour:
     y: 0
     width: 901
     height: 1301
-  m_MinSize: {x: 276, y: 76}
-  m_MaxSize: {x: 4001, y: 4026}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 21}
   m_Panes:
   - {fileID: 21}
@@ -1119,9 +1119,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 7ab00000
-      m_LastClickedID: 45178
-      m_ExpandedIDs: 8cf4ffff92f4ffffccf4ffffd2f4ffffd8f4ffff1cfbffff76b00000
+      m_SelectedIDs: 1455ffff
+      m_LastClickedID: -43756
+      m_ExpandedIDs: 1455ffff1655ffff2cbcffff1cfbffffd8e70100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1193,7 +1193,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/__scenes/missions/testmission
+    - Assets/__scenes/home
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1203,16 +1203,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/__scenes/missions/testmission
+  - Assets/__scenes/home
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\arnold\knights_project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 290}
-    m_SelectedIDs: c0740100
-    m_LastClickedID: 95424
-    m_ExpandedIDs: 0000000070730100727301007473010076730100787301007a7301007c7301007e73010080730100827301008473010086730100887301008a7301003c74010000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 242}
+    m_SelectedIDs: 3c740100
+    m_LastClickedID: 95292
+    m_ExpandedIDs: 00000000727301007473010076730100787301007a7301007c7301007e73010080730100827301008473010086730100887301008a7301008c7301003e74010000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1241,7 +1241,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000070730100727301007473010076730100787301007a7301007c7301007e73010080730100827301008473010086730100887301008a730100
+    m_ExpandedIDs: 00000000727301007473010076730100787301007a7301007c7301007e73010080730100827301008473010086730100887301008a7301008c730100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
