@@ -79,6 +79,12 @@ public class CharDataCenter : MonoBehaviour
         this.CharSkillBooksObs.OnNext(charSkillBooks);
     }
 
+    public async Task SaveInventory(CharInventory charInventory)
+    {
+        await FirebaseService.Instance.SaveSingle(FirebasePaths.SkillBooks, charInventory);
+        this.CharInventoryObs.OnNext(charInventory);
+    }
+
     public async Task<CharInventory> GetInventoryAsync(string firebaseUid)
     {
         var charInventory = await FirebaseService.Instance.GetSingle<CharInventory>(FirebasePaths.Inventories, firebaseUid);
@@ -126,5 +132,5 @@ public class CharDataCenter : MonoBehaviour
             await FirebaseService.Instance.SaveSingle(FirebasePaths.Equipments, charEquipment);
         }
         return charEquipment;
-    }    
+    }
 }

@@ -270,4 +270,47 @@ public class CombatController : MonoBehaviour
             await this.playerRig.CharDataCenter.SaveSkillBooks(skillBooks);
         }
     }
+
+    public async Task ClaimLoots(List<LootedItem> lootedItems)
+    {
+        foreach (var lootedItem in lootedItems)
+        {
+            if (lootedItem.ItemSO != null)
+            {
+                var inventory = this.playerRig.CharDataCenter.CharInventoryObs.Value;
+                var existingItem = inventory.Items.FirstOrDefault(x => x.ItemSOId == lootedItem.ItemSO.name);
+                if (lootedItem.ItemSO.IsStackable && existingItem != null)
+                {
+                    existingItem.Quantity += lootedItem.Qty;
+                }
+                else
+                {
+                    inventory.Items.Add(new()
+                    {
+                        Quantity = lootedItem.Qty,
+                        ItemSOId = lootedItem.ItemSO.name
+                    });
+                }
+                await this.playerRig.CharDataCenter.SaveInventory(inventory);
+            }
+            else if (lootedItem.SkillBookSO != null)
+            {
+                var skillbooks = this.playerRig.CharDataCenter.CharSkillBooksObs.Value;
+                var existingItem = skillbooks.SkillBooks.FirstOrDefault(x => x.SkillBookSOId == lootedItem.SkillBookSO.name);
+                if (existingItem != null)
+                {
+                    existingItem.Quantity += lootedItem.Qty;
+                }
+                else
+                {                    
+                    skillbooks.SkillBooks.Add(new()
+                    {
+                        Quantity = lootedItem.Qty,
+                        SkillBookSOId = lootedItem.SkillBookSO.name
+                    });
+                }
+                await this.playerRig.CharDataCenter.SaveSkillBooks(skillbooks);
+            }
+        }
+    }
 }

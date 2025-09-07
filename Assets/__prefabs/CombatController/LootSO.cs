@@ -13,6 +13,8 @@ public class LootedItem
     public int Qty;
     [SerializeField]
     public int DropRatePercent = 100;
+    [SerializeField]
+    public bool IncludeTeammates = false;
 }
 
 [CreateAssetMenu(fileName = "LootSO", menuName = "Scriptable Objects/LootSO")]

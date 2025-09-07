@@ -18,16 +18,11 @@ public class RewardsContainer : ListContainer
 
     }
 
-    public void Render(LootSO lootSO)
+    public void Render(List<LootedItem> loots)
     {
-        var loots = lootSO.LootedItems.Where(x =>
-        {
-            int dropRateResult = UnityEngine.Random.Range(1, 100);
-            return dropRateResult <= x.DropRatePercent;
-        }).ToList();
-        this.PopulateListItems(this.RewardItemUIs, lootSO.LootedItems.Count);
+        this.PopulateListItems(this.RewardItemUIs, loots.Count);
         this.RenderItems(
-            this.RewardItemUIs, lootSO.LootedItems, 0,
+            this.RewardItemUIs, loots, 0,
             (ui, data) => ui.Render(data));
     }
 }
