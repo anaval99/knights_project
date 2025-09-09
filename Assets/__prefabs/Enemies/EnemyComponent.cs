@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Animancer;
 using Animancer.FSM;
 using R3;
@@ -43,7 +44,9 @@ public class EnemyComponent : MonoBehaviour
                 this.CombatParticipant.homeSpot = this.animancer.transform.position;
                 this.CombatParticipant.homeRotation = this.animancer.transform.rotation;
                 var state = combatController.State.Clone();
-                var target = state.PlayerParticipants[0];
+                var target = state.PlayerParticipants
+                    .OrderBy(_ => UnityEngine.Random.Range(1f, 10f))
+                    .FirstOrDefault();
                 state.Phase = CombatPhase.TurnAction;
                 state.SkillTargets = new List<CombatParticipant>() { target };
                 combatController.SetCombatState(state);
@@ -58,11 +61,29 @@ public class EnemyComponent : MonoBehaviour
                         this.rxStateMachine.SetState(new TurnEndState(this.CombatParticipant));
                         return;
                     }
+
+                    var atk = this.GetHighestManaAtk();
+                    if (atk == null)
+                    {
+                        this.rxStateMachine.SetState(new TurnEndState(this.CombatParticipant));
+                        return;
+                    }
+
+                    this.PerformGenericAttack(atk);
                 })
                 .AddTo(this);
 
             this.combatController.OnHitObs.Where(ev => ev.Target == this.CombatParticipant).Subscribe(this.HandleHit).AddTo(this);
         }
+    }
+
+    public GenericEnemyAttack GetHighestManaAtk()
+    {
+        var atk = this.enemyDefinitionSO.GenericEnemyAttacks
+            .Where(atk => atk.ManaCost <= this.CombatParticipant.Mana)
+            .OrderByDescending(atk => atk.ManaCost)
+            .FirstOrDefault();
+        return atk;
     }
 
     [ContextMenu("SetTurn()")]
