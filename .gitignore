@@ -26,6 +26,9 @@ Assets/Firebase/Plugins/
 .vscode/
 .idea/
 
+# User settings
+UserSettings/
+
 # Unity Rider Plugin
 *.sln.iml
 
