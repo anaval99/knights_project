@@ -1,4 +1,5 @@
 using Firebase.Firestore;
+using System.Collections.Generic;
 
 [FirestoreData]
 public class CharMailAttachment
@@ -20,7 +21,11 @@ public class CharMail : IFirebaseDoc
     [FirestoreProperty]
     public string UserId { get; set; }
     [FirestoreProperty]
+    public string RecipientUserId { get; set; }
+    [FirestoreProperty]
     public string Subject { get; set; }
     [FirestoreProperty]
     public string Message { get; set; }
+    [FirestoreProperty]
+    public List<CharMailAttachment> Attachments { get; set; } = new List<CharMailAttachment>();
 }

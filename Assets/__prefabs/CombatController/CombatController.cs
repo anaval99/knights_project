@@ -302,7 +302,7 @@ public class CombatController : MonoBehaviour
                     existingItem.Quantity += lootedItem.Qty;
                 }
                 else
-                {                    
+                {
                     skillbooks.SkillBooks.Add(new()
                     {
                         Quantity = lootedItem.Qty,
@@ -311,6 +311,55 @@ public class CombatController : MonoBehaviour
                 }
                 await this.playerRig.CharDataCenter.SaveSkillBooks(skillbooks);
             }
+        }
+    }
+
+    public async Task ClaimLootsForTeammates(List<LootedItem> lootedItems)
+    {
+        var playerAvatar = this.playerRig.CharDataCenter.CharAvatarObs.Value;
+        var partyAvatarIds = new List<string>();
+        if (!string.IsNullOrEmpty(playerAvatar.Party1AvatarId))
+        {
+            partyAvatarIds.Add(playerAvatar.Party1AvatarId);
+        }
+        if (!string.IsNullOrEmpty(playerAvatar.Party2AvatarId))
+        {
+            partyAvatarIds.Add(playerAvatar.Party2AvatarId);
+        }
+        if (partyAvatarIds.Count == 0) return;
+
+        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("AvatarId", partyAvatarIds.ToArray()));
+
+        foreach (var avatar in partyAvatars)
+        {
+            var mail = new CharMail
+            {
+                UserId = avatar.UserId,
+                Subject = "Loot from Battle",
+                Message = "Your share of the loot from the recent battle.",
+                Attachments = new List<CharMailAttachment>()
+            };
+
+            foreach (var lootedItem in lootedItems)
+            {
+                var attachment = new CharMailAttachment
+                {
+                    Qty = lootedItem.Qty
+                };
+
+                if (lootedItem.ItemSO != null)
+                {
+                    attachment.ItemSOId = lootedItem.ItemSO.name;
+                }
+                else if (lootedItem.SkillBookSO != null)
+                {
+                    attachment.SkillBookSOId = lootedItem.SkillBookSO.name;
+                }
+
+                mail.Attachments.Add(attachment);
+            }
+
+            await FirebaseService.Instance.SaveSingleToList(FirebasePaths.Mails, mail);
         }
     }
 }
