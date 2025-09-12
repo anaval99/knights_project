@@ -42,7 +42,7 @@ public class FriendItemUI : MonoBehaviour
     {
         var color = Color.black;
         this.backgroundImage.color = Color.black; // Reset color
-        if (selectedAvatar != null && this.friendAvatar != null && selectedAvatar.AvatarId == this.friendAvatar.AvatarId)
+        if (selectedAvatar != null && this.friendAvatar != null && selectedAvatar.UserId == this.friendAvatar.UserId)
         {
             // Highlight the selected friend
             color = Color.yellow; // Example highlight color
@@ -60,11 +60,11 @@ public class FriendItemUI : MonoBehaviour
         string statusText = string.Empty;
         if (this.friendAvatar != null && playerAvatar != null)
         {
-            if (playerAvatar.Party1AvatarId == this.friendAvatar.AvatarId)
+            if (playerAvatar.Party1UserId == this.friendAvatar.UserId)
             {
                 statusText = "P1";
             }
-            else if (playerAvatar.Party2AvatarId == this.friendAvatar.AvatarId)
+            else if (playerAvatar.Party2UserId == this.friendAvatar.UserId)
             {
                 statusText = "P2";
             }

@@ -198,10 +198,10 @@ public class CombatController : MonoBehaviour
         string playerId = FirebaseService.Instance.GetUserId();
         await playerRig.CharDataCenter.LoadCharDataAsync(playerId);
         var playerAvatar = playerRig.CharDataCenter.CharAvatarObs.Value;
-        string party1AvatarId = playerAvatar.Party1AvatarId;
-        string party2AvatarId = playerAvatar.Party2AvatarId;
+        string party1UserId = playerAvatar.Party1UserId;
+        string party2UserId = playerAvatar.Party2UserId;
         // load party avatars
-        await LoadPartyAvatarsAsync(party1AvatarId, party2AvatarId);
+        await LoadPartyAvatarsAsync(party1UserId, party2UserId);
         var state = this.CombatStateObs.Value.Clone();
         state.Phase = CombatPhase.Start; // set initial combat phase
         var allRigs = new List<PlayerRig> { playerRig };
@@ -222,32 +222,32 @@ public class CombatController : MonoBehaviour
         this.SetCombatState(state);
     }
 
-    async Task LoadParty1AvatarAsync(string party1AvatarId, List<CharAvatar> partyAvatars)
+    async Task LoadParty1AvatarAsync(string party1UserId, List<CharAvatar> partyAvatars)
     {
-        if (party1AvatarId != null && partyAvatars.Count > 0)
+        if (!string.IsNullOrEmpty(party1UserId) && partyAvatars.Count > 0)
         {
-            var party1Avatar = partyAvatars.Find(a => a.AvatarId == party1AvatarId);
+            var party1Avatar = partyAvatars.Find(a => a.UserId == party1UserId);
             this.party1Rig.gameObject.SetActive(true);
             await this.party1Rig.CharDataCenter.LoadCharDataAsync(party1Avatar.UserId);
         }
     }
 
-    async Task LoadParty2AvatarAsync(string party2AvatarId, List<CharAvatar> partyAvatars)
+    async Task LoadParty2AvatarAsync(string party2UserId, List<CharAvatar> partyAvatars)
     {
-        if (party2AvatarId != null && partyAvatars.Count > 0)
+        if (!string.IsNullOrEmpty(party2UserId) && partyAvatars.Count > 0)
         {
-            var party2Avatar = partyAvatars.Find(a => a.AvatarId == party2AvatarId);
+            var party2Avatar = partyAvatars.Find(a => a.UserId == party2UserId);
             this.party2Rig.gameObject.SetActive(true);
             await this.party2Rig.CharDataCenter.LoadCharDataAsync(party2Avatar.UserId);
         }
     }
 
-    async Task LoadPartyAvatarsAsync(string party1AvatarId, string party2AvatarId)
+    async Task LoadPartyAvatarsAsync(string party1UserId, string party2UserId)
     {
-        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("AvatarId", new[] { party1AvatarId, party2AvatarId }));
+        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("UserId", new[] { party1UserId, party2UserId }));
 
-        var loadParty1Task = LoadParty1AvatarAsync(party1AvatarId, partyAvatars);
-        var loadParty2Task = LoadParty2AvatarAsync(party2AvatarId, partyAvatars);
+        var loadParty1Task = LoadParty1AvatarAsync(party1UserId, partyAvatars);
+        var loadParty2Task = LoadParty2AvatarAsync(party2UserId, partyAvatars);
 
         await Task.WhenAll(loadParty1Task, loadParty2Task);
     }
@@ -317,18 +317,18 @@ public class CombatController : MonoBehaviour
     public async Task ClaimLootsForTeammates(List<LootedItem> lootedItems)
     {
         var playerAvatar = this.playerRig.CharDataCenter.CharAvatarObs.Value;
-        var partyAvatarIds = new List<string>();
-        if (!string.IsNullOrEmpty(playerAvatar.Party1AvatarId))
+        var partyUserIds = new List<string>();
+        if (!string.IsNullOrEmpty(playerAvatar.Party1UserId))
         {
-            partyAvatarIds.Add(playerAvatar.Party1AvatarId);
+            partyUserIds.Add(playerAvatar.Party1UserId);
         }
-        if (!string.IsNullOrEmpty(playerAvatar.Party2AvatarId))
+        if (!string.IsNullOrEmpty(playerAvatar.Party2UserId))
         {
-            partyAvatarIds.Add(playerAvatar.Party2AvatarId);
+            partyUserIds.Add(playerAvatar.Party2UserId);
         }
-        if (partyAvatarIds.Count == 0) return;
+        if (partyUserIds.Count == 0) return;
 
-        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("AvatarId", partyAvatarIds.ToArray()));
+        var partyAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(FirebasePaths.Avatars, q => q.WhereIn("UserId", partyUserIds.ToArray()));
 
         foreach (var avatar in partyAvatars)
         {

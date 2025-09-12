@@ -22,9 +22,9 @@ public class CharAvatar : IFirebaseDoc
   public string AvatarId { get; set; } = Guid.NewGuid().ToString();
 
   [FirestoreProperty]
-  public string Party1AvatarId { get; set; } = "";
+  public string Party1UserId { get; set; } = "";
   [FirestoreProperty]
-  public string Party2AvatarId { get; set; } = "";
+  public string Party2UserId { get; set; } = "";
   [FirestoreProperty]
   public List<string> FriendUserIds { get; set; } = new ();
 }

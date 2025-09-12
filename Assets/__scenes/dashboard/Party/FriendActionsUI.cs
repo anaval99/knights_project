@@ -54,22 +54,22 @@ public class FriendActionsUI : MonoBehaviour
             return;
         }
 
-        if (partyNumber == 1 && playerAvatar.Party1AvatarId != selectedAvatar.AvatarId)
+        if (partyNumber == 1 && playerAvatar.Party1UserId != selectedAvatar.UserId)
         {
-            playerAvatar.Party1AvatarId = selectedAvatar.AvatarId;
-            if (playerAvatar.Party2AvatarId == selectedAvatar.AvatarId)
+            playerAvatar.Party1UserId = selectedAvatar.UserId;
+            if (playerAvatar.Party2UserId == selectedAvatar.UserId)
             {
-                playerAvatar.Party2AvatarId = null; // Remove from party 2 if already there
+                playerAvatar.Party2UserId = null; // Remove from party 2 if already there
             }
         }
-        else if (partyNumber == 2 && playerAvatar.Party2AvatarId != selectedAvatar.AvatarId)
+        else if (partyNumber == 2 && playerAvatar.Party2UserId != selectedAvatar.UserId)
         {
-            playerAvatar.Party2AvatarId = selectedAvatar.AvatarId;
-            if (playerAvatar.Party1AvatarId == selectedAvatar.AvatarId)
+            playerAvatar.Party2UserId = selectedAvatar.UserId;
+            if (playerAvatar.Party1UserId == selectedAvatar.UserId)
             {
-                playerAvatar.Party1AvatarId = null; // Remove from party 1 if already there
+                playerAvatar.Party1UserId = null; // Remove from party 1 if already there
             }
-        } 
+        }
         else
         {
             Debug.LogWarning($"Avatar {selectedAvatar.CharacterName} is already in party {partyNumber}.");
