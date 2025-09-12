@@ -48,6 +48,19 @@ public class RewardBox : MonoBehaviour
     {
         var controller = this.GetCombatController();
         await controller.ClaimLoots(this.loots);
+        await this.ClaimLootsForTeammates();
         SceneManager.LoadScene("__scenes/dashboard/dashboard");
     }
+
+    public async System.Threading.Tasks.Task<int> ClaimLootsForTeammates()
+    {
+        var teamLoots = this.loots.Where(x => x.IncludeTeammates).ToList();
+        if (teamLoots.Count == 0)
+        {
+            return 0;
+        }
+        var controller = this.GetCombatController();
+        await controller.ClaimLootsForTeammates(teamLoots);
+        return teamLoots.Count;
+    }    
 }

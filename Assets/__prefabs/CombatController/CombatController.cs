@@ -334,7 +334,8 @@ public class CombatController : MonoBehaviour
         {
             var mail = new CharMail
             {
-                UserId = avatar.UserId,
+                UserId = playerAvatar.UserId,
+                RecipientUserId = avatar.UserId,
                 Subject = "Loot from Battle",
                 Message = "Your share of the loot from the recent battle.",
                 Attachments = new List<CharMailAttachment>()
