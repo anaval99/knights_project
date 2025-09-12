@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 // fb singleton service
@@ -105,6 +106,16 @@ public class FirebaseService
             Debug.LogWarning($"No document found at path: {path} for UID: {uid}");
             return default(T);
         }
+    }
+
+    public async Task SaveSingleToList<T>(string path, T data) where T : IFirebaseDoc
+    {
+        string uid = Firebase.Auth.FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        data.UserId = uid; // sender
+        var collectionRef = this.GetCollectionRef(path);
+        var doc = collectionRef.Document(Guid.NewGuid().ToString());
+        await doc.SetAsync(data);
+        Debug.Log($"Document saved to list at path: {path} with new GUID for UID: {uid}");
     }
 
     public string GetUserId()
