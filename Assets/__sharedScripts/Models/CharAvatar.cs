@@ -26,5 +26,5 @@ public class CharAvatar : IFirebaseDoc
   [FirestoreProperty]
   public string Party2AvatarId { get; set; } = "";
   [FirestoreProperty]
-  public List<string> FriendAvatarIds { get; set; } = new ();
+  public List<string> FriendUserIds { get; set; } = new ();
 }

@@ -45,12 +45,7 @@ public class FriendSearcher : MonoBehaviour
             Debug.LogWarning("Player avatar is not loaded.");
             return;
         }
-        if (playerAvatar.FriendAvatarIds.Contains(avatarId))
-        {
-            Debug.LogWarning("This avatar is already in your friend list.");
-            alerts.Error("This avatar is already in your friend list.");
-            return;
-        }
+        // Check will be done after finding the avatar
 
         isSearching = true;
         if (string.IsNullOrEmpty(avatarId))
@@ -70,7 +65,14 @@ public class FriendSearcher : MonoBehaviour
             return;
         }
         CharAvatar avatar = avatars[0];
-        playerAvatar.FriendAvatarIds.Add(avatar.AvatarId);
+        if (playerAvatar.FriendUserIds.Contains(avatar.UserId))
+        {
+            Debug.LogWarning("This user is already in your friend list.");
+            alerts.Error("This user is already in your friend list.");
+            isSearching = false;
+            return;
+        }
+        playerAvatar.FriendUserIds.Add(avatar.UserId);
         await charDataCenter.SaveAvatar(playerAvatar);
 
         isSearching = false;

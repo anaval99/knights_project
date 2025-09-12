@@ -26,7 +26,7 @@ public class FriendList : ListContainer
 
     async void FetchAndRenderFriends(CharAvatar avatar)
     {
-        if (avatar == null || avatar.FriendAvatarIds == null || avatar.FriendAvatarIds.Count == 0)
+        if (avatar == null || avatar.FriendUserIds == null || avatar.FriendUserIds.Count == 0)
         {
             Debug.LogWarning("No friends to render.");
             this.friendItemUIs.ForEach(itemUI => itemUI.Render(null));
@@ -35,7 +35,7 @@ public class FriendList : ListContainer
 
         var friendAvatars = await FirebaseService.Instance.QueryMany<CharAvatar>(
             FirebasePaths.Avatars,
-            q => q.WhereIn("AvatarId", avatar.FriendAvatarIds)
+            q => q.WhereIn("UserId", avatar.FriendUserIds)
         );
 
         this.RenderItems(this.friendItemUIs, friendAvatars, 0, (itemUI, friendAvatar) =>
