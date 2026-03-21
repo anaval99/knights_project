@@ -8,7 +8,7 @@
 
 ![Character Creation](preview/char_creation.png)
 
-Players enter a name and customize their avatar by choosing from 12 face options (eye + mouth combos), multiple hair styles, and a set of hair colors applied via swappable materials. A `BodyPartRenderer` toggles the correct GameObjects on a modular character rig based on these selections. On submit, the `CharAvatar` data is saved to Firebase and the player receives a default set of beginner weapons, armor, and skills.
+The character rig is built as a modular prefab where every face, hair, and mouth variant exists as a child GameObject. `CharCreationForm` stores selections into a `CharAvatar` data object, and on every change calls `BodyPartRenderer.SetBodyPart()` which deactivates all body part GameObjects, then looks up the selected hair/eye/mouth by name in a dictionary and activates only those. Hair color is solved by swapping the `MeshRenderer.material` from a `HairColorList` ScriptableObject that maps color names to materials. This approach avoids runtime mesh generation entirely — all visual customization is just toggling pre-existing GameObjects on and off.
 
 ---
 
@@ -16,13 +16,13 @@ Players enter a name and customize their avatar by choosing from 12 face options
 
 ![Equipment](preview/equipments.png)
 
-Characters use a modular mesh approach where each equipment piece (weapon, armor) is a child GameObject on the player rig. `EquipmentRenderer` deactivates all currently visible equipment parts and activates the new ones whenever gear changes. A PBRMaskTint shader allows multiple color regions on a single mesh using grayscale masks, enabling visual variety across armor sets. Weapon switches also update the animation set automatically — each `WeaponClass` (Sword, Wand, Bow) maps to a naming suffix (e.g. `_THS`, `_MagicWand`, `_BowAndArrow`) so the correct idle, attack, and movement clips play for the equipped weapon.
+I used the same activate/deactivate pattern for equipment rendering. Every weapon and armor piece lives as a pre-placed child on the rig, and `EquipmentRenderer` tracks which GameObjects are currently active, deactivates them all on any equipment change, then looks up the new item's `GameObjectName` via `EquipmentList.GetSOGO()` and activates the matching GameObjects. To handle weapon-specific animations without a complex lookup, I used a naming convention — each `WeaponClass` maps to a suffix (`Sword` → `_THS`, `Wand` → `_MagicWand`, `Bow` → `_BowAndArrow`) and an extension method `WithWeapon()` appends it to any animation name. This way one call like `GetClipWithWeapon(PlayerAnims.Idle_Battle)` resolves to the correct clip for whatever weapon is equipped.
 
 ---
 
 ## Equipment Switching
 
-The inventory UI displays owned items in a paginated grid; selecting an item shows its stats and an Equip button. `ItemActionsUI` handles equip actions by updating `CharEquipment.Weapon` or `CharEquipment.Armor`, saving to Firebase, and triggering `EquipmentRenderer` to swap the visible GameObjects. Equipped items display a marker in the inventory grid. Combat stats (Damage, Defense, Health) are recomputed from the newly equipped `ItemSO` scriptable objects each time gear changes.
+Equipment switching is driven reactively. `ItemActionsUI` checks the selected item's `WeaponClass` and `ArmorPart` to decide which slot it goes into, writes it to `CharEquipment`, and saves to Firebase — the `CharEquipmentObs` observable then propagates the change automatically to `EquipmentRenderer` (visuals), `PlayerCombatHandler` (stats recomputation), and `PlayerAnimation` (weapon-appropriate idle). `PlayerCombatHandler.ComputeStatsFromEquipment()` reads the `ItemSO` off the equipment and directly sets `MaxHealth`, `Defense`, and `Damage` on the `CombatParticipant`. The entire chain from equip click to updated visuals + stats is one reactive subscription with no manual refresh calls.
 
 ---
 
@@ -30,13 +30,13 @@ The inventory UI displays owned items in a paginated grid; selecting an item sho
 
 ![Skills and Potions](preview/skill_system.png)
 
-The skillbar has 4 active-skill slots plus 2 dedicated potion slots (HP and MP), managed by `CharSkillBar` and rendered by `SkillbarUI` and `PotionsUI`. Players assign skills from their skill book to specific slots via the dashboard; each slot stores a `SkillBookSOId` reference. Skill buttons validate availability at render time — active skills check that the equipped weapon matches the skill's `WeaponClass`, and potions check remaining quantity. During combat, clicking a skill button sets the `CombatState.SelectedSkillBook` and transitions the phase to target selection or action confirmation depending on the skill's `TargetType`.
+`SkillButtonUI` uses `Observable.CombineLatest` to merge the current equipment and the render trigger into a single stream, so any weapon change automatically re-evaluates whether each skill button should be enabled. Each button validates itself: active skills check if the equipped weapon's `WeaponClass` matches the skill's required class, and potion buttons check remaining quantity. On click, the button clones the current `CombatState`, sets `SelectedSkillBook`, determines the next phase based on `TargetType` (single-target goes to `TurnSelectTarget`, multi-target auto-populates targets and goes straight to `TurnConfirmAction`), and pushes the new state through `CombatController.SetCombatState()`. This keeps all skill selection logic self-contained in the button rather than in a central controller.
 
 ---
 
 ## Potions & Consumables
 
-Potions are defined as `SkillBookSO` assets with a `SkillType` of HPPotion or MPPotion and a `HealAmount`. When used during a combat turn, `CombatController.UseConsumableSkillBook()` decrements the quantity in `CharSkillBooks` and persists it to Firebase. A `TriggerHealState` fires an `OnHealEvent` that restores HP (capped at max) or MP on the target, and a floating damage number in green or blue confirms the heal visually. Potion buttons grey out and become unusable once quantity reaches zero.
+Potions reuse the `SkillBookSO` system with a `SkillType` of HPPotion or MPPotion instead of creating a separate consumable system. `PotionsUI` uses `Observable.CombineLatest` on the skillbar and skill books observables to always render the correct quantity count. When used in combat, `PlayerCombatHandler.PerformPotion()` calls `CombatController.UseConsumableSkillBook()` which decrements the quantity in the skill books list and saves to Firebase in one step. The heal itself is an `IRxState` (`TriggerHealState`) composed into the turn sequence — for multi-target heals, multiple `TriggerHealState` instances are merged in parallel via `CombineState(true, heals)`.
 
 ---
 
@@ -45,16 +45,16 @@ Potions are defined as `SkillBookSO` assets with a `SkillType` of HPPotion or MP
 ![Combat - Skill Selection](preview/combat_part1.png)
 ![Combat - Target Selection](preview/combat_part2.png)
 
-Combat begins when the player enters a `CombatZone` trigger; all player and enemy `CombatParticipant`s are collected and shuffled into a random turn order. On a player's turn the skillbar activates for skill/potion selection, then phases through target selection and action confirmation before executing the move. Skill execution is composed from chainable reactive states (`DashToTargetState`, `MeleeAttack01`, `RangeAttack01`, `TriggerHitState`, `DashBackHomeState`, etc.) orchestrated by `CombineState` for sequential or parallel playback. Enemies use simple AI — they pick a random player target and use their highest-mana-cost affordable attack. The battle ends when all enemies are defeated, triggering a victory animation and a loot reward screen.
+Combat state is managed through a single `BehaviorSubject<CombatState>` on `CombatController`, and phase transitions are processed as side effects via a debounced subscription in `ProcessSideEffects()`. Turn order is determined by concatenating all player and enemy `CombatParticipant`s and shuffling with `OrderBy(_ => random.Next())`, then cycling through with a `TurnIndex` that skips dead participants. Each skill's execution is built by composing small `IRxState` objects — for example, `BeginnerSlash` chains `DashToTargetState` → `IdleState` → `MeleeAttack01` → `DashBackHomeState` → `TurnEndState` via `CombineState`, which internally uses `Observable.Concat` for sequential or `Observable.Merge` for parallel playback. Every participant — player or enemy — subscribes to the same `CombatStateObs` and only acts when it's their turn and the phase matches, keeping the logic decentralized.
 
 ---
 
 ## List Rendering (Angular-Style ngFor)
 
-`ListContainer` is a generic utility that replicates Angular's `*ngFor` pattern in Unity. `PopulateListItems<T>()` clones a template UI element until the list has enough children to fill a page, and `RenderItems<T, D>()` takes a data list, slices it by page number, and calls a render callback on each child — passing `default` for empty slots. This gives any list-based UI (inventory grid, skill book, etc.) automatic pagination and data-driven rendering with just a few lines of setup. The pattern keeps list logic reusable across different UI screens without duplicating instantiation or paging code.
+`ListContainer` replicates Angular's `*ngFor` in Unity by separating population from rendering. `PopulateListItems<T>()` clones a single template UI element until the container has enough children, and `RenderItems<T, D>()` slices the data list by page number, calls a render callback for each slot, and passes `default` for empty slots. This lets any list-based UI (inventory, skill books, etc.) get pagination and data binding with just two calls — no per-screen duplication of instantiation or paging logic.
 
 ---
 
 ## Reactive State Machine
 
-`RxStateMachine` manages complex animation and gameplay sequences using R3 (Rx.NET for Unity) with minimal boilerplate. It holds a `BehaviorSubject<IRxState>` — when a new state is pushed via `SetState()`, the observable chain calls `state.Play()` (which returns an `Observable<int>`) and uses `.Switch()` to automatically cancel any in-progress state. Each skill, movement, or combat action implements `IRxState`, and `CombineState` chains them sequentially or in parallel via Concat/Merge. This means orchestrating a full combat turn — dash, attack, hit, dash back — is just composing small state objects, and the reactive pipeline handles timing, cancellation, and sequencing automatically.
+`RxStateMachine` uses a `BehaviorSubject<IRxState>` and `.Switch()` — pushing a new state automatically cancels whatever was playing and starts the new one. Each game action (dash, attack, heal, projectile, etc.) implements `IRxState.Play()` returning an `Observable<int>`, and `CombineState` composes them via `Observable.Concat` (sequential) or `Observable.Merge` (parallel). This means building a full combat turn is just `new CombineState(dash, idle, attack, backHome, idle, turnEnd)` — the reactive pipeline handles timing, ordering, and cancellation with no coroutines or update loops.
